@@ -1,0 +1,16 @@
+fastapi
+uvicorn
+python-dotenv
+pydantic
+
+requests
+
+rdkit
+
+neo4j
+
+faiss-cpu
+
+numpy
+pandas
+scikit-learn

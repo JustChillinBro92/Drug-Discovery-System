@@ -1,0 +1,97 @@
+# =========================
+# Python
+# =========================
+
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual Environment
+venv/
+.venv/
+env/
+
+# Python package builds
+build/
+dist/
+*.egg-info/
+
+
+# =========================
+# Environment Variables
+# =========================
+
+.env
+.env.*
+!.env.example
+
+
+# =========================
+# VS Code
+# =========================
+
+.vscode/
+*.code-workspace
+
+
+# =========================
+# Jupyter
+# =========================
+
+.ipynb_checkpoints/
+
+
+# =========================
+# Logs
+# =========================
+
+*.log
+logs/
+
+
+# =========================
+# Data
+# =========================
+
+data/cache/
+data/reports/
+
+# FAISS indexes can be large
+data/faiss/
+
+# Local graph dumps
+data/graph/
+
+
+# =========================
+# Neo4j
+# =========================
+
+neo4j/
+*.neo4j
+
+
+# =========================
+# Frontend
+# =========================
+
+frontend/node_modules/
+frontend/dist/
+frontend/.env
+
+
+# =========================
+# OS Files
+# =========================
+
+.DS_Store
+Thumbs.db
+
+
+# =========================
+# Temporary Files
+# =========================
+
+*.tmp
+*.temp
+*.swp
