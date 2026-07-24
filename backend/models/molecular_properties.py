@@ -5,11 +5,31 @@ from pydantic import BaseModel, Field
 # Lipinski Rule of Five evaluation
 
 class LipinskiResult(BaseModel):
-    molecular_weight_pass: bool
-    logp_pass: bool
-    hbd_pass: bool
-    hba_pass: bool
-    overall_pass: bool
+    molecular_weight_pass: bool = Field(
+        ...,
+        description="True if molecular weight ≤ 500 Da."
+    )
+
+    logp_pass: bool = Field(
+        ...,
+        description="True if LogP ≤ 5."
+    )
+
+    hbd_pass: bool = Field(
+        ...,
+        description="True if hydrogen bond donors ≤ 5."
+    )
+
+    hba_pass: bool = Field(
+        ...,
+        description="True if hydrogen bond acceptors ≤ 10."
+    )
+
+    overall_pass: bool = Field(
+        ...,
+        description="True if the compound satisfies Lipinski's Rule of Five."
+    )
+
     violations: int = Field(
         ...,
         ge=0,
@@ -53,7 +73,7 @@ class MolecularProperties(BaseModel):
         description="Number of rotatable bonds."
     )
 
-    heavy_atoms: int = Field(
+    heavy_atom_count: int = Field(
         ...,
         ge=0,
         description="Number of heavy atoms."
