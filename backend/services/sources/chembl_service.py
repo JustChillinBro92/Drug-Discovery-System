@@ -22,7 +22,7 @@ class ChEMBLService:
             response = requests.get(
                 url,
                 params=params,
-                timeout=(3, 30)
+                timeout=(5, 30)
             )
             
             response.raise_for_status()
@@ -54,7 +54,7 @@ class ChEMBLService:
         try:
             response = requests.get(
                 url,
-                timeout=(3, 30)
+                timeout=(5, 30)
             )
             
             response.raise_for_status()

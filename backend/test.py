@@ -5,6 +5,8 @@ from services.normalizers.compound_normalizer import compound_normalizer
 from services.analyzers.rdkit_service import rdkit_service
 from services.analyzers.fingerprint_service import fingerprint_service
 from services.analyzers.similarity_service import similarity_service
+from services.analyzers.similarity_search_service import similarity_search_service
+
 
 # result = chembl_service.search_compound("Aspirin")
 
@@ -24,25 +26,25 @@ from services.analyzers.similarity_service import similarity_service
 
 compound1 = compound_normalizer.normalize("Aspirin")
 compound2 = compound_normalizer.normalize("Ibuprofen")
+compound3 = compound_normalizer.normalize("Paracetamol")
 
+# print(
+#     json.dumps(
+#         compound1.model_dump(),
+#         indent=4
+#     )
+# )
 
-print(
-    json.dumps(
-        compound1.model_dump(),
-        indent=4
-    )
-)
+# print()
 
-print()
+# print(
+#     json.dumps(
+#         compound2.model_dump(),
+#         indent=4
+#     )
+# )
 
-print(
-    json.dumps(
-        compound2.model_dump(),
-        indent=4
-    )
-)
-
-print()
+# print()
 
 # print("Name:", compound1.canonical_name)
 # print("ChEMBL ID:", compound1.chembl_id)
@@ -63,6 +65,8 @@ print()
 
 fingerprint1 = fingerprint_service.generate_morgan_fingerprint(compound1)
 fingerprint2 = fingerprint_service.generate_morgan_fingerprint(compound2)
+fingerprint3 = fingerprint_service.generate_morgan_fingerprint(compound3)
+
 
 # print(fingerprint1)
 
@@ -82,16 +86,40 @@ fingerprint2 = fingerprint_service.generate_morgan_fingerprint(compound2)
 #     sum(fingerprint1.fingerprint)
 # )
 
-similarity = similarity_service.calculate_similarity(
+# similarity = similarity_service.calculate_similarity(
+#     fingerprint1,
+#     fingerprint2,
+#     compound2.canonical_name
+# )
+
+# print(
+#     json.dumps(
+#         similarity.model_dump(),
+#         indent=4
+#     )
+# )
+
+
+compound_database = [
+    {
+        "compound": compound2,
+        "fingerprint": fingerprint2
+    },
+    {
+        "compound": compound3,
+        "fingerprint": fingerprint3
+    }
+]
+
+results = similarity_search_service.search_similar_compounds(
     fingerprint1,
-    fingerprint2,
-    compound2.canonical_name
+    compound_database,
 )
 
-print(
-    json.dumps(
-        similarity.model_dump(),
-        indent=4
+for result in results:
+    print(
+            json.dumps(
+            result.model_dump(),
+            indent=4
+        )
     )
-)
-
