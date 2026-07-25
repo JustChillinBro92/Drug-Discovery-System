@@ -1,7 +1,7 @@
 from models.biomedical_entities import CompoundEntity
 
 from services.sources.chembl_service import chembl_service
-
+from services.normalizers.synonym_cleaner import synonym_cleaner
 
 class CompoundNormalizer:
     
@@ -30,6 +30,19 @@ class CompoundNormalizer:
         
         structures = molecule.get("molecule_structures", {})
         properties = molecule.get("molecule_properties", {})
+        
+        raw_synonyms = []
+        
+        for synonym in molecule.get(
+            "molecule_synonyms", []
+        ):
+            name = synonym.get("molecule_synonym")
+            if name:
+                raw_synonyms.append(name)
+        
+        
+        synonyms = synonym_cleaner.clean(raw_synonyms)
+        
         smiles = structures.get("canonical_smiles")
         inchikey = structures.get("standard_inchi_key")
         formula = properties.get("full_molformula")
@@ -38,14 +51,14 @@ class CompoundNormalizer:
         # 5: Return the final normalized entity
         
         return CompoundEntity(
-            original_text=compound_name,
-            canonical_name=molecule.get("pref_name"),
-            confidence=1.0,
-            synonyms=[],
-            chembl_id=chembl_id,
-            smiles=smiles,
-            inchikey=inchikey,
-            molecular_formula=formula            
+            original_text = compound_name,
+            canonical_name = molecule.get("pref_name"),
+            confidence = 1.0,
+            synonyms = synonyms,
+            chembl_id = chembl_id,
+            smiles = smiles,
+            inchikey = inchikey,
+            molecular_formula = formula            
         )
         
 compound_normalizer = CompoundNormalizer()

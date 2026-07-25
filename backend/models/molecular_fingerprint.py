@@ -1,34 +1,24 @@
-from typing import List, Optional
+from typing import List
 from pydantic import BaseModel, Field
 
 
-"""
-Represents a molecular fingerprint generated using RDKit.
-
-Used for:
-- compound similarity search
-- nearest neighbor retrieval
-- analog identification
-"""
-
 class MolecularFingerprint(BaseModel):
-    fingerprint_type: str = Field(
+    algorithm: str = Field(
         ...,
-        description="Fingerprint algorithm used (Morgan)."
+        description="Fingerprint algorithm used."
     )
 
-    radius: Optional[int] = Field(
-        default=None,
-        description="Radius used for circular fingerprints like Morgan."
+    radius: int = Field(
+        ...,
+        description="Morgan fingerprint radius."
     )
 
-    bit_length: int = Field(
+    n_bits: int = Field(
         ...,
-        gt=0,
-        description="Number of bits in fingerprint vector."
+        description="Fingerprint size."
     )
 
-    bit_vector: List[int] = Field(
+    fingerprint: List[int] = Field(
         ...,
-        description="Binary fingerprint representation."
+        description="Binary fingerprint vector."
     )
