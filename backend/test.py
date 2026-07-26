@@ -1,11 +1,16 @@
 import json
 
 from services.sources.chembl_service import chembl_service
+from services.sources.europepmc_service import europepmc_service
+
 from services.normalizers.compound_normalizer import compound_normalizer
+from services.normalizers.paper_normalizer import paper_normalizer
+
 from services.analyzers.rdkit_service import rdkit_service
 from services.analyzers.fingerprint_service import fingerprint_service
 from services.analyzers.similarity_service import similarity_service
 from services.analyzers.similarity_search_service import similarity_search_service
+
 
 
 # result = chembl_service.search_compound("Aspirin")
@@ -24,9 +29,11 @@ from services.analyzers.similarity_search_service import similarity_search_servi
 # print(molecule)
 
 
-compound1 = compound_normalizer.normalize("Aspirin")
-compound2 = compound_normalizer.normalize("Ibuprofen")
-compound3 = compound_normalizer.normalize("Paracetamol")
+# compound1 = compound_normalizer.normalize("Aspirin")
+# compound2 = compound_normalizer.normalize("Ibuprofen")
+# compound3 = compound_normalizer.normalize("Paracetamol")
+# compound4 = compound_normalizer.normalize("Montelukast")
+
 
 # print(
 #     json.dumps(
@@ -63,9 +70,11 @@ compound3 = compound_normalizer.normalize("Paracetamol")
 #     )
 # )
 
-fingerprint1 = fingerprint_service.generate_morgan_fingerprint(compound1)
-fingerprint2 = fingerprint_service.generate_morgan_fingerprint(compound2)
-fingerprint3 = fingerprint_service.generate_morgan_fingerprint(compound3)
+# fingerprint1 = fingerprint_service.generate_morgan_fingerprint(compound1)
+# fingerprint2 = fingerprint_service.generate_morgan_fingerprint(compound2)
+# fingerprint3 = fingerprint_service.generate_morgan_fingerprint(compound3)
+# fingerprint4 = fingerprint_service.generate_morgan_fingerprint(compound4)
+
 
 
 # print(fingerprint1)
@@ -100,26 +109,60 @@ fingerprint3 = fingerprint_service.generate_morgan_fingerprint(compound3)
 # )
 
 
-compound_database = [
-    {
-        "compound": compound2,
-        "fingerprint": fingerprint2
-    },
-    {
-        "compound": compound3,
-        "fingerprint": fingerprint3
-    }
-]
+# compound_database = [
+#     {
+#         "compound": compound2,
+#         "fingerprint": fingerprint2
+#     },
+#     {
+#         "compound": compound3,
+#         "fingerprint": fingerprint3
+#     },
+#     {
+#         "compound": compound4,
+#         "fingerprint": fingerprint4
+#     }
+# ]
 
-results = similarity_search_service.search_similar_compounds(
-    fingerprint1,
-    compound_database,
-)
+# results = similarity_search_service.search_similar_compounds(
+#     fingerprint1,
+#     compound_database,
+# )
 
-for result in results:
-    print(
-            json.dumps(
-            result.model_dump(),
-            indent=4
-        )
-    )
+# for result in results:
+#     print(
+#             json.dumps(
+#             result.model_dump(),
+#             indent=4
+#         )
+#     )
+
+
+# epmc_papers = europepmc_service.search_service(
+#     "Aspirin",
+#     page_size=5 
+# )
+
+# print(epmc_papers.keys())
+# print(epmc_papers["hitCount"])
+# print(
+#     json.dumps(
+#         epmc_papers["resultList"],
+#         indent=4
+#     )
+# )
+
+# nmz_epmc_papers = paper_normalizer.normalize(
+#     "Aspirin",
+#     page_size=20 
+# )
+
+# for paper in nmz_epmc_papers:
+#     print(
+#         json.dumps(
+#             paper.model_dump(),
+#             indent=4
+#         )
+#     )
+
+

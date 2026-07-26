@@ -3,9 +3,12 @@ from models.biomedical_entities import CompoundEntity
 from services.sources.chembl_service import chembl_service
 from services.normalizers.synonym_cleaner import synonym_cleaner
 
+
 class CompoundNormalizer:
-    
-    def normalize(self, compound_name: str) -> CompoundEntity:
+    def normalize(
+        self, 
+        compound_name: str
+    ) -> CompoundEntity:
         # 1: search up the compound & its similarities using ChEMBL service
         
         search_result = chembl_service.search_compound(compound_name)
