@@ -11,6 +11,7 @@ from services.analyzers.fingerprint_service import fingerprint_service
 from services.analyzers.similarity_service import similarity_service
 from services.analyzers.similarity_search_service import similarity_search_service
 
+from services.processors.text_chunker import text_chunker
 
 
 # result = chembl_service.search_compound("Aspirin")
@@ -29,10 +30,10 @@ from services.analyzers.similarity_search_service import similarity_search_servi
 # print(molecule)
 
 
-# compound1 = compound_normalizer.normalize("Aspirin")
-# compound2 = compound_normalizer.normalize("Ibuprofen")
-# compound3 = compound_normalizer.normalize("Paracetamol")
-# compound4 = compound_normalizer.normalize("Montelukast")
+compound1 = compound_normalizer.normalize("Aspirin")
+compound2 = compound_normalizer.normalize("Ibuprofen")
+compound3 = compound_normalizer.normalize("Paracetamol")
+compound4 = compound_normalizer.normalize("Montelukast")
 
 
 # print(
@@ -70,8 +71,8 @@ from services.analyzers.similarity_search_service import similarity_search_servi
 #     )
 # )
 
-# fingerprint1 = fingerprint_service.generate_morgan_fingerprint(compound1)
-# fingerprint2 = fingerprint_service.generate_morgan_fingerprint(compound2)
+fingerprint1 = fingerprint_service.generate_morgan_fingerprint(compound1)
+fingerprint2 = fingerprint_service.generate_morgan_fingerprint(compound2)
 # fingerprint3 = fingerprint_service.generate_morgan_fingerprint(compound3)
 # fingerprint4 = fingerprint_service.generate_morgan_fingerprint(compound4)
 
@@ -152,10 +153,10 @@ from services.analyzers.similarity_search_service import similarity_search_servi
 #     )
 # )
 
-# nmz_epmc_papers = paper_normalizer.normalize(
-#     "Aspirin",
-#     page_size=20 
-# )
+nmz_epmc_papers = paper_normalizer.normalize(
+    "Aspirin",
+    page_size=10 
+)
 
 # for paper in nmz_epmc_papers:
 #     print(
@@ -165,4 +166,18 @@ from services.analyzers.similarity_search_service import similarity_search_servi
 #         )
 #     )
 
+for paper in nmz_epmc_papers:
+    chunks = text_chunker.chunk_paper(
+        paper
+    )
+    
+    print("\nNew Paper:\n")
+    
+    for chunk in chunks:
+        print(
+            json.dumps(
+                chunk.model_dump(),
+                indent=4
+            )
+        )
 

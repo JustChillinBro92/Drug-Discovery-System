@@ -56,7 +56,7 @@ class PaperNormalizer:
             publication_date = (
                 result
                 .get("journalInfo", {})
-                .get("dateOfPublication")
+                .get("printPublicationDate")
             )
             
             publication_types = (

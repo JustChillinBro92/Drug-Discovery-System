@@ -4,3 +4,4 @@
 
 3. Disable rdkit's internal logger in rdkit_service.py
 
+4. Text chunker needs semantic chunking and maybe work on full paper text
