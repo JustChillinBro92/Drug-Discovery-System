@@ -13,6 +13,8 @@ from services.analyzers.similarity_search_service import similarity_search_servi
 
 from services.processors.text_chunker import text_chunker
 
+from services.embeddings.embedding_service import embedding_service
+from services.retrieval.faiss_service import faiss_service
 
 # result = chembl_service.search_compound("Aspirin")
 
@@ -30,10 +32,10 @@ from services.processors.text_chunker import text_chunker
 # print(molecule)
 
 
-compound1 = compound_normalizer.normalize("Aspirin")
-compound2 = compound_normalizer.normalize("Ibuprofen")
-compound3 = compound_normalizer.normalize("Paracetamol")
-compound4 = compound_normalizer.normalize("Montelukast")
+# compound1 = compound_normalizer.normalize("Aspirin")
+# compound2 = compound_normalizer.normalize("Ibuprofen")
+# compound3 = compound_normalizer.normalize("Paracetamol")
+# compound4 = compound_normalizer.normalize("Montelukast")
 
 
 # print(
@@ -71,8 +73,8 @@ compound4 = compound_normalizer.normalize("Montelukast")
 #     )
 # )
 
-fingerprint1 = fingerprint_service.generate_morgan_fingerprint(compound1)
-fingerprint2 = fingerprint_service.generate_morgan_fingerprint(compound2)
+# fingerprint1 = fingerprint_service.generate_morgan_fingerprint(compound1)
+# fingerprint2 = fingerprint_service.generate_morgan_fingerprint(compound2)
 # fingerprint3 = fingerprint_service.generate_morgan_fingerprint(compound3)
 # fingerprint4 = fingerprint_service.generate_morgan_fingerprint(compound4)
 
@@ -155,7 +157,7 @@ fingerprint2 = fingerprint_service.generate_morgan_fingerprint(compound2)
 
 nmz_epmc_papers = paper_normalizer.normalize(
     "Aspirin",
-    page_size=10 
+    page_size=20 
 )
 
 # for paper in nmz_epmc_papers:
@@ -166,18 +168,51 @@ nmz_epmc_papers = paper_normalizer.normalize(
 #         )
 #     )
 
-for paper in nmz_epmc_papers:
-    chunks = text_chunker.chunk_paper(
-        paper
-    )
+# for paper in nmz_epmc_papers:
+#     chunks = text_chunker.chunk_paper(
+#         paper
+#     )
     
-    print("\nNew Paper:\n")
+#     print("\nNew Paper:\n")
     
-    for chunk in chunks:
-        print(
-            json.dumps(
-                chunk.model_dump(),
-                indent=4
-            )
-        )
+#     for chunk in chunks:
+#         print(
+#             json.dumps(
+#                 chunk.model_dump(),
+#                 indent=4
+#             )
+#         )
+
+
+# for paper in nmz_epmc_papers:
+#     chunks = text_chunker.chunk_paper(
+#         paper
+#     )
+    
+#     embeddings = embedding_service.embed_chunks(
+#         chunks
+#     )
+    
+#     faiss_service.add_documents(
+#         chunks,
+#         embeddings
+#     )
+    
+
+# query_embedding = embedding_service.embed_text(
+#     "How does aspirin affect clotting?"
+# )
+
+# results = faiss_service.search_documents(
+#     query_embedding
+# )
+
+# for result in results:
+#     print(
+#         json.dumps(
+#             result.model_dump(),
+#             indent=4
+#         )
+#     )
+
 

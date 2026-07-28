@@ -3,6 +3,7 @@ uvicorn
 python-dotenv
 pydantic
 transformers
+sentence-transformers
 torch
 
 requests
