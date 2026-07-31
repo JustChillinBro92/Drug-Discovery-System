@@ -2,7 +2,8 @@ from api.request_models import AnalysisRequest
 
 
 VALID_MODES = {
-    "literature_search",
+    "literature_acquisition",
+    "literature_conversation",
     "molecule_analysis",
     "similar_compound_search",
     "drug_likeness",

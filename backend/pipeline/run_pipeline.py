@@ -14,9 +14,6 @@ from llm.generator import Generator
 
 # Initialize dependencies
 
-# retriever = Retriever()
-# context_builder = ContextBuilder()
-
 gemini_client = GeminiClient()
 generator = Generator(
     client=gemini_client
@@ -28,8 +25,10 @@ generator = Generator(
 orchestrator = PipelineOrchestrator(
     paper_normalizer=paper_normalizer,
     text_chunker=text_chunker,
+    
     embedding_service=embedding_service,
     faiss_service=faiss_service,
+    
     retriever=retriever,
     context_builder=context_builder,
     generator=generator
@@ -68,13 +67,13 @@ if __name__ == "__main__":
 
 
     while True:
-
-        print("\nSelect Mode:")
-        print("1. Literature Search")
-        print("2. Molecule Analysis")
-        print("3. Similar Compound Search")
-        print("4. Drug Likeness")
-        print("5. Report Generation")
+        print()
+        print("1. Literature Acquisition")
+        print("2. Literature Conversation")
+        print("3. Molecule Analysis")
+        print("4. Similar Compound Search")
+        print("5. Drug Likeness")
+        print("6. Report Generation")
         print("0. Exit")
 
 
@@ -86,11 +85,12 @@ if __name__ == "__main__":
 
 
         modes = {
-            "1": "literature_search",
-            "2": "molecule_analysis",
-            "3": "similar_compound_search",
-            "4": "drug_likeness",
-            "5": "report_generation"
+            "1": "literature_acquisition",
+            "2": "literature_conversation",
+            "3": "molecule_analysis",
+            "4": "similar_compound_search",
+            "5": "drug_likeness",
+            "6": "report_generation"
         }
 
 
@@ -110,5 +110,40 @@ if __name__ == "__main__":
         )
 
 
-        print("\nResponse:")
-        print(result)
+        print("\n========== RESPONSE ==========")
+
+        print(f"\nMode: {result.mode}")
+
+        if result.answer:
+            print("\nAnswer:")
+            print(result.answer)
+           
+            
+        if result.message:
+            print("\nMessage:")
+            print(result.message)
+
+
+        if result.papers_added is not None:
+            print(f"\nPapers Added: {result.papers_added}")
+
+
+        if result.chunks_added is not None:
+            print(f"Chunks Added: {result.chunks_added}")
+
+
+        if result.sources:
+            print("\nSources:")
+
+            for index, source in enumerate(result.sources, start=1):
+
+                print(f"\n[{index}]")
+
+                print(f"Title   : {source.title}")
+                print(f"PMID    : {source.pmid}")
+                print(f"PMCID   : {source.pmcid}")
+                print(f"DOI     : {source.doi}")
+                print(f"Journal : {source.journal}")
+                print(f"Year    : {source.publication_year}")
+
+        print("\n==============================")

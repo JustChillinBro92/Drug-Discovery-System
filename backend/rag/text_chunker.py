@@ -55,6 +55,11 @@ class TextChunker:
                 pmid=paper.pmid,
                 pmcid=paper.pmcid,
                 doi=paper.doi,
+                
+                title=paper.title,
+                journal=paper.journal,
+                publication_year=paper.publication_year,
+                authors=paper.authors,
 
                 chunk_index=chunk_index,
                 text=chunk_text

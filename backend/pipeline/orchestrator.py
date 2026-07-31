@@ -1,5 +1,6 @@
 from services.input_understanding import understand_input
 
+from models.pipeline_response import PipelineResponse
 from models.conversation_state import ConversationState
 
 
@@ -49,12 +50,21 @@ class PipelineOrchestrator:
         )
 
 
-        if request.mode == "literature_search":
+        if request.mode == "literature_acquisition":
 
-            return self.run_literature_search(
+            return self.run_literature_acquisition(
                 request,
                 state
             )
+
+
+        elif request.mode == "literature_conversation":
+
+            return self.run_literature_conversation(
+                request,
+                state
+            )
+
 
 
         elif request.mode == "molecule_analysis":
@@ -95,72 +105,69 @@ class PipelineOrchestrator:
             )
 
 
-
-
-    def run_literature_search(
+    def run_literature_acquisition(
         self,
         request,
         state
     ):
-
-        # 1. Retrieve papers
+        page_size = int(input("Enter the amount of papers to retrieve: "))
 
         papers = self.paper_normalizer.normalize(
             request.query,
-            page_size=100
+            page_size=page_size
         )
-
-
-        # 2. Chunk + Embed + Index
-
+    
+        total_chunks = 0
+        
         for paper in papers:
-
             chunks = self.text_chunker.chunk_paper(
                 paper
             )
-
+            
             embeddings = self.embedding_service.embed_chunks(
                 chunks
             )
-
+            
             self.faiss_service.add_documents(
                 chunks,
                 embeddings
             )
+            
+            total_chunks += len(chunks)
+            
+            
+        return PipelineResponse(
+            mode = request.mode,
+            message = "Literature indexed successfully!",
+            papers_added = len(papers),
+            chunks_added = total_chunks
+        )
 
 
-        # 3. Retrieve relevant chunks
-
+    def run_literature_conversation(
+        self,
+        request,
+        state
+    ):
+        
         retrieved_chunks = self.retriever.retrieve(
-            request.query
+            request.query,
         )
         
-        # for i, result in enumerate(retrieved_chunks, start=1):
-        #     print(f"\n===== Chunk {i} =====")
-        #     print(result.chunk.text)
-
-
-        # 4. Build context
-
-        context = self.context_builder.build_context(
+        context, sources = self.context_builder.build_context(
             retrieved_chunks
         )
-
-
-        # 5. Generate answer
-
+        
         answer = self.generator.generate(
-            context=context,
-            query=request.query
+            context = context,
+            query = request.query
         )
 
-
-        return {
-            "mode": request.mode,
-            "answer": answer
-        }
-
-
+        return PipelineResponse(
+            mode = request.mode,
+            answer = answer,
+            sources = sources
+        )
 
 
     def run_molecule_analysis(
@@ -169,10 +176,10 @@ class PipelineOrchestrator:
         state
     ):
 
-        return {
-            "mode": request.mode,
-            "message": "Molecule analysis pipeline pending"
-        }
+        return PipelineResponse(
+            mode = request.mode,
+            message = "Molecule analysis pipeline pending"
+        )
 
 
     def run_similarity_search(
@@ -181,10 +188,10 @@ class PipelineOrchestrator:
         state
     ):
 
-        return {
-            "mode": request.mode,
-            "message": "Similarity search pipeline pending"
-        }
+        return PipelineResponse(
+            mode = request.mode,
+            message = "Molecule analysis pipeline pending"
+        )
 
 
     def run_drug_likeness(
@@ -192,11 +199,11 @@ class PipelineOrchestrator:
         request,
         state
     ):
-
-        return {
-            "mode": request.mode,
-            "message": "Drug likeness pipeline pending"
-        }
+        
+        return PipelineResponse(
+            mode = request.mode,
+            message = "Molecule analysis pipeline pending"
+        )
 
 
     def run_report_generation(
@@ -204,9 +211,9 @@ class PipelineOrchestrator:
         request,
         state
     ):
-
-        return {
-            "mode": request.mode,
-            "message": "Report generation pipeline pending"
-        }
+        
+        return PipelineResponse(
+            mode = request.mode,
+            message = "Molecule analysis pipeline pending"
+        )
         
