@@ -10,8 +10,8 @@ class SourceReference(BaseModel):
     doi: Optional[str] = None
     journal: Optional[str] = None
     publication_year: Optional[int] = None
+    url: Optional[str] = None
     
-
 
 class PipelineResponse(BaseModel):
     mode: str

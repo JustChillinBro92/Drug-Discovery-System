@@ -55,6 +55,7 @@ class TextChunker:
                 pmid=paper.pmid,
                 pmcid=paper.pmcid,
                 doi=paper.doi,
+                url=paper.url,
                 
                 title=paper.title,
                 journal=paper.journal,

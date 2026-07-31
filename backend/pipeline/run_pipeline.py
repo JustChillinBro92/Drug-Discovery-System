@@ -70,10 +70,11 @@ if __name__ == "__main__":
         print()
         print("1. Literature Acquisition")
         print("2. Literature Conversation")
-        print("3. Molecule Analysis")
-        print("4. Similar Compound Search")
-        print("5. Drug Likeness")
-        print("6. Report Generation")
+        print("3. View Indexed Papers")
+        print("4. Molecule Analysis")
+        print("5. Similar Compound Search")
+        print("6. Drug Likeness")
+        print("7. Report Generation")
         print("0. Exit")
 
 
@@ -87,10 +88,11 @@ if __name__ == "__main__":
         modes = {
             "1": "literature_acquisition",
             "2": "literature_conversation",
-            "3": "molecule_analysis",
-            "4": "similar_compound_search",
-            "5": "drug_likeness",
-            "6": "report_generation"
+            "3": "view_indexed_papers",
+            "4": "molecule_analysis",
+            "5": "similar_compound_search",
+            "6": "drug_likeness",
+            "7": "report_generation"
         }
 
 
@@ -99,15 +101,26 @@ if __name__ == "__main__":
             continue
 
 
-        query = input("\nQuery: ")
+        mode = modes[choice]
+        
+        if mode == "view_indexed_papers":
+            result = execute(
+                conversation_id=conversation_id,
+                mode=mode,
+                query="",
+                state=state
+            )
+        
+        else:
 
+            query = input("\nQuery: ")
 
-        result = execute(
-            conversation_id=conversation_id,
-            mode=modes[choice],
-            query=query,
-            state=state
-        )
+            result = execute(
+                conversation_id=conversation_id,
+                mode=mode,
+                query=query,
+                state=state
+            )
 
 
         print("\n========== RESPONSE ==========")
@@ -145,5 +158,7 @@ if __name__ == "__main__":
                 print(f"DOI     : {source.doi}")
                 print(f"Journal : {source.journal}")
                 print(f"Year    : {source.publication_year}")
+                print(f"URL     : {source.url}")
+
 
         print("\n==============================")

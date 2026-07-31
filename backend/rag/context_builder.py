@@ -56,7 +56,8 @@ class ContextBuilder:
                         pmcid = chunk.pmcid or "Unknown",
                         doi = chunk.doi or "Unknown",
                         journal = chunk.journal or "Unknown",
-                        publication_year = chunk.publication_year or "Unknown"
+                        publication_year = chunk.publication_year or "Unknown",
+                        url = chunk.url or "Unknown"
                     )
                 )
                 

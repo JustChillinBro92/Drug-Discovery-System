@@ -4,6 +4,7 @@ from api.request_models import AnalysisRequest
 VALID_MODES = {
     "literature_acquisition",
     "literature_conversation",
+    "view_indexed_papers",
     "molecule_analysis",
     "similar_compound_search",
     "drug_likeness",
@@ -29,10 +30,8 @@ def understand_input(
 
     query = query.strip()
 
-    if not query:
-        raise ValueError(
-            "Query cannot be empty."
-        )
+    if mode != "view_indexed_papers" and not query:
+        raise ValueError("Query cannot be empty")
 
     return AnalysisRequest(
         conversation_id=conversation_id,

@@ -2,6 +2,8 @@ from services.input_understanding import understand_input
 
 from models.pipeline_response import PipelineResponse
 from models.conversation_state import ConversationState
+from models.pipeline_response import SourceReference
+
 
 
 class PipelineOrchestrator:
@@ -64,7 +66,14 @@ class PipelineOrchestrator:
                 request,
                 state
             )
+            
+            
+        elif request.mode == "view_indexed_papers":
 
+            return self.run_view_indexed_papers(
+                request,
+                state
+            )                    
 
 
         elif request.mode == "molecule_analysis":
@@ -116,10 +125,43 @@ class PipelineOrchestrator:
             request.query,
             page_size=page_size
         )
+        
+        existing_ids = {
+            (
+                paper.pmid
+                or paper.pmcid
+                or paper.doi
+            )
+            for paper in state.indexed_papers
+        }
+        
     
         total_chunks = 0
+        added_papers = 0
+        
         
         for paper in papers:
+            paper_id = (
+                paper.pmid
+                or paper.pmcid
+                or paper.doi
+            )
+            
+            # Store papers in conversation state
+            # Prevents addition of duplicate papers
+            
+            if paper_id not in existing_ids:
+                state.indexed_papers.append(
+                    paper
+                )
+                
+                existing_ids.add(
+                    paper_id
+                )
+                
+                added_papers += 1
+                
+                
             chunks = self.text_chunker.chunk_paper(
                 paper
             )
@@ -134,12 +176,12 @@ class PipelineOrchestrator:
             )
             
             total_chunks += len(chunks)
-            
+        
             
         return PipelineResponse(
             mode = request.mode,
             message = "Literature indexed successfully!",
-            papers_added = len(papers),
+            papers_added = added_papers,
             chunks_added = total_chunks
         )
 
@@ -169,6 +211,32 @@ class PipelineOrchestrator:
             sources = sources
         )
 
+
+    def run_view_indexed_papers(
+        self,
+        request,
+        state
+    ):
+
+        sources = []
+        
+        for paper in state.indexed_papers:
+            sources.append(
+                SourceReference(
+                    title=paper.title,
+                    pmid=paper.pmid,
+                    pmcid=paper.pmcid,
+                    doi=paper.doi,
+                    journal=paper.journal,
+                    publication_year=paper.publication_year                    
+                )
+            )
+            
+        return PipelineResponse(
+            mode=request.mode,
+            sources=sources
+        )
+        
 
     def run_molecule_analysis(
         self,

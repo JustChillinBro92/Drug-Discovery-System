@@ -29,6 +29,11 @@ class DocumentChunk(BaseModel):
         default=None,
         description="Digital Object Identifier of the source paper."
     )
+    
+    url: Optional[str] = Field(
+        default=None,
+        description="Direct URL to the source paper or its Europe PMC record."
+    )
 
     title: Optional[str] = Field(
         default=None,
