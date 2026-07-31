@@ -11,10 +11,10 @@ from services.analyzers.fingerprint_service import fingerprint_service
 from services.analyzers.similarity_service import similarity_service
 from services.analyzers.similarity_search_service import similarity_search_service
 
-from services.processors.text_chunker import text_chunker
-
-from services.embeddings.embedding_service import embedding_service
-from services.retrieval.faiss_service import faiss_service
+from rag.text_chunker import text_chunker
+from rag.embedding_service import embedding_service
+from rag.faiss_service import faiss_service
+from rag.retriever import retriever
 
 # result = chembl_service.search_compound("Aspirin")
 
@@ -155,10 +155,10 @@ from services.retrieval.faiss_service import faiss_service
 #     )
 # )
 
-nmz_epmc_papers = paper_normalizer.normalize(
-    "Aspirin",
-    page_size=20 
-)
+# nmz_epmc_papers = paper_normalizer.normalize(
+#     "Aspirin",
+#     page_size=20 
+# )
 
 # for paper in nmz_epmc_papers:
 #     print(
@@ -199,12 +199,9 @@ nmz_epmc_papers = paper_normalizer.normalize(
 #     )
     
 
-# query_embedding = embedding_service.embed_text(
-#     "How does aspirin affect clotting?"
-# )
-
-# results = faiss_service.search_documents(
-#     query_embedding
+# results = retriever.retrieve(
+#     query = "How does aspirin affect clotting?",
+#     top_k = 5
 # )
 
 # for result in results:

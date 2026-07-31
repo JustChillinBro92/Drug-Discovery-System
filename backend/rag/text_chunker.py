@@ -50,10 +50,14 @@ class TextChunker:
             # Create the chunk entity
             
             chunk = DocumentChunk(
-                chunk_id = f"{paper.pmid}_{chunk_index}",
-                paper_pmid = paper.pmid,
-                chunk_index = chunk_index,
-                text = chunk_text 
+                chunk_id=f"{paper.pmid or paper.pmcid or paper.doi}_{chunk_index}",
+
+                pmid=paper.pmid,
+                pmcid=paper.pmcid,
+                doi=paper.doi,
+
+                chunk_index=chunk_index,
+                text=chunk_text
             )
             chunks.append(chunk)
             
@@ -68,5 +72,3 @@ class TextChunker:
     
     
 text_chunker = TextChunker()
-        
-        

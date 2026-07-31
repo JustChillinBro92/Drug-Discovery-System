@@ -1,22 +1,36 @@
 from fastapi import APIRouter
 
-from api.request_models import DrugQueryRequest
-from api.response_models import HealthResponse
+from api.request_models import AnalysisRequest
+from api.response_models import (
+    HealthCheckResponse,
+    AnalysisResponse
+)
 
-from pipeline.pipeline import execute
+from backend.pipeline.run_pipeline import execute
 
 router = APIRouter()
 
 
-@router.get("/health", response_model=HealthResponse)
+@router.get("/health", response_model= HealthCheckResponse)
 def health_check():
-    return HealthResponse(
+    return  HealthCheckResponse(
         status="healthy",
         service="Drug Discovery RAG"
     )
     
-@router.post("/analyze")
-def analyze_drug(request: DrugQueryRequest):
-    result = execute(request.query)
     
-    return result
+@router.post("/analyze", response_model=AnalysisResponse)
+def analyze(
+    request: AnalysisRequest
+):
+    result = execute(
+        conversation_id=request.conversation_id,
+        mode=request.mode,
+        query=request.query
+    )
+
+    return AnalysisResponse(
+        conversation_id=request.conversation_id,
+        mode=request.mode,
+        result=result
+    )

@@ -1,4 +1,7 @@
 from pydantic import BaseModel
 
-class DrugQueryRequest(BaseModel):
+
+class AnalysisRequest(BaseModel):
+    conversation_id: str
+    mode: str
     query: str

@@ -13,4 +13,7 @@ class Settings:
     CHEMBL_API_URL = os.getenv("CHEMBL_API_URL")
     EUROPEPMC_API_URL = os.getenv("EUROPEPMC_API_URL")
     
+    GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+    GEMINI_MODEL = os.getenv("GEMINI_MODEL")
+    
 settings = Settings() 

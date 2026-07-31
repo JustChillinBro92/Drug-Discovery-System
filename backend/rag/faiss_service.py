@@ -91,5 +91,4 @@ class FAISS_Service:
         return results
         
 
-faiss_service = FAISS_Service()        
-        
+faiss_service = FAISS_Service()
