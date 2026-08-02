@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Any, Optional
 
 from pydantic import BaseModel
 
@@ -16,6 +16,7 @@ class SourceReference(BaseModel):
 class PipelineResponse(BaseModel):
     mode: str
     answer: Optional[str] = None
+    data: Optional[dict[str, Any]] = None
     message: Optional[str] = None
     papers_added: Optional[int] = None
     chunks_added: Optional[int] = None

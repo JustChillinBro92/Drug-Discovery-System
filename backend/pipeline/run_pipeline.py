@@ -1,3 +1,5 @@
+import json
+
 from pipeline.orchestrator import PipelineOrchestrator
 
 from services.normalizers.paper_normalizer import paper_normalizer
@@ -7,6 +9,10 @@ from rag.embedding_service import embedding_service
 from rag.faiss_service import faiss_service
 from rag.retriever import retriever
 from rag.context_builder import context_builder
+
+from services.normalizers.compound_normalizer import compound_normalizer
+from services.analyzers.rdkit_service import rdkit_service
+from services.analyzers.fingerprint_service import fingerprint_service
 
 from llm.gemini_client import GeminiClient
 from llm.generator import Generator
@@ -31,7 +37,11 @@ orchestrator = PipelineOrchestrator(
     
     retriever=retriever,
     context_builder=context_builder,
-    generator=generator
+    generator=generator,
+    
+    compound_normalizer=compound_normalizer,
+    rdkit_service=rdkit_service,
+    fingerprint_service=fingerprint_service
 )
 
 
@@ -123,14 +133,79 @@ if __name__ == "__main__":
             )
 
 
-        print("\n========== RESPONSE ==========")
+        print(f"\n{'=' * 21} RESPONSE {'=' * 21}")
 
         print(f"\nMode: {result.mode}")
 
         if result.answer:
             print("\nAnswer:")
             print(result.answer)
+         
            
+        if result.data:
+            print("\nDetails:")
+            print(f"+{'-' * 50}+")
+            
+            data = result.data
+
+            if "compound" in data:
+                compound = data["compound"]
+
+                print()
+                print("+----------------------+")
+                print("| Compound Information |")
+                print("+----------------------+")
+
+                print(f"Original Input       : {compound.get('original_text')}")
+                print(f"Canonical Name       : {compound.get('canonical_name')}")
+                print(f"Confidence           : {compound.get('confidence')}")
+                # print(f"Synonyms             : {', '.join(compound.get('synonyms', [])) or 'None'}")
+                print(f"ChEMBL ID            : {compound.get('chembl_id')}")
+                print(f"SMILES               : {compound.get('smiles')}")
+                print(f"InChIKey             : {compound.get('inchikey')}")
+                print(f"Molecular Formula    : {compound.get('molecular_formula')}")              
+                
+                
+            if "properties" in data:
+                properties = data["properties"]
+
+                print()
+                print("+------------+")
+                print("| Properties |")
+                print("+------------+")
+                
+                
+                print(f"Molecular Weight     : {properties.get('molecular_weight')} Da")
+                print(f"LogP                 : {properties.get('logp')}")
+                print(f"TPSA                 : {properties.get('tpsa')} Å²")
+                print(f"H-Bond Donors        : {properties.get('h_bond_donors')}")
+                print(f"H-Bond Acceptors     : {properties.get('h_bond_acceptors')}")
+                print(f"Rotatable Bonds      : {properties.get('rotatable_bonds')}")
+                print(f"Heavy Atom Count     : {properties.get('heavy_atom_count')}")
+                print(f"Ring Count           : {properties.get('ring_count')}")
+                print(f"Aromatic Ring Count  : {properties.get('aromatic_ring_count')}")
+                print(f"Formal Charge        : {properties.get('formal_charge')}")
+                print(f"Fraction CSP3        : {properties.get('fraction_csp3')}")
+                print(f"QED                  : {properties.get('qed')}")
+
+
+                if properties.get("lipinski"):
+                    lipinski = properties["lipinski"] 
+                    
+                    lipinski = properties["lipinski"]
+
+                    print()
+                    print("+-------------------------+")
+                    print("| Lipinski's Rule of Five |")
+                    print("+-------------------------+")
+
+                    print(f"Molecular Weight ≤ 500 : {lipinski.get('molecular_weight_pass')}")
+                    print(f"LogP ≤ 5               : {lipinski.get('logp_pass')}")
+                    print(f"HBD ≤ 5                : {lipinski.get('hbd_pass')}")
+                    print(f"HBA ≤ 10               : {lipinski.get('hba_pass')}")
+                    print(f"Overall Pass           : {lipinski.get('overall_pass')}")
+                    print(f"Violations             : {lipinski.get('violations')}")
+                
             
         if result.message:
             print("\nMessage:")
@@ -161,4 +236,4 @@ if __name__ == "__main__":
                 print(f"URL     : {source.url}")
 
 
-        print("\n==============================")
+        print(f"\n{'=' * 52}")

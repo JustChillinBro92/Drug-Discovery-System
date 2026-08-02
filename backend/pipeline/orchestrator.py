@@ -7,7 +7,6 @@ from models.pipeline_response import SourceReference
 
 
 class PipelineOrchestrator:
-
     def __init__(
         self,
         paper_normalizer,
@@ -16,7 +15,10 @@ class PipelineOrchestrator:
         faiss_service,
         retriever,
         context_builder,
-        generator
+        generator,
+        compound_normalizer,
+        rdkit_service,
+        fingerprint_service
     ):
         # Pending
         
@@ -27,11 +29,13 @@ class PipelineOrchestrator:
         self.retriever = retriever
         self.context_builder = context_builder
         self.generator = generator
+        self.compound_normalizer=compound_normalizer
+        self.rdkit_service=rdkit_service
+        self.fingerprint_service=fingerprint_service
 
 
     """
     Main pipeline controller.
-
     Receives validated user request
     and routes it to the required workflow.
     """
@@ -135,7 +139,7 @@ class PipelineOrchestrator:
             for paper in state.indexed_papers
         }
         
-    
+
         total_chunks = 0
         added_papers = 0
         
@@ -228,7 +232,8 @@ class PipelineOrchestrator:
                     pmcid=paper.pmcid,
                     doi=paper.doi,
                     journal=paper.journal,
-                    publication_year=paper.publication_year                    
+                    publication_year=paper.publication_year,
+                    url=paper.url 
                 )
             )
             
@@ -243,10 +248,22 @@ class PipelineOrchestrator:
         request,
         state
     ):
-
+        
+        compound = self.compound_normalizer.normalize(
+            request.query
+        )
+        
+        properties = self.rdkit_service.analyze_properties(
+            compound
+        )
+        
         return PipelineResponse(
             mode = request.mode,
-            message = "Molecule analysis pipeline pending"
+            message = "Molecule analysis completed",
+            data = {
+                "compound": compound.model_dump(),
+                "properties": properties.model_dump()
+            }
         )
 
 
