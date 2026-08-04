@@ -32,10 +32,10 @@ from rag.retriever import retriever
 # print(molecule)
 
 
-# compound1 = compound_normalizer.normalize("Aspirin")
-# compound2 = compound_normalizer.normalize("Ibuprofen")
-# compound3 = compound_normalizer.normalize("Paracetamol")
-# compound4 = compound_normalizer.normalize("Montelukast")
+compound1 = compound_normalizer.normalize("Aspirin")
+compound2 = compound_normalizer.normalize("Ibuprofen")
+compound3 = compound_normalizer.normalize("Paracetamol")
+compound4 = compound_normalizer.normalize("Montelukast")
 
 
 # print(
@@ -73,10 +73,10 @@ from rag.retriever import retriever
 #     )
 # )
 
-# fingerprint1 = fingerprint_service.generate_morgan_fingerprint(compound1)
-# fingerprint2 = fingerprint_service.generate_morgan_fingerprint(compound2)
-# fingerprint3 = fingerprint_service.generate_morgan_fingerprint(compound3)
-# fingerprint4 = fingerprint_service.generate_morgan_fingerprint(compound4)
+fingerprint1 = fingerprint_service.generate_morgan_fingerprint(compound1)
+fingerprint2 = fingerprint_service.generate_morgan_fingerprint(compound2)
+fingerprint3 = fingerprint_service.generate_morgan_fingerprint(compound3)
+fingerprint4 = fingerprint_service.generate_morgan_fingerprint(compound4)
 
 
 
@@ -112,33 +112,33 @@ from rag.retriever import retriever
 # )
 
 
-# compound_database = [
-#     {
-#         "compound": compound2,
-#         "fingerprint": fingerprint2
-#     },
-#     {
-#         "compound": compound3,
-#         "fingerprint": fingerprint3
-#     },
-#     {
-#         "compound": compound4,
-#         "fingerprint": fingerprint4
-#     }
-# ]
+compound_database = [
+    {
+        "compound": compound2,
+        "fingerprint": fingerprint2
+    },
+    {
+        "compound": compound3,
+        "fingerprint": fingerprint3
+    },
+    {
+        "compound": compound4,
+        "fingerprint": fingerprint4
+    }
+]
 
-# results = similarity_search_service.search_similar_compounds(
-#     fingerprint1,
-#     compound_database,
-# )
+results = similarity_search_service.search_similar_compounds(
+    fingerprint1,
+    compound_database,
+)
 
-# for result in results:
-#     print(
-#             json.dumps(
-#             result.model_dump(),
-#             indent=4
-#         )
-#     )
+for result in results:
+    print(
+            json.dumps(
+            result.model_dump(),
+            indent=4
+        )
+    )
 
 
 # epmc_papers = europepmc_service.search_service(

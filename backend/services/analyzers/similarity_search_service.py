@@ -17,7 +17,7 @@ class SimilaritySearchService:
         Loops through all the compounds, calculates similarity score,
         appends pair (compound, score) to result & filters out top-k pairs
         according to score
-               
+                       
         """
         
         results = []

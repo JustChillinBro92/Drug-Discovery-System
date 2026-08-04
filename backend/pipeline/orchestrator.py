@@ -18,7 +18,8 @@ class PipelineOrchestrator:
         generator,
         compound_normalizer,
         rdkit_service,
-        fingerprint_service
+        fingerprint_service,
+        similarity_search_service
     ):
         # Pending
         
@@ -32,6 +33,7 @@ class PipelineOrchestrator:
         self.compound_normalizer=compound_normalizer
         self.rdkit_service=rdkit_service
         self.fingerprint_service=fingerprint_service
+        self.similarity_search_service=similarity_search_service
 
 
     """
@@ -46,7 +48,8 @@ class PipelineOrchestrator:
         conversation_id: str,
         mode: str,
         query: str,
-        state: ConversationState
+        state: ConversationState,
+        **kwargs
     ):
 
         request = understand_input(
@@ -92,7 +95,8 @@ class PipelineOrchestrator:
 
             return self.run_similarity_search(
                 request,
-                state
+                state,
+                **kwargs
             )
 
 
@@ -270,12 +274,50 @@ class PipelineOrchestrator:
     def run_similarity_search(
         self,
         request,
-        state
+        state,
+        **kwargs
     ):
+        
+        query_compound = self.compound_normalizer.normalize(
+            request.query
+        )
+        
+        query_compound_fingerprint = self.fingerprint_service.generate_morgan_fingerprint(
+            query_compound
+        )
+        
+        target_compound_data = []
+        
+        for compound in kwargs.get("target_compounds", []):
+            nmz_compound = self.compound_normalizer.normalize(
+                compound
+            )
+            
+            fingerprint = self.fingerprint_service.generate_morgan_fingerprint(
+                nmz_compound
+            )
+            
+            target_compound_data.append(
+                {
+                    "compound": nmz_compound,
+                    "fingerprint": fingerprint 
+                }
+            )
+        
+        
+        similarity_results = self.similarity_search_service.search_similar_compounds(
+            query_compound_fingerprint,
+            target_compound_data
+        )
+        
 
         return PipelineResponse(
             mode = request.mode,
-            message = "Molecule analysis pipeline pending"
+            message = "Similarity search completed",
+            data = {
+                "compound": query_compound.model_dump(),
+                "similarity_results": similarity_results
+            }
         )
 
 

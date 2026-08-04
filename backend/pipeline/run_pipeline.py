@@ -13,6 +13,7 @@ from rag.context_builder import context_builder
 from services.normalizers.compound_normalizer import compound_normalizer
 from services.analyzers.rdkit_service import rdkit_service
 from services.analyzers.fingerprint_service import fingerprint_service
+from services.analyzers.similarity_search_service import similarity_search_service
 
 from llm.gemini_client import GeminiClient
 from llm.generator import Generator
@@ -41,7 +42,9 @@ orchestrator = PipelineOrchestrator(
     
     compound_normalizer=compound_normalizer,
     rdkit_service=rdkit_service,
-    fingerprint_service=fingerprint_service
+    fingerprint_service=fingerprint_service,
+    
+    similarity_search_service=similarity_search_service
 )
 
 
@@ -51,14 +54,16 @@ def execute(
     conversation_id: str,
     mode: str,
     query: str,
-    state
+    state,
+    **kwargs
 ):
 
     return orchestrator.run(
         conversation_id=conversation_id,
         mode=mode,
         query=query,
-        state=state
+        state=state,
+        **kwargs
     )
 
 
@@ -120,7 +125,24 @@ if __name__ == "__main__":
                 query="",
                 state=state
             )
-        
+            
+        elif mode == "similar_compound_search":
+            query_compound = input("\nEnter query compound: ")
+            target_compounds = input("\nEnter target compounds(separated by ','): ")
+            
+            target_compound_list = [
+                compound.strip()
+                for compound in target_compounds.split(",")
+            ]
+            
+            result = execute(
+                conversation_id=conversation_id,
+                mode=mode,
+                query=query_compound,
+                state=state,
+                target_compounds=target_compound_list
+            )
+            
         else:
 
             query = input("\nQuery: ")
@@ -144,7 +166,6 @@ if __name__ == "__main__":
            
         if result.data:
             print("\nDetails:")
-            print(f"+{'-' * 50}+")
             
             data = result.data
 
@@ -206,6 +227,19 @@ if __name__ == "__main__":
                     print(f"Overall Pass           : {lipinski.get('overall_pass')}")
                     print(f"Violations             : {lipinski.get('violations')}")
                 
+            if "similarity_results" in data:
+                compounds = data["similarity_results"]
+                
+                print()
+                print("+--------------------+")
+                print("| Similarity Results |")
+                print("+--------------------+")
+                
+                for compound in compounds:
+                    print(f"Canonical Name       : {compound.compound_name}")
+                    print(f"ChEMBL ID            : {compound.chembl_id}")
+                    print(f"Similarity Score     : {compound.similarity_score}\n")
+
             
         if result.message:
             print("\nMessage:")
