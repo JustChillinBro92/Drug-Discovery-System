@@ -12,7 +12,7 @@ class PipelineOrchestrator:
         paper_normalizer,
         text_chunker,
         embedding_service,
-        faiss_service,
+        vector_store,
         retriever,
         context_builder,
         generator,
@@ -26,7 +26,7 @@ class PipelineOrchestrator:
         self.paper_normalizer = paper_normalizer
         self.text_chunker = text_chunker
         self.embedding_service = embedding_service
-        self.faiss_service = faiss_service
+        self.vector_store = vector_store
         self.retriever = retriever
         self.context_builder = context_builder
         self.generator = generator
@@ -134,16 +134,6 @@ class PipelineOrchestrator:
             page_size=page_size
         )
         
-        existing_ids = {
-            (
-                paper.pmid
-                or paper.pmcid
-                or paper.doi
-            )
-            for paper in state.indexed_papers
-        }
-        
-
         total_chunks = 0
         added_papers = 0
         
@@ -155,21 +145,13 @@ class PipelineOrchestrator:
                 or paper.doi
             )
             
-            # Store papers in conversation state
             # Prevents addition of duplicate papers
             
-            if paper_id not in existing_ids:
-                state.indexed_papers.append(
-                    paper
-                )
-                
-                existing_ids.add(
-                    paper_id
-                )
-                
-                added_papers += 1
-                
-                
+            if self.vector_store.paper_exists(
+                paper_id
+            ):
+                continue
+            
             chunks = self.text_chunker.chunk_paper(
                 paper
             )
@@ -178,12 +160,19 @@ class PipelineOrchestrator:
                 chunks
             )
             
-            self.faiss_service.add_documents(
+            self.vector_store.add_documents(
                 chunks,
                 embeddings
             )
             
+            added_papers += 1
             total_chunks += len(chunks)
+            
+            
+            # Keep conversation-specific memory only
+            state.referenced_papers.append(
+                paper
+            )
         
             
         return PipelineResponse(
@@ -226,18 +215,20 @@ class PipelineOrchestrator:
         state
     ):
 
+        papers = self.vector_store.get_indexed_papers()
+        
         sources = []
         
-        for paper in state.indexed_papers:
+        for paper in papers:
             sources.append(
                 SourceReference(
-                    title=paper.title,
-                    pmid=paper.pmid,
-                    pmcid=paper.pmcid,
-                    doi=paper.doi,
-                    journal=paper.journal,
-                    publication_year=paper.publication_year,
-                    url=paper.url 
+                    title=paper.get("title"),
+                    pmid=paper.get("pmid"),
+                    pmcid=paper.get("pmcid"),
+                    doi=paper.get("doi"),
+                    journal=paper.get("journal"),
+                    publication_year=paper.get("publication_year"),
+                    url=paper.get("url")
                 )
             )
             

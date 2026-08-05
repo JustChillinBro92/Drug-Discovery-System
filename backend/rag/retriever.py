@@ -1,5 +1,5 @@
 from rag.embedding_service import embedding_service
-from rag.faiss_service import faiss_service
+from rag.vector_store import vector_store
 
 
 """
@@ -20,7 +20,7 @@ class Retriever:
         
         # Search vector database
         
-        results = faiss_service.search_documents(
+        results = vector_store.search_documents(
             query_embeddings,
             top_k
         )

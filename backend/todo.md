@@ -7,3 +7,5 @@
 4. Text chunker needs semantic chunking and maybe work on full paper text
 
 5. Replace FAISS with a proper vector database like Qdrant
+
+6. Work on conversation state

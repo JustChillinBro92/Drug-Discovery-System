@@ -21,10 +21,10 @@ class ConversationState(BaseModel):
     entities: EntityState = Field(
         default_factory=EntityState
     )
-
-    indexed_papers: List[PaperEntity] = Field(
+    
+    referenced_papers: List[PaperEntity] = Field(
         default_factory=list,
-        description="Research papers indexed into the local vector store for this conversation."
+        description="Papers used in this conversation."
     )
     
     retrieved_chunk_ids: List[str] = Field(

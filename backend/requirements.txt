@@ -13,6 +13,7 @@ rdkit
 neo4j
 
 faiss-cpu
+qdrant-client
 
 google-genai
 

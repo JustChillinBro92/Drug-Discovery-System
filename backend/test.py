@@ -13,7 +13,7 @@ from services.analyzers.similarity_search_service import similarity_search_servi
 
 from rag.text_chunker import text_chunker
 from rag.embedding_service import embedding_service
-from rag.faiss_service import faiss_service
+from rag.vector_store import vector_store
 from rag.retriever import retriever
 
 # result = chembl_service.search_compound("Aspirin")
@@ -193,7 +193,7 @@ for result in results:
 #         chunks
 #     )
     
-#     faiss_service.add_documents(
+#     vector_store.add_documents(
 #         chunks,
 #         embeddings
 #     )

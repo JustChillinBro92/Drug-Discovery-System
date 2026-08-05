@@ -6,7 +6,7 @@ from services.normalizers.paper_normalizer import paper_normalizer
 
 from rag.text_chunker import text_chunker
 from rag.embedding_service import embedding_service
-from rag.faiss_service import faiss_service
+from rag.vector_store import vector_store
 from rag.retriever import retriever
 from rag.context_builder import context_builder
 
@@ -34,7 +34,7 @@ orchestrator = PipelineOrchestrator(
     text_chunker=text_chunker,
     
     embedding_service=embedding_service,
-    faiss_service=faiss_service,
+    vector_store=vector_store,
     
     retriever=retriever,
     context_builder=context_builder,
