@@ -86,10 +86,11 @@ if __name__ == "__main__":
         print("1. Literature Acquisition")
         print("2. Literature Conversation")
         print("3. View Indexed Papers")
-        print("4. Molecule Analysis")
-        print("5. Similar Compound Search")
-        print("6. Drug Likeness")
-        print("7. Report Generation")
+        print("4. Delete Indexed Papers")
+        print("5. Molecule Analysis")
+        print("6. Similar Compound Search")
+        print("7. Drug Likeness")
+        print("8. Report Generation")
         print("0. Exit")
 
 
@@ -104,10 +105,11 @@ if __name__ == "__main__":
             "1": "literature_acquisition",
             "2": "literature_conversation",
             "3": "view_indexed_papers",
-            "4": "molecule_analysis",
-            "5": "similar_compound_search",
-            "6": "drug_likeness",
-            "7": "report_generation"
+            "4": "delete_indexed_papers",
+            "5": "molecule_analysis",
+            "6": "similar_compound_search",
+            "7": "drug_likeness",
+            "8": "report_generation"
         }
 
 
@@ -123,6 +125,16 @@ if __name__ == "__main__":
                 conversation_id=conversation_id,
                 mode=mode,
                 query="",
+                state=state
+            )
+            
+        elif mode == "delete_indexed_papers":
+            query_confirm = input("\nDelete all indexed papers? (y/n): ")
+            
+            result = execute(
+                conversation_id=conversation_id,
+                mode=mode,
+                query=query_confirm,
                 state=state
             )
             
@@ -160,7 +172,10 @@ if __name__ == "__main__":
         print(f"\nMode: {result.mode}")
 
         if result.answer:
-            print("\nAnswer:")
+            print()
+            print("+--------+")
+            print("| Answer |")
+            print("+--------+")
             print(result.answer)
          
            
@@ -254,6 +269,10 @@ if __name__ == "__main__":
             print(f"Chunks Added: {result.chunks_added}")
 
 
+        if result.duplicate_papers is not None:
+            print(f"Duplicate Papers Retrieved: {result.duplicate_papers}")
+
+            
         if result.sources:
             print("\nSources:")
 
@@ -262,6 +281,7 @@ if __name__ == "__main__":
                 print(f"\n[{index}]")
 
                 print(f"Title   : {source.title}")
+                print(f"ChunkID : {source.chunk_id}")
                 print(f"PMID    : {source.pmid}")
                 print(f"PMCID   : {source.pmcid}")
                 print(f"DOI     : {source.doi}")
@@ -269,5 +289,25 @@ if __name__ == "__main__":
                 print(f"Year    : {source.publication_year}")
                 print(f"URL     : {source.url}")
 
+
+        if result.papers:
+            print("\nIndexed Papers:")
+
+            for index, paper in enumerate(result.papers, start=1):
+
+                print(f"\n[{index}]")
+
+                print(f"Title   : {paper.title}")
+                print(f"PMID    : {paper.pmid}")
+                print(f"PMCID   : {paper.pmcid}")
+                print(f"DOI     : {paper.doi}")
+                print(f"Journal : {paper.journal}")
+                print(f"Year    : {paper.publication_year}")
+                print(f"URL     : {paper.url}")
+
+                # if paper.abstract:
+                #     print("\nAbstract:")
+                #     print(paper.abstract)   
+                         
 
         print(f"\n{'=' * 52}")

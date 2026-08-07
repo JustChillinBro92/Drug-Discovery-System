@@ -3,6 +3,7 @@ from services.input_understanding import understand_input
 from models.pipeline_response import PipelineResponse
 from models.conversation_state import ConversationState
 from models.pipeline_response import SourceReference
+from models.paper_entity import PaperEntity
 
 
 
@@ -81,6 +82,13 @@ class PipelineOrchestrator:
                 request,
                 state
             )                    
+            
+        elif request.mode == "delete_indexed_papers":
+
+            return self.run_delete_indexed_papers(
+                request,
+                state
+            )
 
 
         elif request.mode == "molecule_analysis":
@@ -136,6 +144,7 @@ class PipelineOrchestrator:
         
         total_chunks = 0
         added_papers = 0
+        duplicate_papers = 0
         
         
         for paper in papers:
@@ -149,7 +158,8 @@ class PipelineOrchestrator:
             
             if self.vector_store.paper_exists(
                 paper_id
-            ):
+            ):  
+                duplicate_papers += 1
                 continue
             
             chunks = self.text_chunker.chunk_paper(
@@ -168,18 +178,13 @@ class PipelineOrchestrator:
             added_papers += 1
             total_chunks += len(chunks)
             
-            
-            # Keep conversation-specific memory only
-            state.referenced_papers.append(
-                paper
-            )
-        
-            
+    
         return PipelineResponse(
             mode = request.mode,
             message = "Literature indexed successfully!",
             papers_added = added_papers,
-            chunks_added = total_chunks
+            chunks_added = total_chunks,
+            duplicate_papers = duplicate_papers
         )
 
 
@@ -216,27 +221,34 @@ class PipelineOrchestrator:
     ):
 
         papers = self.vector_store.get_indexed_papers()
-        
-        sources = []
-        
-        for paper in papers:
-            sources.append(
-                SourceReference(
-                    title=paper.get("title"),
-                    pmid=paper.get("pmid"),
-                    pmcid=paper.get("pmcid"),
-                    doi=paper.get("doi"),
-                    journal=paper.get("journal"),
-                    publication_year=paper.get("publication_year"),
-                    url=paper.get("url")
-                )
-            )
-            
+                    
         return PipelineResponse(
             mode=request.mode,
-            sources=sources
+            papers=papers
         )
         
+
+    def run_delete_indexed_papers(
+        self,
+        request,
+        state
+    ):
+        
+        query_confirm = request.query.lower()
+        
+        if query_confirm == 'y':
+            self.vector_store.clear_collection()
+        
+            return PipelineResponse(
+                mode=request.mode,
+                message="Indexed papers deleted successfully!"
+            )
+        
+        return PipelineResponse(
+            mode=request.mode,
+            message="Deletion cancelled."
+        )
+
 
     def run_molecule_analysis(
         self,

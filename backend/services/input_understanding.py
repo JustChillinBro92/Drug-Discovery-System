@@ -5,6 +5,7 @@ VALID_MODES = {
     "literature_acquisition",
     "literature_conversation",
     "view_indexed_papers",
+    "delete_indexed_papers",
     "molecule_analysis",
     "similar_compound_search",
     "drug_likeness",
@@ -14,7 +15,6 @@ VALID_MODES = {
 
 """
 Validates and structures user input.
-Does not perform intent detection.
 """
 
 def understand_input(

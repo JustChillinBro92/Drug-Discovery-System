@@ -13,6 +13,7 @@ from qdrant_client.models import (
     MatchValue
 )
 
+from models.paper_entity import PaperEntity
 from models.document_chunk import DocumentChunk
 from models.retrieval import RetrievalResult
 
@@ -111,23 +112,24 @@ class QdrantStore:
         top_k: int = 5
     ) -> list[RetrievalResult]:
         
-        results = self.client.search(
+        results = self.client.query_points(
             collection_name=self.collection_name,
-            query_vector=query_embedding.tolist(),
-            limit=top_k
+            query=query_embedding.tolist(),
+            limit=top_k,
+            with_payload=True
         )
         
         retrieved_results = []
         
-        for result in results:
-            payload = result.payload
+        for point in results.points:
+            payload = point.payload
             
             chunk = DocumentChunk(**payload)
             
             retrieved_results.append(
                 RetrievalResult(
                     chunk=chunk,
-                    similarity_score=float(result.score())
+                    similarity_score=float(point.score)
                 )
             )
             
@@ -156,18 +158,48 @@ class QdrantStore:
                 payload.get("doi")
             )
             
+            if not paper_id:
+                continue
+            
             if paper_id not in papers:
                 papers[paper_id] = {
-                    "title": payload.get("title"),
                     "pmid": payload.get("pmid"),
                     "pmcid": payload.get("pmcid"),
                     "doi": payload.get("doi"),
+                    "title": payload.get("title"),
+                    "authors": payload.get("authors", []),
                     "journal": payload.get("journal"),
                     "publication_year": payload.get("publication_year"),
-                    "url": payload.get("url")                   
+                    "url": payload.get("url"),
+                    "texts": []
                 }
+                
+            papers[paper_id]["texts"].append(
+                payload.get("text", "")
+            )
             
-        return list(papers.values())
+        results = []
+        
+        for paper in papers.values():
+            
+            results.append(
+                PaperEntity(
+                    pmid=paper["pmid"],
+                    pmcid=paper["pmcid"],
+                    doi=paper["doi"],
+                    title=paper["title"],
+                    abstract="\n\n".join(
+                        paper["texts"]
+                    ),
+                    authors=paper["authors"],
+                    journal=paper["journal"],
+                    publication_year=paper["publication_year"],
+                    url=paper["url"]
+                )
+            )                
+                
+            
+        return results
         
     
     """
@@ -182,9 +214,21 @@ class QdrantStore:
         points, _ = self.client.scroll(
             collection_name=self.collection_name,
             scroll_filter=Filter(
-                must=[
+                should=[
                     FieldCondition(
-                        key="paper_id",
+                        key="pmid",
+                        match=MatchValue(
+                            value=paper_id
+                        )
+                    ),
+                    FieldCondition(
+                        key="pmcid",
+                        match=MatchValue(
+                            value=paper_id
+                        )
+                    ),
+                    FieldCondition(
+                        key="doi",
                         match=MatchValue(
                             value=paper_id
                         )
@@ -199,9 +243,13 @@ class QdrantStore:
         return len(points) > 0
    
     
+    
     def clear_collection(self):
-        self.client.delete_collection(
-            collection_name=self.collection_name
+        self.client.delete(
+            collection_name=self.collection_name,
+            points_selector=Filter(
+                must=[]
+            )
         )
 
         # pending
