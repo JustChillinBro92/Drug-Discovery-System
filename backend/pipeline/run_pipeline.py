@@ -224,24 +224,73 @@ if __name__ == "__main__":
                 print(f"Fraction CSP3        : {properties.get('fraction_csp3')}")
                 print(f"QED                  : {properties.get('qed')}")
 
-
-                if properties.get("lipinski"):
-                    lipinski = properties["lipinski"] 
-                    
-                    lipinski = properties["lipinski"]
-
-                    print()
-                    print("+-------------------------+")
-                    print("| Lipinski's Rule of Five |")
-                    print("+-------------------------+")
-
-                    print(f"Molecular Weight ≤ 500 : {lipinski.get('molecular_weight_pass')}")
-                    print(f"LogP ≤ 5               : {lipinski.get('logp_pass')}")
-                    print(f"HBD ≤ 5                : {lipinski.get('hbd_pass')}")
-                    print(f"HBA ≤ 10               : {lipinski.get('hba_pass')}")
-                    print(f"Overall Pass           : {lipinski.get('overall_pass')}")
-                    print(f"Violations             : {lipinski.get('violations')}")
+                 
+            if "drug_likeness" in data:
+                print()
+                print("+---------------+")
+                print("| Drug Likeness |")
+                print("+---------------+")
                 
+                lipinski = data["drug_likeness"]["lipinski"]
+                
+                print("Lipinski's Rule of Five:")
+
+                mw = lipinski["molecular_weight"]
+                print("\nMolecular Weight")
+                print("------------------")
+                print(f"Value : {mw['value']} Da")
+                print(f"Limit : {mw['limit']}")
+                print(f"Pass  : {mw['pass']}")
+                
+                print(f"\nExplanation:")
+                print(f"{mw['explanation']}")
+
+
+                logp = lipinski["logp"]
+                print("\nLogP")
+                print("------")
+                print(f"Value : {logp['value']}")
+                print(f"Limit : {logp['limit']}")
+                print(f"Pass  : {logp['pass']}")
+                
+                print(f"\nExplanation:")
+                print(f"{logp['explanation']}")
+
+
+                hbd = lipinski["hydrogen_bond_donors"]
+                print("\nHydrogen Bond Donors (HBD)")
+                print("----------------------------")
+                print(f"Value : {hbd['value']}")
+                print(f"Limit : {hbd['limit']}")
+                print(f"Pass  : {hbd['pass']}")
+                
+                print(f"\nExplanation:")
+                print(f"{hbd['explanation']}")
+
+
+                hba = lipinski["hydrogen_bond_acceptors"]
+                print("\nHydrogen Bond Acceptors (HBA)")
+                print("-------------------------------")
+                print(f"Value : {hba['value']}")
+                print(f"Limit : {hba['limit']}")
+                print(f"Pass  : {hba['pass']}")
+                
+                print(f"\nExplanation:")
+                print(f"{hba['explanation']}")
+
+
+                overall = lipinski["overall"]
+
+                print("\nOverall Lipinski Result")
+                print("-------------------------")
+                print(f"Pass           : {overall['pass']}")
+                print(f"Violations     : {overall['violations']}")
+                print(f"Classification : {overall['classification']}")
+                
+                print(f"\nExplanation:")
+                print(f"{overall['explanation']}")
+              
+              
             if "similarity_results" in data:
                 compounds = data["similarity_results"]
                 

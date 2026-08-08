@@ -2,8 +2,6 @@ from services.input_understanding import understand_input
 
 from models.pipeline_response import PipelineResponse
 from models.conversation_state import ConversationState
-from models.pipeline_response import SourceReference
-from models.paper_entity import PaperEntity
 
 
 
@@ -105,14 +103,6 @@ class PipelineOrchestrator:
                 request,
                 state,
                 **kwargs
-            )
-
-
-        elif request.mode == "drug_likeness":
-
-            return self.run_drug_likeness(
-                request,
-                state
             )
 
 
@@ -264,12 +254,85 @@ class PipelineOrchestrator:
             compound
         )
         
+        lipinski = properties.lipinski
+        
+        drug_likeness = {
+            "lipinski": {
+                "molecular_weight": {
+                    "value": properties.molecular_weight,
+                    "limit": "≤ 500 Da",
+                    "pass": lipinski.molecular_weight_pass,
+                    "explanation": (
+                        "Molecular weight affects absorption and membrane "
+                        "permeability. Compounds with molecular weight above "
+                        "500 Da often show reduced oral bioavailability."
+                    )
+                },
+
+                "logp": {
+                    "value": properties.logp,
+                    "limit": "≤ 5",
+                    "pass": lipinski.logp_pass,
+                    "explanation": (
+                        "LogP represents lipophilicity. Suitable LogP values "
+                        "help balance membrane permeability and aqueous "
+                        "solubility. Very high lipophilicity may reduce "
+                        "solubility and increase metabolic issues."
+                    )
+                },
+
+                "hydrogen_bond_donors": {
+                    "value": properties.h_bond_donors,
+                    "limit": "≤ 5",
+                    "pass": lipinski.hbd_pass,
+                    "explanation": (
+                        "Hydrogen bond donors influence interactions with "
+                        "biological targets and affect permeability. Excessive "
+                        "donor groups can reduce drug absorption."
+                    )
+                },
+
+                "hydrogen_bond_acceptors": {
+                    "value": properties.h_bond_acceptors,
+                    "limit": "≤ 10",
+                    "pass": lipinski.hba_pass,
+                    "explanation": (
+                        "Hydrogen bond acceptors affect molecular interactions "
+                        "with proteins and solubility. Excessive acceptors may "
+                        "negatively impact permeability and bioavailability."
+                    )
+                },
+
+                "overall": {
+                    "pass": lipinski.overall_pass,
+                    "violations": lipinski.violations,
+                    "classification": (
+                        "Drug-like"
+                        if lipinski.overall_pass
+                        else "Poor drug-likeness"
+                    ),
+                    "explanation": (
+                        "The compound satisfies all Lipinski Rule of Five "
+                        "criteria and shows characteristics commonly associated "
+                        "with orally active drug candidates."
+                        if lipinski.overall_pass
+                        else
+                        "The compound violates one or more Lipinski Rule of "
+                        "Five criteria, which may indicate reduced suitability "
+                        "as an orally active drug candidate."
+                    )
+                }
+            }
+        }
+        
+    
         return PipelineResponse(
             mode = request.mode,
             message = "Molecule analysis completed",
             data = {
                 "compound": compound.model_dump(),
-                "properties": properties.model_dump()
+                "properties": properties.model_dump(),
+                "drug_likeness": drug_likeness
             }
         )
 
@@ -321,18 +384,6 @@ class PipelineOrchestrator:
                 "compound": query_compound.model_dump(),
                 "similarity_results": similarity_results
             }
-        )
-
-
-    def run_drug_likeness(
-        self,
-        request,
-        state
-    ):
-        
-        return PipelineResponse(
-            mode = request.mode,
-            message = "Molecule analysis pipeline pending"
         )
 
 

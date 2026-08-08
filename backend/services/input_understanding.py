@@ -8,7 +8,6 @@ VALID_MODES = {
     "delete_indexed_papers",
     "molecule_analysis",
     "similar_compound_search",
-    "drug_likeness",
     "report_generation"
 }
 
