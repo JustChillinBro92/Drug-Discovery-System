@@ -8,7 +8,8 @@ VALID_MODES = {
     "delete_indexed_papers",
     "molecule_analysis",
     "similar_compound_search",
-    "report_generation"
+    "report_generation",
+    "view_conversation_state"
 }
 
 
@@ -29,7 +30,10 @@ def understand_input(
 
     query = query.strip()
 
-    if mode != "view_indexed_papers" and not query:
+    if mode not in (
+        "view_indexed_papers", 
+        "view_conversation_state"
+    ) and not query:
         raise ValueError("Query cannot be empty")
 
     return AnalysisRequest(

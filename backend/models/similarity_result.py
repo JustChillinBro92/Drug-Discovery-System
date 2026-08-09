@@ -1,16 +1,20 @@
 from pydantic import BaseModel, Field
 
+
 class SimilarityResult(BaseModel):
-    compound_name: str = Field(
+    query_compound: str = Field(
         ...,
-        description="Name of compared compound."
+        description="Compound used as the similarity search query."
     )
-    
+
+    compared_compound: str = Field(
+        ...,
+        description="Compound compared against the query compound."
+    )
+
     similarity_score: float = Field(
         ...,
-        ge = 0.0,
-        le = 1.0,
-        description="Tanimoto similarity score."
+        ge=0.0,
+        le=1.0,
+        description="Tanimoto similarity score between the two compounds."
     )
-    
-    

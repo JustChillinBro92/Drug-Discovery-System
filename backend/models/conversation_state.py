@@ -2,8 +2,9 @@ from typing import List, Optional
 
 from pydantic import BaseModel, Field
 
-from models.paper_entity import PaperEntity
-
+from models.similarity_search_result import SimilarCompound
+from models.referenced_paper import ReferencedPaper
+from models.compound_analysis import CompoundAnalysis
 
 
 class EntityState(BaseModel):
@@ -22,7 +23,17 @@ class ConversationState(BaseModel):
         default_factory=EntityState
     )
     
-    referenced_papers: List[PaperEntity] = Field(
+    analyzed_compounds: List[CompoundAnalysis] = Field(
+        default_factory=list,
+        description="Compounds analyzed during this conversation."
+    )
+    
+    similarity_results: List[SimilarCompound] = Field(
+        default_factory=list,
+        description="Similarity comparisons performed during this conversation."
+    )
+
+    referenced_papers: List[ReferencedPaper] = Field(
         default_factory=list,
         description="Papers used in this conversation."
     )

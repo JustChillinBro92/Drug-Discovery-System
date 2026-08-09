@@ -1,5 +1,7 @@
 import json
 
+from models.conversation_state import ConversationState
+
 from pipeline.orchestrator import PipelineOrchestrator
 
 from services.normalizers.paper_normalizer import paper_normalizer
@@ -54,7 +56,7 @@ def execute(
     conversation_id: str,
     mode: str,
     query: str,
-    state,
+    state: ConversationState,
     **kwargs
 ):
 
@@ -89,8 +91,8 @@ if __name__ == "__main__":
         print("4. Delete Indexed Papers")
         print("5. Molecule Analysis")
         print("6. Similar Compound Search")
-        print("7. Drug Likeness")
-        print("8. Report Generation")
+        print("7. Report Generation")
+        print("8. View Conversation State")
         print("0. Exit")
 
 
@@ -98,6 +100,7 @@ if __name__ == "__main__":
 
 
         if choice == "0":
+            vector_store.close()
             break
 
 
@@ -108,8 +111,8 @@ if __name__ == "__main__":
             "4": "delete_indexed_papers",
             "5": "molecule_analysis",
             "6": "similar_compound_search",
-            "7": "drug_likeness",
-            "8": "report_generation"
+            "7": "report_generation",
+            "8": "view_conversation_state",
         }
 
 
@@ -154,7 +157,15 @@ if __name__ == "__main__":
                 state=state,
                 target_compounds=target_compound_list
             )
-            
+           
+        elif mode == "view_conversation_state":
+            result = execute(
+                conversation_id=conversation_id,
+                mode=mode,
+                query="",
+                state=state
+            )
+         
         else:
 
             query = input("\nQuery: ")
@@ -300,11 +311,61 @@ if __name__ == "__main__":
                 print("+--------------------+")
                 
                 for compound in compounds:
-                    print(f"Canonical Name       : {compound.compound_name}")
+                    print(f"Query Compound       : {compound.query_compound}")
+                    print(f"Compared Compound    : {compound.compound_name}")
                     print(f"ChEMBL ID            : {compound.chembl_id}")
                     print(f"Similarity Score     : {compound.similarity_score}\n")
 
             
+            if "state" in data:
+                state_data = data["state"]
+
+                print()
+                print("+--------------------+")
+                print("| Conversation State |")
+                print("+--------------------+")
+
+                print(f"Conversation ID : {state_data.get('conversation_id')}")
+                print(f"Current Mode    : {state_data.get('current_mode')}")
+
+                print("\nEntities:")
+                print(state_data.get("entities"))
+
+                print("\nAnalyzed Compounds:")
+                for compound in state_data.get("analyzed_compounds", []):
+                    print(compound)
+                    
+                print("\nSimilarity Results:")
+                for similarity_result in state_data.get("similarity_results", []):
+                    print(similarity_result)
+
+                print("\nReferenced Papers:")
+                for paper in state_data.get("referenced_papers", []): 
+                    print(paper)
+                
+                # for index, paper in enumerate(
+                #     state_data.get("referenced_papers", []),
+                #     start=1
+                # ):
+                #     print(f"\n[{index}]")
+
+                #     print(f"Title   : {paper.get('title', 'Unknown')}")
+                #     print(f"PMID    : {paper.get('pmid', 'Unknown')}")
+                #     print(f"PMCID   : {paper.get('pmcid', 'Unknown')}")
+                #     print(f"DOI     : {paper.get('doi', 'Unknown')}")
+                #     print(f"Journal : {paper.get('journal', 'Unknown')}")
+                #     print(f"Year    : {paper.get('publication_year', 'Unknown')}")
+                #     print(f"URL     : {paper.get('url', 'Unknown')}")
+
+                print("\nRetrieved Chunk IDs:")
+                for chunk_id in state_data.get("retrieved_chunk_ids", []):
+                    print(f"- {chunk_id}")
+
+                print("\nImportant Context:")
+                for context in state_data.get("important_context", []):
+                    print(f"- {context}")
+                            
+
         if result.message:
             print("\nMessage:")
             print(result.message)

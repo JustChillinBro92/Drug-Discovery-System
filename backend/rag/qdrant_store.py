@@ -242,8 +242,11 @@ class QdrantStore:
 
         return len(points) > 0
    
-    
-    
+   
+    """
+    Deletes Qdrant collections data
+    """
+        
     def clear_collection(self):
         self.client.delete(
             collection_name=self.collection_name,
@@ -255,6 +258,14 @@ class QdrantStore:
         # pending
         # self._initialize_collection()
         
+
+    """
+    Closes Qdrant client
+    """
+    
+    def close(self):
+        self.client.close()
+
 
 qdrant_store = QdrantStore()
     

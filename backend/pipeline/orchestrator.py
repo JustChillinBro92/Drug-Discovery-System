@@ -2,7 +2,8 @@ from services.input_understanding import understand_input
 
 from models.pipeline_response import PipelineResponse
 from models.conversation_state import ConversationState
-
+from models.compound_analysis import CompoundAnalysis
+from models.paper_entity import PaperEntity
 
 
 class PipelineOrchestrator:
@@ -114,6 +115,14 @@ class PipelineOrchestrator:
             )
 
 
+        elif request.mode == "view_conversation_state":
+            
+            return self.run_view_conversation_state(
+                request,
+                state
+            )
+
+
         else:
             raise ValueError(
                 f"Unsupported mode: {request.mode}"
@@ -188,10 +197,50 @@ class PipelineOrchestrator:
             request.query,
         )
         
-        context, sources = self.context_builder.build_context(
-            retrieved_chunks
-        )
+        # Store retrieved chunks in conversation state
         
+        state.retrieved_chunk_ids = [
+            result.chunk.chunk_id
+            for result in retrieved_chunks
+        ]
+        
+        
+        context, sources, referenced_papers = (
+            self.context_builder.build_context(
+                retrieved_chunks
+            )
+        )
+
+        
+        # Store papers actually referenced in answer
+        
+        existing_paper_ids = {
+            (
+                paper.pmid or
+                paper.pmcid or
+                paper.doi
+            )
+            for paper in state.referenced_papers
+        }
+        
+        
+        for paper in referenced_papers:
+            paper_id = (
+                paper.pmid
+                or paper.pmcid
+                or paper.doi
+            )
+            
+            if paper_id not in existing_paper_ids:
+                state.referenced_papers.append(
+                    paper
+                )
+
+                existing_paper_ids.add(
+                    paper_id
+                )
+                
+                          
         answer = self.generator.generate(
             context = context,
             query = request.query
@@ -253,6 +302,24 @@ class PipelineOrchestrator:
         properties = self.rdkit_service.analyze_properties(
             compound
         )
+        
+        
+        # Update conversation state
+        
+        existing = {
+            c.compound_name
+            for c in state.analyzed_compounds
+        }
+        
+        
+        if compound.canonical_name not in existing:
+            state.analyzed_compounds.append(
+                CompoundAnalysis(
+                    compound=compound,
+                    properties=properties
+                )
+            )
+        
         
         lipinski = properties.lipinski
         
@@ -348,8 +415,10 @@ class PipelineOrchestrator:
             request.query
         )
         
-        query_compound_fingerprint = self.fingerprint_service.generate_morgan_fingerprint(
-            query_compound
+        query_compound_fingerprint = (
+            self.fingerprint_service.generate_morgan_fingerprint(
+                query_compound
+            )   
         )
         
         target_compound_data = []
@@ -359,8 +428,10 @@ class PipelineOrchestrator:
                 compound
             )
             
-            fingerprint = self.fingerprint_service.generate_morgan_fingerprint(
-                nmz_compound
+            fingerprint = (
+                self.fingerprint_service.generate_morgan_fingerprint(
+                    nmz_compound
+                )
             )
             
             target_compound_data.append(
@@ -371,9 +442,20 @@ class PipelineOrchestrator:
             )
         
         
-        similarity_results = self.similarity_search_service.search_similar_compounds(
-            query_compound_fingerprint,
-            target_compound_data
+        similarity_results = (
+            self.similarity_search_service
+            .search_similar_compounds(
+                query_fingerprint=query_compound_fingerprint,
+                query_name=query_compound.canonical_name,
+                compounds=target_compound_data
+            )
+        )
+        
+        
+        # Update conversation state
+
+        state.similarity_results.extend(
+            similarity_results
         )
         
 
@@ -396,5 +478,20 @@ class PipelineOrchestrator:
         return PipelineResponse(
             mode = request.mode,
             message = "Molecule analysis pipeline pending"
+        )
+        
+
+    def run_view_conversation_state(
+        self,
+        request,
+        state
+    ):
+        
+        return PipelineResponse(
+            mode = request.mode,
+            message = "Current conversation state",
+            data = { 
+                "state": state.model_dump()
+            }
         )
         
