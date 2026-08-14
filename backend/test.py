@@ -1,20 +1,20 @@
-import json
+# import json
 
-from services.sources.chembl_service import chembl_service
-from services.sources.europepmc_service import europepmc_service
+# from services.sources.chembl_service import chembl_service
+# from services.sources.europepmc_service import europepmc_service
 
-from services.normalizers.compound_normalizer import compound_normalizer
-from services.normalizers.paper_normalizer import paper_normalizer
+# from services.normalizers.compound_normalizer import compound_normalizer
+# from services.normalizers.paper_normalizer import paper_normalizer
 
-from services.analyzers.rdkit_service import rdkit_service
-from services.analyzers.fingerprint_service import fingerprint_service
-from services.analyzers.similarity_service import similarity_service
-from services.analyzers.similarity_search_service import similarity_search_service
+# from services.analyzers.rdkit_service import rdkit_service
+# from services.analyzers.fingerprint_service import fingerprint_service
+# from services.analyzers.similarity_service import similarity_service
+# from services.analyzers.similarity_search_service import similarity_search_service
 
-from rag.text_chunker import text_chunker
-from rag.embedding_service import embedding_service
-from rag.vector_store import vector_store
-from rag.retriever import retriever
+# from rag.text_chunker import text_chunker
+# from rag.embedding_service import embedding_service
+# from rag.vector_store import vector_store
+# from rag.retriever import retriever
 
 # result = chembl_service.search_compound("Aspirin")
 
@@ -32,10 +32,10 @@ from rag.retriever import retriever
 # print(molecule)
 
 
-compound1 = compound_normalizer.normalize("Aspirin")
-compound2 = compound_normalizer.normalize("Ibuprofen")
-compound3 = compound_normalizer.normalize("Paracetamol")
-compound4 = compound_normalizer.normalize("Montelukast")
+# compound1 = compound_normalizer.normalize("Aspirin")
+# compound2 = compound_normalizer.normalize("Ibuprofen")
+# compound3 = compound_normalizer.normalize("Paracetamol")
+# compound4 = compound_normalizer.normalize("Montelukast")
 
 
 # print(
@@ -73,10 +73,10 @@ compound4 = compound_normalizer.normalize("Montelukast")
 #     )
 # )
 
-fingerprint1 = fingerprint_service.generate_morgan_fingerprint(compound1)
-fingerprint2 = fingerprint_service.generate_morgan_fingerprint(compound2)
-fingerprint3 = fingerprint_service.generate_morgan_fingerprint(compound3)
-fingerprint4 = fingerprint_service.generate_morgan_fingerprint(compound4)
+# fingerprint1 = fingerprint_service.generate_morgan_fingerprint(compound1)
+# fingerprint2 = fingerprint_service.generate_morgan_fingerprint(compound2)
+# fingerprint3 = fingerprint_service.generate_morgan_fingerprint(compound3)
+# fingerprint4 = fingerprint_service.generate_morgan_fingerprint(compound4)
 
 
 
@@ -112,33 +112,33 @@ fingerprint4 = fingerprint_service.generate_morgan_fingerprint(compound4)
 # )
 
 
-compound_database = [
-    {
-        "compound": compound2,
-        "fingerprint": fingerprint2
-    },
-    {
-        "compound": compound3,
-        "fingerprint": fingerprint3
-    },
-    {
-        "compound": compound4,
-        "fingerprint": fingerprint4
-    }
-]
+# compound_database = [
+#     {
+#         "compound": compound2,
+#         "fingerprint": fingerprint2
+#     },
+#     {
+#         "compound": compound3,
+#         "fingerprint": fingerprint3
+#     },
+#     {
+#         "compound": compound4,
+#         "fingerprint": fingerprint4
+#     }
+# ]
 
-results = similarity_search_service.search_similar_compounds(
-    fingerprint1,
-    compound_database,
-)
+# results = similarity_search_service.search_similar_compounds(
+#     fingerprint1,
+#     compound_database,
+# )
 
-for result in results:
-    print(
-            json.dumps(
-            result.model_dump(),
-            indent=4
-        )
-    )
+# for result in results:
+#     print(
+#             json.dumps(
+#             result.model_dump(),
+#             indent=4
+#         )
+#     )
 
 
 # epmc_papers = europepmc_service.search_service(

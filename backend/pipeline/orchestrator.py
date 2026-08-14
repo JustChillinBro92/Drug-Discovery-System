@@ -304,7 +304,11 @@ class PipelineOrchestrator:
         )
         
         
-        # Update conversation state
+        # Update conversation 
+        
+        state.entities.add_compound(
+            compound.canonical_name
+        )
         
         existing = {
             c.compound_name
@@ -415,6 +419,12 @@ class PipelineOrchestrator:
             request.query
         )
         
+        # Update conversation 
+        
+        state.entities.add_compound(
+            query_compound.canonical_name
+        )
+        
         query_compound_fingerprint = (
             self.fingerprint_service.generate_morgan_fingerprint(
                 query_compound
@@ -426,6 +436,12 @@ class PipelineOrchestrator:
         for compound in kwargs.get("target_compounds", []):
             nmz_compound = self.compound_normalizer.normalize(
                 compound
+            )
+            
+            # Update conversation 
+
+            state.entities.add_compound(
+                nmz_compound.canonical_name
             )
             
             fingerprint = (

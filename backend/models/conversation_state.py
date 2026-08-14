@@ -11,6 +11,18 @@ class EntityState(BaseModel):
     compounds: List[str] = Field(default_factory=list)
     diseases: List[str] = Field(default_factory=list)
     proteins: List[str] = Field(default_factory=list)
+    
+    def add_compound(self, compound: str):
+        if compound not in self.compounds:
+            self.compounds.append(compound)
+            
+    def add_disease(self, disease: str):
+        if disease not in self.diseases:
+            self.diseases.append(disease)
+
+    def add_protein(self, protein: str):
+        if protein not in self.proteins:
+            self.proteins.append(protein)
 
 
 
