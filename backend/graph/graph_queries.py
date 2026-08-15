@@ -1,4 +1,36 @@
 # ========================================================
+# GRAPH CONSTRAINTS
+# ========================================================
+
+CREATE_COMPOUND_CONSTRAINT = """
+CREATE CONSTRAINT compound_chembl_id IF NOT EXISTS
+FOR (c:Compound)
+REQUIRE c.chembl_id IS UNIQUE
+"""
+
+
+CREATE_PROTEIN_CONSTRAINT = """
+CREATE CONSTRAINT protein_uniprot_id IF NOT EXISTS
+FOR (p:Protein)
+REQUIRE p.uniprot_id IS UNIQUE
+"""
+
+
+CREATE_DISEASE_CONSTRAINT = """
+CREATE CONSTRAINT disease_id IF NOT EXISTS
+FOR (d:Disease)
+REQUIRE d.disease_id IS UNIQUE
+"""
+
+
+CREATE_PAPER_CONSTRAINT = """
+CREATE CONSTRAINT paper_id IF NOT EXISTS
+FOR (p:Paper)
+REQUIRE p.paper_id IS UNIQUE
+"""
+
+
+# ========================================================
 # CREATE NODES
 # ========================================================
 
@@ -160,6 +192,22 @@ MATCH (s:SideEffect {
 })
 
 MERGE (c)-[:CAUSES]->(s)
+"""
+
+
+ADD_COMPOUND_SIMILAR_TO_COMPOUND = """
+MATCH (c1:Compound {
+    chembl_id: $query_chembl_id
+})
+
+MATCH (c2:Compound {
+    chembl_id: $target_chembl_id
+})
+
+MERGE (c1)-[r:SIMILAR_TO]->(c2)
+
+SET
+    r.similarity_score = $similarity_score
 """
 
 

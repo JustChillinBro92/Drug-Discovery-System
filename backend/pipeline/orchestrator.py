@@ -19,7 +19,8 @@ class PipelineOrchestrator:
         compound_normalizer,
         rdkit_service,
         fingerprint_service,
-        similarity_search_service
+        similarity_search_service,
+        graph_service
     ):
         # Pending
         
@@ -30,10 +31,11 @@ class PipelineOrchestrator:
         self.retriever = retriever
         self.context_builder = context_builder
         self.generator = generator
-        self.compound_normalizer=compound_normalizer
-        self.rdkit_service=rdkit_service
-        self.fingerprint_service=fingerprint_service
-        self.similarity_search_service=similarity_search_service
+        self.compound_normalizer = compound_normalizer
+        self.rdkit_service = rdkit_service
+        self.fingerprint_service = fingerprint_service
+        self.similarity_search_service = similarity_search_service
+        self.graph_service = graph_service
 
 
     """
@@ -419,7 +421,7 @@ class PipelineOrchestrator:
             request.query
         )
         
-        # Update conversation 
+        # Update conversation state
         
         state.entities.add_compound(
             query_compound.canonical_name
@@ -438,7 +440,7 @@ class PipelineOrchestrator:
                 compound
             )
             
-            # Update conversation 
+            # Update conversation state
 
             state.entities.add_compound(
                 nmz_compound.canonical_name
@@ -473,6 +475,37 @@ class PipelineOrchestrator:
         state.similarity_results.extend(
             similarity_results
         )
+        
+        # Add query & target compounds to graph
+        
+        self.graph_service.add_compound(
+            query_compound
+        )
+        
+        
+        for result in similarity_results:
+            
+            target_compound = next(
+                (
+                    item["compound"]
+                    for item in target_compound_data
+                    if item["compound"].chembl_id == result.chembl_id
+                ),
+                None
+            )
+            
+            if target_compound is None:
+                continue
+            
+            self.graph_service.add_compound(
+                target_compound
+            )
+            
+            self.graph_service.add_compound_similarity(
+                query_compound=query_compound,
+                target_compound=target_compound,
+                similarity_score=result.similarity_score
+            )
         
 
         return PipelineResponse(

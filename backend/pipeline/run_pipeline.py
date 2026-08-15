@@ -20,10 +20,13 @@ from services.analyzers.similarity_search_service import similarity_search_servi
 from llm.gemini_client import GeminiClient
 from llm.generator import Generator
 
+from graph.graph_service import graph_service
+
 
 # Initialize dependencies
 
 gemini_client = GeminiClient()
+
 generator = Generator(
     client=gemini_client
 )
@@ -46,7 +49,8 @@ orchestrator = PipelineOrchestrator(
     rdkit_service=rdkit_service,
     fingerprint_service=fingerprint_service,
     
-    similarity_search_service=similarity_search_service
+    similarity_search_service=similarity_search_service,
+    graph_service=graph_service
 )
 
 

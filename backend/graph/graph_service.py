@@ -29,6 +29,8 @@ class GraphService:
             username=username,
             password=password
         )
+        
+        self.client.initialize_schema()
 
 
     def close(self):
@@ -269,6 +271,28 @@ class GraphService:
         )
 
 
+    # ========================================================
+    # Compound -> Compound
+    # SIMILAR_TO
+    # ========================================================
+
+    def add_compound_similarity(
+        self,
+        query_compound: CompoundEntity,
+        target_compound: CompoundEntity,
+        similarity_score: float
+    ):
+        
+        self.client.execute_query(
+            graph_queries.ADD_COMPOUND_SIMILAR_TO_COMPOUND,
+            {
+                "query_chembl_id": query_compound.chembl_id,
+                "target_chembl_id": target_compound.chembl_id,
+                "similarity_score": similarity_score
+            }
+        )
+
+
     # |=================================|
     # | DELETE THE GRAPH NODES          |
     # |=================================|
@@ -391,7 +415,6 @@ class GraphService:
                 "docking_id": docking_id
             }
         )
-
 
 
 

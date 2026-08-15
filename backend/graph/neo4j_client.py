@@ -1,5 +1,6 @@
 from neo4j import GraphDatabase
 
+from . import graph_queries
 
 class Neo4jClient:
     def __init__(
@@ -12,6 +13,27 @@ class Neo4jClient:
             uri,
             auth=(username, password)
         )
+        
+    def initialize_schema(self):
+
+        with self.driver.session() as session:
+
+            session.run(
+                graph_queries.CREATE_COMPOUND_CONSTRAINT
+            )
+
+            session.run(
+                graph_queries.CREATE_PROTEIN_CONSTRAINT
+            )
+
+            session.run(
+                graph_queries.CREATE_DISEASE_CONSTRAINT
+            )
+
+            session.run(
+                graph_queries.CREATE_PAPER_CONSTRAINT
+            )
+        
 
 
     def execute_query(

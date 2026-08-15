@@ -8,7 +8,7 @@ from models.biomedical_entities import (
 )
 
 
-compound = CompoundEntity(
+compound1 = CompoundEntity(
     original_text="Aspirin",
     canonical_name="ASPIRIN_TEST",
     confidence=1.0,
@@ -17,6 +17,17 @@ compound = CompoundEntity(
     smiles="CC(=O)Oc1ccccc1C(=O)O",
     inchikey="TEST_INCHIKEY",
     molecular_formula="C9H8O4"
+)
+
+compound2 = CompoundEntity(
+    original_text="Acetaminophen",
+    canonical_name="ACETAMINOPHEN",
+    confidence=1.0,
+    synonyms=[],
+    chembl_id="CHEMBL112",
+    smiles="CC(=O)NC1=CC=C(C=C1)O",
+    inchikey="RZVAJINKPMORJF-UHFFFAOYSA-N",
+    molecular_formula="C8H9NO2"
 )
 
 
@@ -54,28 +65,37 @@ try:
 
     print("Adding nodes...")
 
-    graph_service.add_compound(compound)
+    graph_service.add_compound(compound1)
+    graph_service.add_compound(compound2)
+
     graph_service.add_protein(protein)
     graph_service.add_disease(disease)
     graph_service.add_side_effect(side_effect)
+
 
     print("Nodes added.")
 
     print("Adding relationships...")
 
     graph_service.add_compound_binds_protein(
-        compound,
+        compound1,
         protein
     )
 
     graph_service.add_compound_treats_disease(
-        compound,
+        compound1,
         disease
     )
 
     graph_service.add_compound_causes_side_effect(
-        compound,
+        compound1,
         side_effect
+    )
+    
+    graph_service.add_compound_similarity(
+        query_compound=compound1,
+        target_compound=compound2,
+        similarity_score=0.2222
     )
 
     print("Relationships added.")
@@ -87,7 +107,7 @@ try:
 finally:
 
     graph_service.delete_compound(
-        compound.chembl_id
+        compound1.chembl_id
     )
 
     graph_service.delete_protein(
