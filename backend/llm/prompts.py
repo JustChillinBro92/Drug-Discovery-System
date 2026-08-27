@@ -1,4 +1,4 @@
-SYSTEM_PROMPT = """
+SYSTEM_PROMPT_1 = """
 You are an AI biomedical research assistant.
 
 Your job is to answer questions related to:
@@ -6,6 +6,7 @@ Your job is to answer questions related to:
 - compounds
 - diseases
 - proteins
+- side effects
 - biomedical literature
 
 Use only the provided context.
@@ -13,7 +14,6 @@ Use only the provided context.
 If the context does not contain enough information,
 state that clearly.
 """
-
 
 RAG_PROMPT = """
 {system_prompt}
@@ -31,4 +31,58 @@ User question:
 
 Generate a concise scientific answer.
 Include important evidence from the provided context.
+"""
+
+
+SYSTEM_PROMPT_2 = """
+You are a biomedical interaction classifier.
+
+Using only the provided ChEMBL target and activity data,
+classify each compound-target interaction as exactly one of:
+
+- INHIBITS
+- ACTIVATES
+- BINDS_TO
+- UNKNOWN
+
+Rules:
+- INHIBITS: compound reduces or blocks target activity.
+- ACTIVATES: compound increases or stimulates target activity.
+- BINDS_TO: compound binds the target, but inhibition/activation
+  is not established.
+- UNKNOWN: insufficient evidence.
+- Prefer explicit action_type when available.
+- Use the actual compound-target experiment, not keywords alone.
+- Words such as "activating" or "activation" referring to a
+  stimulus or pathway do not mean the compound activates the target.
+- Consider all activities for each target together.
+- Do not invent information.
+
+Return ONLY valid JSON mapping each target_chembl_id
+to its interaction type.
+
+Example:
+
+{
+  "CHEMBL230": "INHIBITS",
+  "CHEMBL3253": "BINDS_TO"
+}
+"""
+
+
+ASSAY_INTERACTION_PROMPT = """
+{system_prompt}
+
+Targets and their ChEMBL activities:
+
+{targets}
+
+Determine the interaction type for EACH target.
+
+Return ONLY valid JSON in this format:
+
+{{
+  "CHEMBL230": "INHIBITS",
+  "CHEMBL3253": "BINDS_TO"
+}}
 """

@@ -1,6 +1,11 @@
 # import json
 
-from services.sources.chembl_service import chembl_service
+from llm.gemini_client import GeminiClient
+from llm.generator import Generator
+
+# from services.sources.chembl_service import chembl_service
+from services.sources.chembl_service import ChEMBLService
+
 # from services.sources.europepmc_service import europepmc_service
 
 # from services.normalizers.compound_normalizer import compound_normalizer
@@ -212,18 +217,88 @@ from services.sources.chembl_service import chembl_service
 #         )
 #     )
 
+gemini_client = GeminiClient()
 
-# proteins = chembl_service.get_protein_targets_for_molecule(
-#     "CHEMBL25"
-# )
+generator = Generator(
+    client=gemini_client
+)
 
-# for protein in proteins:
-#     print(
-#         f"\nTarget ID: {protein['target_chembl_id']}"
-#         f"\nTarget: {protein['target_name']}"
-#         f"\nOrganism: {protein['organism']}"
-#         f"\nAccession: {protein['accession']}"
-#         f"\nDescription: {protein['component_description']}"
-#         f"\nType: {protein['component_type']}"
+chembl_service = ChEMBLService(generator=generator)
+
+
+# activities = chembl_service.get_activities("CHEMBL25")
+
+# for activity in activities:
+#     if activity.get("activity_id") == 42173:
+#         print(activity)
+
+
+proteins = chembl_service.get_protein_targets_for_molecule(
+    "CHEMBL25"
+)
+
+for protein in proteins:
+    print(
+        f"\nTarget ID: {protein['target_chembl_id']}"
+        f"\nTarget: {protein['target_name']}"
+        f"\nOrganism: {protein['organism']}"
+        f"\nAccession: {protein['accession']}"
+        f"\nDescription: {protein['component_description']}"
+        f"\nType: {protein['component_type']}"
+        f"\nInteraction: {protein['interaction_type']}"
+        f"\nActivities: {len(protein['activities'])}"
+    )
+
+    for activity in protein["activities"]:
+        print(
+            f"\nActivity ID: "
+            f"{activity['activity_id']}"
+        )
+        print(
+            f"Type: "
+            f"{activity['standard_type']}"
+        )
+        print(
+            f"Value: "
+            f"{activity['standard_value']} "
+            f"{activity['standard_units']}"
+        )
+        print(
+            f"Assay: "
+            f"{activity['assay_chembl_id']}"
+        )
+        print(
+            f"Year: "
+            f"{activity['document_year']}"
+        )
+
+# test_ids = [
+#     "CHEMBL25",      # Aspirin
+#     "CHEMBL521",     # Ibuprofen
+#     "CHEMBL112",     # Paracetamol
+#     "CHEMBL113",     # Caffeine
+#     "CHEMBL154"      # Naproxen
+# ]
+
+# for molecule_id in test_ids:
+
+#     print(f"\n{'=' * 50}")
+#     print(f"Molecule: {molecule_id}")
+#     print(f"{'=' * 50}")
+
+#     proteins = chembl_service.get_protein_targets_for_molecule(
+#         molecule_id
 #     )
 
+#     print(f"Protein targets: {len(proteins)}")
+
+#     for protein in proteins:
+#         print(
+#             protein["target_chembl_id"],
+#             "|",
+#             protein["target_name"],
+#             "|",
+#             protein["organism"],
+#             "|",
+#             protein["accession"]
+#         )

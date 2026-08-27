@@ -26,7 +26,6 @@ from graph.graph_service import graph_service
 # Initialize dependencies
 
 gemini_client = GeminiClient()
-
 generator = Generator(
     client=gemini_client
 )
