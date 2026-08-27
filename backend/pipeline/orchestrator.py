@@ -325,6 +325,12 @@ class PipelineOrchestrator:
                     properties=properties
                 )
             )
+            
+        # Add query compound to graph
+        
+        self.graph_service.add_compound(
+            compound
+        )            
         
         
         lipinski = properties.lipinski

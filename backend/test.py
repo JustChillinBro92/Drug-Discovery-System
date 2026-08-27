@@ -1,6 +1,6 @@
 # import json
 
-# from services.sources.chembl_service import chembl_service
+from services.sources.chembl_service import chembl_service
 # from services.sources.europepmc_service import europepmc_service
 
 # from services.normalizers.compound_normalizer import compound_normalizer
@@ -212,4 +212,18 @@
 #         )
 #     )
 
+
+# proteins = chembl_service.get_protein_targets_for_molecule(
+#     "CHEMBL25"
+# )
+
+# for protein in proteins:
+#     print(
+#         f"\nTarget ID: {protein['target_chembl_id']}"
+#         f"\nTarget: {protein['target_name']}"
+#         f"\nOrganism: {protein['organism']}"
+#         f"\nAccession: {protein['accession']}"
+#         f"\nDescription: {protein['component_description']}"
+#         f"\nType: {protein['component_type']}"
+#     )
 
