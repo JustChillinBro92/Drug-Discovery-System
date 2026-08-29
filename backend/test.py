@@ -6,10 +6,12 @@ from llm.generator import Generator
 # from services.sources.chembl_service import chembl_service
 from services.sources.chembl_service import ChEMBLService
 
+from services.sources.uniprot_service import uniprot_service
 # from services.sources.europepmc_service import europepmc_service
 
 # from services.normalizers.compound_normalizer import compound_normalizer
 # from services.normalizers.paper_normalizer import paper_normalizer
+from services.normalizers.protein_normalizer import protein_normalizer
 
 # from services.analyzers.rdkit_service import rdkit_service
 # from services.analyzers.fingerprint_service import fingerprint_service
@@ -234,7 +236,7 @@ chembl_service = ChEMBLService(generator=generator)
 
 
 proteins = chembl_service.get_protein_targets_for_molecule(
-    "CHEMBL25"
+    "CHEMBL3707395"
 )
 
 for protein in proteins:
@@ -248,6 +250,7 @@ for protein in proteins:
         f"\nInteraction: {protein['interaction_type']}"
         f"\nActivities: {len(protein['activities'])}"
     )
+    
 
     for activity in protein["activities"]:
         print(
@@ -271,7 +274,29 @@ for protein in proteins:
             f"Year: "
             f"{activity['document_year']}"
         )
-
+        
+    protein_details = uniprot_service.get_protein(
+        protein['accession']
+    )
+    
+    nmz_protein = protein_normalizer.normalize(
+        protein_details,
+        protein["organism"]
+    )
+    
+    print(
+        f"\nUniProt ID: {nmz_protein.uniprot_id}"
+        f"\nProtein Name: {nmz_protein.protein_name}"
+        f"\nGene Symbol: {nmz_protein.gene_symbol}"
+        # f"\nOrganism: {nmz_protein.organism}"
+        # f"\nFunction: {nmz_protein.function}"
+        # f"\nSubcellular Location: {nmz_protein.subcellular_location}"
+        # f"\nPathways: {nmz_protein.pathways}"
+        # f"\nSequence: {nmz_protein.sequence}"
+        # f"\nSequence Length: {nmz_protein.sequence_length}"
+    )
+        
+        
 # test_ids = [
 #     "CHEMBL25",      # Aspirin
 #     "CHEMBL521",     # Ibuprofen

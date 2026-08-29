@@ -62,20 +62,20 @@ class CompoundEntity(BaseBioMedicalEntity):
     
 # Protein Entity class (UniProt)
 
-class ProteinEntity(BaseBioMedicalEntity):
+class ProteinEntity(BaseModel):
     uniprot_id: str = Field(
         ...,
-        description="UniProt identifier for the protein."
-    )
-
-    gene_symbol: Optional[str] = Field(
-        default=None,
-        description="Gene symbol associated with the protein."
+        description="UniProt accession for the protein."
     )
 
     protein_name: Optional[str] = Field(
         default=None,
-        description="Name of the protein."
+        description="Recommended name of the protein."
+    )
+
+    gene_symbol: Optional[str] = Field(
+        default=None,
+        description="Primary gene symbol associated with the protein."
     )
 
     organism: Optional[str] = Field(
@@ -83,6 +83,31 @@ class ProteinEntity(BaseBioMedicalEntity):
         description="Organism in which the protein is found."
     )
 
+    function: Optional[str] = Field(
+        default=None,
+        description="Biological function of the protein."
+    )
+
+    subcellular_location: Optional[str] = Field(
+        default=None,
+        description="Subcellular location of the protein."
+    )
+    
+    pathways: list[str] = Field(
+        default_factory=list,
+        description="Biological pathways associated with the protein."
+    )
+    
+    sequence: Optional[str] = Field(
+        default=None,
+        description="Amino acid sequence of the protein."
+    )
+
+    sequence_length: Optional[int] = Field(
+        default=None,
+        description="Length of the protein sequence in amino acids."
+    )
+    
     
     
 # Disease Entity class (DisGeNET)

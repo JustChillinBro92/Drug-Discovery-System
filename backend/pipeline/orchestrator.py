@@ -3,7 +3,6 @@ from services.input_understanding import understand_input
 from models.pipeline_response import PipelineResponse
 from models.conversation_state import ConversationState
 from models.compound_analysis import CompoundAnalysis
-from models.paper_entity import PaperEntity
 
 
 class PipelineOrchestrator:

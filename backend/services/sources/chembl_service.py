@@ -232,6 +232,13 @@ class ChEMBLService:
         target_activities = {}
 
         for activity in activities:
+            
+            # Filter by human species
+            
+            if activity.get(
+                "target_organism"
+            ) != "Homo sapiens":
+                continue
 
             target_id = activity.get(
                 "target_chembl_id"
@@ -273,7 +280,6 @@ class ChEMBLService:
                 continue
 
             target = targets[0]
-
 
             targets_for_llm.append({
 
@@ -335,7 +341,7 @@ class ChEMBLService:
 
 
         # ---------------------------------------------------------
-        # ONE Gemini request for the ENTIRE molecule
+        # Gemini request for the ENTIRE molecule
         # ---------------------------------------------------------
 
         interaction_types = (
@@ -459,12 +465,11 @@ class ChEMBLService:
                 []
             ):
 
-                # Only human targets and single proteins
+                # Only single proteins
 
-                if (
-                    target.get("organism") != "Homo sapiens" or
-                    target.get("target_type") != "SINGLE PROTEIN"
-                ):
+                if target.get(
+                    "target_type"
+                ) != "SINGLE PROTEIN":
                     continue
 
 
