@@ -12,7 +12,6 @@ Calculate Tanimoto similarity between two fingerprints.
 
 
 class SimilarityService:
-
     def convert_to_bitvector(
         self,
         fingerprint: MolecularFingerprint

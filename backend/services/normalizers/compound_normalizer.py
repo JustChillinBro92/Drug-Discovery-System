@@ -1,7 +1,8 @@
 from models.biomedical_entities import CompoundEntity
 
 from services.sources.chembl_service import chembl_service
-from services.normalizers.synonym_cleaner import synonym_cleaner
+
+# from services.normalizers.synonym_cleaner import synonym_cleaner
 
 
 class CompoundNormalizer:
@@ -40,17 +41,17 @@ class CompoundNormalizer:
         
         # 5: Extract synonyms
         
-        raw_synonyms = []
+        # raw_synonyms = []
         
-        for synonym in molecule.get(
-            "molecule_synonyms", []
-        ):
-            name = synonym.get("molecule_synonym")
-            if name:
-                raw_synonyms.append(name)
+        # for synonym in molecule.get(
+        #     "molecule_synonyms", []
+        # ):
+        #     name = synonym.get("molecule_synonym")
+        #     if name:
+        #         raw_synonyms.append(name)
         
         
-        synonyms = synonym_cleaner.clean(raw_synonyms)
+        # synonyms = synonym_cleaner.clean(raw_synonyms)
 
         
         # 6: Extract chemical data safely
@@ -81,7 +82,7 @@ class CompoundNormalizer:
             original_text = compound_name,
             canonical_name = canonical_name,
             confidence = 1.0,
-            synonyms = synonyms,
+            # synonyms = synonyms,
             chembl_id = chembl_id,
             smiles = smiles,
             inchikey = inchikey,

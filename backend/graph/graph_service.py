@@ -8,6 +8,7 @@ from models.biomedical_entities import (
     PathwayEntity,
     DockingResultEntity
 )
+from models.compound_analysis import CompoundAnalysis
 
 from models.paper_entity import PaperEntity
 
@@ -48,12 +49,20 @@ class GraphService:
 
     def add_compound(
         self,
-        compound: CompoundEntity
+        compound: CompoundAnalysis
     ):
+        params = {
+            **compound.compound.model_dump(),
+            **compound.properties.model_dump(exclude={"lipinski"}),
+            **{
+                f"lipinski_{key}": value
+                for key, value in compound.properties.lipinski.model_dump().items()
+            }
+        }
 
         self.client.execute_query(
             graph_queries.ADD_COMPOUND,
-            compound.model_dump()
+            params
         )
 
 
@@ -213,20 +222,22 @@ class GraphService:
 
     # ========================================================
     # Compound -> Protein
-    # BINDS_TO
+    # INTERACTION
     # ========================================================
 
-    def add_compound_binds_protein(
+    def add_compound_protein_interaction(
         self,
         compound: CompoundEntity,
-        protein: ProteinEntity
+        protein: ProteinEntity,
+        interaction,
     ):
 
         self.client.execute_query(
-            graph_queries.ADD_COMPOUND_BINDS_PROTEIN,
+            graph_queries.ADD_COMPOUND_PROTEIN_INTERACTION,
             {
                 "chembl_id": compound.chembl_id,
-                "uniprot_id": protein.uniprot_id
+                "uniprot_id": protein.uniprot_id,
+                "interaction": interaction
             }
         )
 

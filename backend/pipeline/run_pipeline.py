@@ -4,7 +4,6 @@ from models.conversation_state import ConversationState
 
 from pipeline.orchestrator import PipelineOrchestrator
 
-from services.normalizers.paper_normalizer import paper_normalizer
 
 from rag.text_chunker import text_chunker
 from rag.embedding_service import embedding_service
@@ -12,13 +11,19 @@ from rag.vector_store import vector_store
 from rag.retriever import retriever
 from rag.context_builder import context_builder
 
+from llm.gemini_client import GeminiClient
+from llm.generator import Generator
+
+from services.analyzers.chembl_target_analyzer import ChEMBLTargetAnalyzer
 from services.normalizers.compound_normalizer import compound_normalizer
+
+from services.normalizers.protein_normalizer import protein_normalizer
+from services.normalizers.paper_normalizer import paper_normalizer
+
 from services.analyzers.rdkit_service import rdkit_service
 from services.analyzers.fingerprint_service import fingerprint_service
 from services.analyzers.similarity_search_service import similarity_search_service
-
-from llm.gemini_client import GeminiClient
-from llm.generator import Generator
+from services.sources.uniprot_service import uniprot_service
 
 from graph.graph_service import graph_service
 
@@ -30,6 +35,9 @@ generator = Generator(
     client=gemini_client
 )
 
+target_analyzer = ChEMBLTargetAnalyzer(
+    generator=generator
+)
 
 # Inject dependencies into orchestrator (Pending)
 
@@ -43,6 +51,10 @@ orchestrator = PipelineOrchestrator(
     retriever=retriever,
     context_builder=context_builder,
     generator=generator,
+    
+    target_analyzer=target_analyzer,
+    uniprot_service=uniprot_service,
+    protein_normalizer=protein_normalizer,
     
     compound_normalizer=compound_normalizer,
     rdkit_service=rdkit_service,
@@ -305,6 +317,39 @@ if __name__ == "__main__":
                 print(f"{overall['explanation']}")
               
               
+            if "proteins" in data:
+                proteins = data["proteins"]
+                
+                print()
+                print("+----------------------+")
+                print("| Protein Information  |")
+                print("+----------------------+")
+
+                for index, protein in enumerate(proteins, start=1):
+                    print(f"\nProtein [{index}]")
+                    print("+-------------+")
+                    print(f"Target ID             : {protein.get('target_chembl_id')}")
+                    print(f"Target                : {protein.get('target_name')}")
+                    print(f"Organism              : {protein.get('organism')}")
+                    print(f"Accession             : {protein.get('accession')}")
+                    print(f"Description           : {protein.get('component_description')}")
+                    print(f"Type                  : {protein.get('component_type')}")
+                    print(f"Interaction           : {protein.get('interaction_type')}")
+                    print(f"Activities            : {protein.get('activities_no')}")
+
+                    nmz_protein = protein.get("protein", {})                       
+                        
+                    print()
+                    print(f"UniProt ID            : {nmz_protein.get('uniprot_id')}")
+                    print(f"Protein Name          : {nmz_protein.get('protein_name')}")
+                    print(f"Gene Symbol           : {nmz_protein.get('gene_symbol')}")
+                    # print(f"Function              : {nmz_protein.get('function')}")
+                    print(f"Subcellular Location  : {nmz_protein.get('subcellular_location')}")
+                    print(f"Pathways              : {nmz_protein.get('pathways')}")
+                    print(f"Sequence              : {nmz_protein.get('sequence')}")                    
+                    print(f"Sequence Length       : {nmz_protein.get('sequence_length')}")
+
+
             if "similarity_results" in data:
                 compounds = data["similarity_results"]
                 

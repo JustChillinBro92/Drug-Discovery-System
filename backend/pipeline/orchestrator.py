@@ -15,6 +15,9 @@ class PipelineOrchestrator:
         retriever,
         context_builder,
         generator,
+        target_analyzer,
+        uniprot_service,
+        protein_normalizer,
         compound_normalizer,
         rdkit_service,
         fingerprint_service,
@@ -30,6 +33,9 @@ class PipelineOrchestrator:
         self.retriever = retriever
         self.context_builder = context_builder
         self.generator = generator
+        self.target_analyzer = target_analyzer
+        self.uniprot_service = uniprot_service
+        self.protein_normalizer = protein_normalizer
         self.compound_normalizer = compound_normalizer
         self.rdkit_service = rdkit_service
         self.fingerprint_service = fingerprint_service
@@ -304,34 +310,76 @@ class PipelineOrchestrator:
             compound
         )
         
-        
-        # Update conversation 
+        # Update conversation state
         
         state.entities.add_compound(
             compound.canonical_name
         )
         
         existing = {
-            c.compound_name
+            c.compound.compound_name
             for c in state.analyzed_compounds
         }
         
-        
         if compound.canonical_name not in existing:
-            state.analyzed_compounds.append(
-                CompoundAnalysis(
-                    compound=compound,
-                    properties=properties
-                )
+            compound_analysis = CompoundAnalysis(
+                compound=compound,
+                properties=properties
             )
             
-        # Add query compound to graph
+            state.analyzed_compounds.append(
+                compound_analysis
+            )
         
-        self.graph_service.add_compound(
-            compound
-        )            
+            # Add compound to knowledge graph
+            
+            self.graph_service.add_compound(
+                compound_analysis
+            )
+
+
+        protein_targets = self.target_analyzer.get_protein_targets_for_molecule(
+            compound.chembl_id
+        )
         
+        proteins = []
         
+        for protein in protein_targets:
+            protein_details = self.uniprot_service.get_protein(
+                protein['accession']
+            )
+            
+            nmz_protein = self.protein_normalizer.normalize(
+                protein_details,
+                protein["organism"]
+            )
+            
+            # Add protein to knowledge graph
+            
+            self.graph_service.add_protein(
+                nmz_protein    
+            )
+            
+            self.graph_service.add_compound_protein_interaction(
+                compound,
+                nmz_protein,
+                protein["interaction_type"]
+            )
+            
+            proteins.append({
+                "target_chembl_id": protein["target_chembl_id"],
+                "target_name": protein["target_name"],
+                "organism": protein["organism"],
+                "accession": protein["accession"],
+                "component_description": protein["component_description"],
+                "component_type": protein["component_type"],
+                "interaction_type": protein["interaction_type"],
+                "activities_no": len(protein["activities"]),
+                "protein": nmz_protein.model_dump()
+            })    
+        
+             
+
         lipinski = properties.lipinski
         
         drug_likeness = {
@@ -410,7 +458,8 @@ class PipelineOrchestrator:
             data = {
                 "compound": compound.model_dump(),
                 "properties": properties.model_dump(),
-                "drug_likeness": drug_likeness
+                "drug_likeness": drug_likeness,
+                "proteins": proteins
             }
         )
 
@@ -489,7 +538,6 @@ class PipelineOrchestrator:
         
         
         for result in similarity_results:
-            
             target_compound = next(
                 (
                     item["compound"]

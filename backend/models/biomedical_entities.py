@@ -23,10 +23,10 @@ class BaseBioMedicalEntity(BaseModel):
         description="Normalization confidence score."
     )
 
-    synonyms: List[str] = Field(
-        default_factory=list,
-        description="Known synonyms of the entity."
-    )
+    # synonyms: List[str] = Field(
+    #     default_factory=list,
+    #     description="Known synonyms of the entity."
+    # )
     
     
     

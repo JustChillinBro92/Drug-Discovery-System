@@ -5,6 +5,7 @@ from llm.generator import Generator
 
 # from services.sources.chembl_service import chembl_service
 from services.sources.chembl_service import ChEMBLService
+from services.analyzers.chembl_target_analyzer import ChEMBLTargetAnalyzer
 
 from services.sources.uniprot_service import uniprot_service
 # from services.sources.europepmc_service import europepmc_service
@@ -225,7 +226,10 @@ generator = Generator(
     client=gemini_client
 )
 
-chembl_service = ChEMBLService(generator=generator)
+chembl_service = ChEMBLService()
+target_analyzer = ChEMBLTargetAnalyzer(
+    generator=generator,
+)
 
 
 # activities = chembl_service.get_activities("CHEMBL25")
@@ -235,7 +239,7 @@ chembl_service = ChEMBLService(generator=generator)
 #         print(activity)
 
 
-proteins = chembl_service.get_protein_targets_for_molecule(
+proteins = target_analyzer.get_protein_targets_for_molecule(
     "CHEMBL3707395"
 )
 
@@ -252,28 +256,28 @@ for protein in proteins:
     )
     
 
-    for activity in protein["activities"]:
-        print(
-            f"\nActivity ID: "
-            f"{activity['activity_id']}"
-        )
-        print(
-            f"Type: "
-            f"{activity['standard_type']}"
-        )
-        print(
-            f"Value: "
-            f"{activity['standard_value']} "
-            f"{activity['standard_units']}"
-        )
-        print(
-            f"Assay: "
-            f"{activity['assay_chembl_id']}"
-        )
-        print(
-            f"Year: "
-            f"{activity['document_year']}"
-        )
+    # for activity in protein["activities"]:
+    #     print(
+    #         f"\nActivity ID: "
+    #         f"{activity['activity_id']}"
+    #     )
+    #     print(
+    #         f"Type: "
+    #         f"{activity['standard_type']}"
+    #     )
+    #     print(
+    #         f"Value: "
+    #         f"{activity['standard_value']} "
+    #         f"{activity['standard_units']}"
+    #     )
+    #     print(
+    #         f"Assay: "
+    #         f"{activity['assay_chembl_id']}"
+    #     )
+    #     print(
+    #         f"Year: "
+    #         f"{activity['document_year']}"
+    #     )
         
     protein_details = uniprot_service.get_protein(
         protein['accession']

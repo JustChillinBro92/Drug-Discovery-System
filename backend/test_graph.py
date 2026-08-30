@@ -12,7 +12,6 @@ compound1 = CompoundEntity(
     original_text="Aspirin",
     canonical_name="ASPIRIN_TEST",
     confidence=1.0,
-    synonyms=[],
     chembl_id="TEST_CHEMBL_001",
     smiles="CC(=O)Oc1ccccc1C(=O)O",
     inchikey="TEST_INCHIKEY",
@@ -23,7 +22,6 @@ compound2 = CompoundEntity(
     original_text="Acetaminophen",
     canonical_name="ACETAMINOPHEN",
     confidence=1.0,
-    synonyms=[],
     chembl_id="CHEMBL112",
     smiles="CC(=O)NC1=CC=C(C=C1)O",
     inchikey="RZVAJINKPMORJF-UHFFFAOYSA-N",
@@ -35,7 +33,6 @@ protein = ProteinEntity(
     original_text="EGFR",
     canonical_name="EGFR_TEST",
     confidence=1.0,
-    synonyms=[],
     uniprot_id="TEST_P00533",
     gene_symbol="EGFR",
     protein_name="Epidermal Growth Factor Receptor",
@@ -47,7 +44,6 @@ disease = DiseaseEntity(
     original_text="Cancer",
     canonical_name="CANCER_TEST",
     confidence=1.0,
-    synonyms=[],
     disease_id="TEST_DISEASE_001"
 )
 
@@ -56,7 +52,6 @@ side_effect = SideEffectEntity(
     original_text="Nausea",
     canonical_name="NAUSEA_TEST",
     confidence=1.0,
-    synonyms=[],
     sider_id="TEST_SIDER_001"
 )
 

@@ -5,7 +5,6 @@ from services.analyzers.similarity_service import similarity_service
 
 
 class SimilaritySearchService:
-
     def search_similar_compounds(
         self,
         query_fingerprint: MolecularFingerprint,

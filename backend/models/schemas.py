@@ -9,7 +9,6 @@ class NormalizedEntity(BaseModel):
     database: str
     database_id: str
     confidence: float
-    synonyms: List[str] = []
     metadata: dict = {}
     
     
