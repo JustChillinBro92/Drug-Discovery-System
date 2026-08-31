@@ -9,7 +9,8 @@ VALID_MODES = {
     "molecule_analysis",
     "similar_compound_search",
     "report_generation",
-    "view_conversation_state"
+    "fetch_from_conversation_state",
+    "view_conversation_state",
 }
 
 

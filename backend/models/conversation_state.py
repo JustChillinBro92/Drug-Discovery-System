@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import List, Dict, Optional
 
 from pydantic import BaseModel, Field
 
@@ -26,6 +26,26 @@ class EntityState(BaseModel):
 
 
 
+class LiteratureRetrievalState(BaseModel):
+    query: str
+
+    category: Optional[str] = None
+
+    retrieved_chunk_ids: List[str] = Field(
+        default_factory=list,
+        description="Chunk IDs retrieved for this literature retrieval."
+    )
+
+    referenced_papers: List[ReferencedPaper] = Field(
+        default_factory=list,
+        description="Papers referenced during this literature retrieval."
+    )
+
+    offset: int = 0
+
+
+
+
 class ConversationState(BaseModel):
     conversation_id: str
 
@@ -45,14 +65,25 @@ class ConversationState(BaseModel):
         description="Similarity comparisons performed during this conversation."
     )
 
-    referenced_papers: List[ReferencedPaper] = Field(
-        default_factory=list,
-        description="Papers used in this conversation."
-    )
+    # referenced_papers: List[ReferencedPaper] = Field(
+    #     default_factory=list,
+    #     description="Papers used in this conversation."
+    # )
     
-    retrieved_chunk_ids: List[str] = Field(
-        default_factory=list,
-        description="Chunk IDs retrieved during previous literature conversations."
+    # retrieved_chunk_ids: List[str] = Field(
+    #     default_factory=list,
+    #     description="Chunk IDs retrieved during previous literature conversations."
+    # )
+    
+    referenced_paper_ids: set[str] = Field(
+        default_factory=set
+    )
+
+    literature_retrievals: Dict[
+        str,
+        LiteratureRetrievalState
+    ] = Field(
+        default_factory=dict
     )
 
     important_context: List[str] = Field(

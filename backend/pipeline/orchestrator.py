@@ -1,7 +1,10 @@
+import uuid
+
 from services.input_understanding import understand_input
 
 from models.pipeline_response import PipelineResponse
 from models.conversation_state import ConversationState
+from models.conversation_state import LiteratureRetrievalState
 from models.compound_analysis import CompoundAnalysis
 
 
@@ -65,70 +68,60 @@ class PipelineOrchestrator:
             query=query
         )
 
-
         if request.mode == "literature_acquisition":
-
             return self.run_literature_acquisition(
                 request,
                 state
             )
 
-
         elif request.mode == "literature_conversation":
-
             return self.run_literature_conversation(
                 request,
                 state
             )
             
-            
         elif request.mode == "view_indexed_papers":
-
             return self.run_view_indexed_papers(
                 request,
                 state
             )                    
             
         elif request.mode == "delete_indexed_papers":
-
             return self.run_delete_indexed_papers(
                 request,
                 state
             )
 
-
         elif request.mode == "molecule_analysis":
-
             return self.run_molecule_analysis(
                 request,
                 state
             )
 
-
         elif request.mode == "similar_compound_search":
-
             return self.run_similarity_search(
                 request,
                 state,
                 **kwargs
             )
 
-
         elif request.mode == "report_generation":
-
             return self.run_report_generation(
                 request,
                 state
             )
-
-
-        elif request.mode == "view_conversation_state":
             
-            return self.run_view_conversation_state(
+        elif request.mode == "fetch_from_conversation_state":
+            return self.run_fetch_from_conversation_state(
                 request,
                 state
             )
 
+        elif request.mode == "view_conversation_state":
+            return self.run_view_conversation_state(
+                request,
+                state
+            )
 
         else:
             raise ValueError(
@@ -203,15 +196,7 @@ class PipelineOrchestrator:
         retrieved_chunks = self.retriever.retrieve(
             request.query,
         )
-        
-        # Store retrieved chunks in conversation state
-        
-        state.retrieved_chunk_ids = [
-            result.chunk.chunk_id
-            for result in retrieved_chunks
-        ]
-        
-        
+                
         context, sources, referenced_papers = (
             self.context_builder.build_context(
                 retrieved_chunks
@@ -219,34 +204,51 @@ class PipelineOrchestrator:
         )
 
         
+        # Extract compound-target interactions
+        
+        
         # Store papers actually referenced in answer
         
-        existing_paper_ids = {
-            (
-                paper.pmid or
-                paper.pmcid or
-                paper.doi
-            )
-            for paper in state.referenced_papers
-        }
-        
-        
+        unique_papers = []
+
         for paper in referenced_papers:
             paper_id = (
                 paper.pmid
                 or paper.pmcid
                 or paper.doi
             )
-            
-            if paper_id not in existing_paper_ids:
-                state.referenced_papers.append(
-                    paper
-                )
 
-                existing_paper_ids.add(
-                    paper_id
-                )
-                
+            if not paper_id:
+                unique_papers.append(paper)
+                continue
+
+            if paper_id in state.referenced_paper_ids:
+                continue
+
+            unique_papers.append(paper)
+            
+            # Update conversation state
+            state.referenced_paper_ids.add(paper_id)
+
+
+        # Create Literature Retrieval State
+        # Store retrieved chunks & referenced papers 
+        
+        retrieval_id = str(uuid.uuid4())
+
+        state.literature_retrievals[
+            retrieval_id
+        ] = LiteratureRetrievalState(
+                query=request.query,
+                retrieved_chunk_ids=[
+                    result.chunk.chunk_id
+                    for result in retrieved_chunks
+                ],
+                referenced_papers=unique_papers,
+                offset=len(retrieved_chunks)
+            )
+
+        # Generate answer
                           
         answer = self.generator.generate(
             context = context,
@@ -582,7 +584,31 @@ class PipelineOrchestrator:
             message = "Molecule analysis pipeline pending"
         )
         
+    
+    def run_fetch_from_conversation_state(
+        self,
+        request,
+        state
+    ):
+        retrieval_id = request.query
+        
+        retrieval = state.literature_retrievals.get(
+            retrieval_id
+        )
+        
+        if not retrieval:
+            raise ValueError("Retrieval not found!")
+        
+        
+        return PipelineResponse(
+            mode=request.mode,
+            message="Retrieved conversation state",
+            data={
+                "retrieved_state": retrieval.model_dump()
+            }
+        )
 
+    
     def run_view_conversation_state(
         self,
         request,

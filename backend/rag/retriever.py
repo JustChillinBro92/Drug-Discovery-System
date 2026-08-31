@@ -10,7 +10,8 @@ class Retriever:
     def retrieve(
         self,
         query: str,
-        top_k: int = 5
+        top_k: int = 5,
+        offset: int = 0
     ):
         # Convert user query to embeddings
         
@@ -22,7 +23,8 @@ class Retriever:
         
         results = vector_store.search_documents(
             query_embeddings,
-            top_k
+            top_k,
+            offset
         )
         
         return results

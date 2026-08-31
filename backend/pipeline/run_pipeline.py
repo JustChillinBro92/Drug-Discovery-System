@@ -107,7 +107,8 @@ if __name__ == "__main__":
         print("5. Molecule Analysis")
         print("6. Similar Compound Search")
         print("7. Report Generation")
-        print("8. View Conversation State")
+        print("8. Fetch From Conversation State")
+        print("9. View Conversation State")
         print("0. Exit")
 
 
@@ -127,7 +128,8 @@ if __name__ == "__main__":
             "5": "molecule_analysis",
             "6": "similar_compound_search",
             "7": "report_generation",
-            "8": "view_conversation_state",
+            "8": "fetch_from_conversation_state",
+            "9": "view_conversation_state",
         }
 
 
@@ -364,7 +366,32 @@ if __name__ == "__main__":
                     print(f"ChEMBL ID            : {compound.chembl_id}")
                     print(f"Similarity Score     : {compound.similarity_score}\n")
 
-            
+
+            if "retrieved_state" in data:
+                retrieval = data["retrieved_state"]
+
+                print()
+                print("+-------------------------+")
+                print("| Literature Retrieval    |")
+                print("+-------------------------+")
+
+                print(f"Query    : {retrieval.get('query')}")
+                print(f"Category : {retrieval.get('category')}")
+                print(f"Offset   : {retrieval.get('offset')}")
+
+                print("\nRetrieved Chunk IDs:")
+                for chunk_id in retrieval.get(
+                    "retrieved_chunk_ids", []
+                ):
+                    print(f"- {chunk_id}")
+
+                print("\nReferenced Papers:")
+                for paper in retrieval.get(
+                    "referenced_papers", []
+                ):
+                    print(paper)
+
+
             if "state" in data:
                 state_data = data["state"]
 
@@ -382,35 +409,44 @@ if __name__ == "__main__":
                 print("\nAnalyzed Compounds:")
                 for compound in state_data.get("analyzed_compounds", []):
                     print(compound)
-                    
+
                 print("\nSimilarity Results:")
                 for similarity_result in state_data.get("similarity_results", []):
                     print(similarity_result)
 
-                print("\nReferenced Papers:")
-                for paper in state_data.get("referenced_papers", []): 
-                    print(paper)
-                
-                # for index, paper in enumerate(
-                #     state_data.get("referenced_papers", []),
-                #     start=1
-                # ):
-                #     print(f"\n[{index}]")
+                print("\nLiterature Retrievals:")
 
-                #     print(f"Title   : {paper.get('title', 'Unknown')}")
-                #     print(f"PMID    : {paper.get('pmid', 'Unknown')}")
-                #     print(f"PMCID   : {paper.get('pmcid', 'Unknown')}")
-                #     print(f"DOI     : {paper.get('doi', 'Unknown')}")
-                #     print(f"Journal : {paper.get('journal', 'Unknown')}")
-                #     print(f"Year    : {paper.get('publication_year', 'Unknown')}")
-                #     print(f"URL     : {paper.get('url', 'Unknown')}")
+                for retrieval_id, retrieval in state_data.get(
+                    "literature_retrievals", {}
+                ).items():
 
-                print("\nRetrieved Chunk IDs:")
-                for chunk_id in state_data.get("retrieved_chunk_ids", []):
-                    print(f"- {chunk_id}")
+                    print(f"\nRetrieval ID : {retrieval_id}")
+                    print(f"Query       : {retrieval.get('query')}")
+                    print(f"Category    : {retrieval.get('category')}")
+                    print(f"Offset      : {retrieval.get('offset')}")
+
+                    print("\nRetrieved Chunk IDs:")
+                    for chunk_id in retrieval.get(
+                        "retrieved_chunk_ids", []
+                    ):
+                        print(f"- {chunk_id}")
+
+                    print("\nReferenced Papers:")
+                    for paper in retrieval.get(
+                        "referenced_papers", []
+                    ):
+                        print(paper)
+
+                print("\nReferenced Paper IDs:")
+                for paper_id in state_data.get(
+                    "referenced_paper_ids", []
+                ):
+                    print(f"- {paper_id}")
 
                 print("\nImportant Context:")
-                for context in state_data.get("important_context", []):
+                for context in state_data.get(
+                    "important_context", []
+                ):
                     print(f"- {context}")
                             
 

@@ -69,7 +69,6 @@ Example:
 }
 """
 
-
 ASSAY_INTERACTION_PROMPT = """
 {system_prompt}
 
@@ -85,4 +84,44 @@ Return ONLY valid JSON in this format:
   "CHEMBL230": "INHIBITS",
   "CHEMBL3253": "BINDS_TO"
 }}
+"""
+
+
+SYSTEM_PROMPT_3 = """
+You are a biomedical relationship extractor.
+
+Using only the provided literature text, extract each compound-target
+relationship as exactly one of:
+
+- INHIBITS: compound reduces or blocks target activity.
+- ACTIVATES: compound increases or stimulates target activity.
+- BINDS_TO: compound binds to the target, but inhibition/activation
+  is not established.
+
+Rules:
+- Extract only relationships explicitly supported by the text.
+- Do not infer relationships from keywords or biological context.
+- Do not confuse pathway or cellular activation with target activation.
+- Do not invent information.
+
+Return ONLY valid JSON:
+
+{
+  "relationships": [
+    {
+      "compound": "Ibuprofen",
+      "target": "PTGS2",
+      "interaction": "INHIBITS"
+    }
+  ]
+}
+"""
+
+LITERATURE_INTERACTION_PROMPT = """
+{system_prompt}
+
+Literature text:
+{context}
+
+Extract every explicit compound-target interaction from the literature.
 """
