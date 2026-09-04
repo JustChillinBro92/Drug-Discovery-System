@@ -1,18 +1,21 @@
-# import json
+import json
 
-from llm.gemini_client import GeminiClient
-from llm.generator import Generator
+# from llm.gemini_client import GeminiClient
+# from llm.generator import Generator
 
 # from services.sources.chembl_service import chembl_service
-from services.sources.chembl_service import ChEMBLService
-from services.analyzers.chembl_target_analyzer import ChEMBLTargetAnalyzer
+# from services.sources.unichem_service import unichem_service
+from services.sources.sider_service import sider_service
+# from services.sources.chembl_service import ChEMBLService
+# from services.analyzers.chembl_target_analyzer import ChEMBLTargetAnalyzer
 
-from services.sources.uniprot_service import uniprot_service
+# from services.sources.uniprot_service import uniprot_service
 # from services.sources.europepmc_service import europepmc_service
 
 # from services.normalizers.compound_normalizer import compound_normalizer
+from services.normalizers.unichem_normalizer import unichem_normalizer
 # from services.normalizers.paper_normalizer import paper_normalizer
-from services.normalizers.protein_normalizer import protein_normalizer
+# from services.normalizers.protein_normalizer import protein_normalizer
 
 # from services.analyzers.rdkit_service import rdkit_service
 # from services.analyzers.fingerprint_service import fingerprint_service
@@ -39,6 +42,23 @@ from services.normalizers.protein_normalizer import protein_normalizer
 # print("\nMOLECULE DETAILS")
 # print(molecule)
 
+
+# molecule = unichem_service.get_compound_sources(
+#     "CHEMBL25"
+# )
+
+# print("\nMOLECULE DETAILS")
+# print(molecule.get("compounds")[0].get("sources")[0])
+
+nmz_compound = unichem_normalizer.normalize(
+    "CHEMBL424"
+)
+
+side_effects = sider_service.get_side_effects(
+    nmz_compound.get("pubchem_cids")
+)
+
+print(len(side_effects))
 
 # compound1 = compound_normalizer.normalize("Aspirin")
 # compound2 = compound_normalizer.normalize("Ibuprofen")
@@ -220,16 +240,16 @@ from services.normalizers.protein_normalizer import protein_normalizer
 #         )
 #     )
 
-gemini_client = GeminiClient()
+# gemini_client = GeminiClient()
 
-generator = Generator(
-    client=gemini_client
-)
+# generator = Generator(
+#     client=gemini_client
+# )
 
-chembl_service = ChEMBLService()
-target_analyzer = ChEMBLTargetAnalyzer(
-    generator=generator,
-)
+# chembl_service = ChEMBLService()
+# target_analyzer = ChEMBLTargetAnalyzer(
+#     generator=generator,
+# )
 
 
 # activities = chembl_service.get_activities("CHEMBL25")
@@ -239,21 +259,21 @@ target_analyzer = ChEMBLTargetAnalyzer(
 #         print(activity)
 
 
-proteins = target_analyzer.get_protein_targets_for_molecule(
-    "CHEMBL3707395"
-)
+# proteins = target_analyzer.get_protein_targets_for_molecule(
+#     "CHEMBL3707395"
+# )
 
-for protein in proteins:
-    print(
-        f"\nTarget ID: {protein['target_chembl_id']}"
-        f"\nTarget: {protein['target_name']}"
-        f"\nOrganism: {protein['organism']}"
-        f"\nAccession: {protein['accession']}"
-        f"\nDescription: {protein['component_description']}"
-        f"\nType: {protein['component_type']}"
-        f"\nInteraction: {protein['interaction_type']}"
-        f"\nActivities: {len(protein['activities'])}"
-    )
+# for protein in proteins:
+#     print(
+#         f"\nTarget ID: {protein['target_chembl_id']}"
+#         f"\nTarget: {protein['target_name']}"
+#         f"\nOrganism: {protein['organism']}"
+#         f"\nAccession: {protein['accession']}"
+#         f"\nDescription: {protein['component_description']}"
+#         f"\nType: {protein['component_type']}"
+#         f"\nInteraction: {protein['interaction_type']}"
+#         f"\nActivities: {len(protein['activities'])}"
+#     )
     
 
     # for activity in protein["activities"]:
@@ -279,26 +299,26 @@ for protein in proteins:
     #         f"{activity['document_year']}"
     #     )
         
-    protein_details = uniprot_service.get_protein(
-        protein['accession']
-    )
+    # protein_details = uniprot_service.get_protein(
+    #     protein['accession']
+    # )
     
-    nmz_protein = protein_normalizer.normalize(
-        protein_details,
-        protein["organism"]
-    )
+    # nmz_protein = protein_normalizer.normalize(
+    #     protein_details,
+    #     protein["organism"]
+    # )
     
-    print(
-        f"\nUniProt ID: {nmz_protein.uniprot_id}"
-        f"\nProtein Name: {nmz_protein.protein_name}"
-        f"\nGene Symbol: {nmz_protein.gene_symbol}"
-        # f"\nOrganism: {nmz_protein.organism}"
-        # f"\nFunction: {nmz_protein.function}"
-        # f"\nSubcellular Location: {nmz_protein.subcellular_location}"
-        # f"\nPathways: {nmz_protein.pathways}"
-        # f"\nSequence: {nmz_protein.sequence}"
-        # f"\nSequence Length: {nmz_protein.sequence_length}"
-    )
+    # print(
+    #     f"\nUniProt ID: {nmz_protein.uniprot_id}"
+    #     f"\nProtein Name: {nmz_protein.protein_name}"
+    #     f"\nGene Symbol: {nmz_protein.gene_symbol}"
+    #     # f"\nOrganism: {nmz_protein.organism}"
+    #     # f"\nFunction: {nmz_protein.function}"
+    #     # f"\nSubcellular Location: {nmz_protein.subcellular_location}"
+    #     # f"\nPathways: {nmz_protein.pathways}"
+    #     # f"\nSequence: {nmz_protein.sequence}"
+    #     # f"\nSequence Length: {nmz_protein.sequence_length}"
+    # )
         
         
 # test_ids = [

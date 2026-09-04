@@ -101,9 +101,9 @@ SET
 """
 
 
-ADD_SIDE_EFFECT = """
+ADD_ADVERSE_EFFECT = """
 MERGE (s:SideEffect {
-    sider_id: $sider_id
+    meddra_id: $meddra_id
 })
 
 SET
@@ -202,16 +202,16 @@ MERGE (c)-[:TREATS]->(d)
 """
 
 
-ADD_COMPOUND_CAUSES_SIDE_EFFECT = """
+ADD_COMPOUND_HAS_ADVERSE_EFFECT = """
 MATCH (c:Compound {
     chembl_id: $chembl_id
 })
 
 MATCH (s:SideEffect {
-    sider_id: $sider_id
+    meddra_id: $meddra_id
 })
 
-MERGE (c)-[:CAUSES]->(s)
+MERGE (c)-[:HAS_ADVERSE_EFFECT]->(s)
 """
 
 
@@ -261,7 +261,7 @@ DETACH DELETE d
 
 DELETE_SIDE_EFFECT = """
 MATCH (s:SideEffect {
-    sider_id: $sider_id
+    meddra_id: $meddra_id
 })
 DETACH DELETE s
 """

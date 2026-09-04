@@ -203,10 +203,7 @@ class PipelineOrchestrator:
             )
         )
 
-        
-        # Extract compound-target interactions
-        
-        
+                
         # Store papers actually referenced in answer
         
         unique_papers = []

@@ -106,7 +106,7 @@ class GraphService:
     ):
 
         self.client.execute_query(
-            graph_queries.ADD_SIDE_EFFECT,
+            graph_queries.ADD_ADVERSE_EFFECT,
             side_effect.model_dump()
         )
 
@@ -263,21 +263,21 @@ class GraphService:
 
 
     # ========================================================
-    # Compound -> Side Effect
+    # Compound -> Adverse Effect
     # CAUSES
     # ========================================================
 
-    def add_compound_causes_side_effect(
+    def add_compound_has_adverse_effect(
         self,
         compound: CompoundEntity,
         side_effect: SideEffectEntity
     ):
 
         self.client.execute_query(
-            graph_queries.ADD_COMPOUND_CAUSES_SIDE_EFFECT,
+            graph_queries.ADD_COMPOUND_HAS_ADVERSE_EFFECT,
             {
                 "chembl_id": compound.chembl_id,
-                "sider_id": side_effect.sider_id
+                "meddra_id": side_effect.meddra_id
             }
         )
 
@@ -366,13 +366,13 @@ class GraphService:
 
     def delete_side_effect(
         self,
-        sider_id: str
+        meddra_id: str
     ):
 
         self.client.execute_query(
             graph_queries.DELETE_SIDE_EFFECT,
             {
-                "sider_id": sider_id
+                "meddra_id": meddra_id
             }
         )
 

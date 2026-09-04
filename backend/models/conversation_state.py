@@ -9,8 +9,8 @@ from models.compound_analysis import CompoundAnalysis
 
 class EntityState(BaseModel):
     compounds: List[str] = Field(default_factory=list)
-    diseases: List[str] = Field(default_factory=list)
-    proteins: List[str] = Field(default_factory=list)
+    diseases: List[str] = Field(default_factory=list) # <- pending
+    proteins: List[str] = Field(default_factory=list) # <- needs update
     
     def add_compound(self, compound: str):
         if compound not in self.compounds:
@@ -23,7 +23,6 @@ class EntityState(BaseModel):
     def add_protein(self, protein: str):
         if protein not in self.proteins:
             self.proteins.append(protein)
-
 
 
 class LiteratureRetrievalState(BaseModel):
@@ -42,8 +41,6 @@ class LiteratureRetrievalState(BaseModel):
     )
 
     offset: int = 0
-
-
 
 
 class ConversationState(BaseModel):

@@ -1,61 +1,56 @@
 import requests
 
 from config.config import settings
+from utils.api_client import request_json
 
 
 class ChEMBLService:
     def __init__(
         self,
-        timeout=(5, 30),
+        timeout=(10, 60),
+        retry_attempts=3,
+        backoff_factor=0.5,
     ):
         self.base_url = settings.CHEMBL_API_URL
         self.timeout = timeout
+        self.retry_attempts = retry_attempts
+        self.backoff_factor = backoff_factor
 
      
     def _get(self, url: str, params=None):
         try:
 
-            response = requests.get(
+            return request_json(
+                "GET",
                 url,
+                service_name="ChEMBL API",
                 params=params,
-                timeout=self.timeout
+                timeout=self.timeout,
+                retry_attempts=self.retry_attempts,
+                backoff_factor=self.backoff_factor,
             )
 
-            response.raise_for_status()
-
-            return response.json()
-
-
         except requests.exceptions.Timeout:
-
             raise Exception(
                 "ChEMBL API request timed out!"
             )
 
-
         except requests.exceptions.ConnectionError:
-
             raise Exception(
                 "Unable to connect to ChEMBL API!"
             )
 
-
         except requests.exceptions.HTTPError as e:
-
             raise Exception(
                 f"ChEMBL API returned an error: {e}"
             )
 
-
         except requests.exceptions.JSONDecodeError:
-
             raise Exception(
                 "ChEMBL returned invalid JSON response!"
             )
 
-
         except requests.exceptions.RequestException as e:
-
             raise Exception(
                 f"Unexpected ChEMBL API error: {e}"
             )
@@ -155,7 +150,10 @@ class ChEMBLService:
             url,
             params=params
         )
-        
+    
+    
+    
+    # Get 
       
       
 chembl_service = ChEMBLService()

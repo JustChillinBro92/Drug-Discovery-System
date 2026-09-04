@@ -109,6 +109,26 @@ class ProteinEntity(BaseModel):
     )
     
     
+      
+# Side Effect Entity class (SIDER)
+
+class SideEffectEntity(BaseModel):
+    meddra_id: Optional[str] = Field(
+        default=None,
+        description="MedDRA identifier for the side effect."
+    )
+    
+    side_effect_name: Optional[str] = Field(
+        default=None,
+        description="Name of the side effect."
+    )
+
+    meddra_level: Optional[str] = Field(
+        default=None,
+        description="MedDRA concept level, such as PT or LLT."
+    )
+    
+    
     
 # Disease Entity class (DisGeNET)
 
@@ -126,26 +146,6 @@ class DiseaseEntity(BaseBioMedicalEntity):
     mesh_id: Optional[str] = Field(
         default=None,
         description="MeSH identifier associated with the disease."
-    )
-    
-    
-    
-# Side Effect Entity class (SIDER)
-
-class SideEffectEntity(BaseBioMedicalEntity):
-    sider_id: Optional[str] = Field(
-        default=None,
-        description="SIDER identifier for the side effect."
-    )
-
-    frequency: Optional[str] = Field(
-        default=None,
-        description="Reported frequency of the side effect."
-    )
-
-    severity: Optional[str] = Field(
-        default=None,
-        description="Reported severity of the side effect."
     )
     
     

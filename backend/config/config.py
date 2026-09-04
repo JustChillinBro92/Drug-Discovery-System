@@ -11,6 +11,7 @@ class Settings:
     NEO4J_PASSWORD = os.getenv("NEO4J_PASSWORD")
 
     CHEMBL_API_URL = os.getenv("CHEMBL_API_URL")
+    UNICHEM_API_URL = os.getenv("UNICHEM_API_URL")
     EUROPEPMC_API_URL = os.getenv("EUROPEPMC_API_URL")
     UNIPROT_API_URL = os.getenv("UNIPROT_API_URL")
     
