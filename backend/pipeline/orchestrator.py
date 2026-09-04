@@ -22,6 +22,8 @@ class PipelineOrchestrator:
         uniprot_service,
         protein_normalizer,
         compound_normalizer,
+        unichem_normalizer,
+        sider_service,
         rdkit_service,
         fingerprint_service,
         similarity_search_service,
@@ -40,6 +42,8 @@ class PipelineOrchestrator:
         self.uniprot_service = uniprot_service
         self.protein_normalizer = protein_normalizer
         self.compound_normalizer = compound_normalizer
+        self.unichem_normalizer = unichem_normalizer
+        self.sider_service = sider_service
         self.rdkit_service = rdkit_service
         self.fingerprint_service = fingerprint_service
         self.similarity_search_service = similarity_search_service
@@ -304,7 +308,7 @@ class PipelineOrchestrator:
         compound = self.compound_normalizer.normalize(
             request.query
         )
-        
+
         properties = self.rdkit_service.analyze_properties(
             compound
         )
@@ -316,7 +320,7 @@ class PipelineOrchestrator:
         )
         
         existing = {
-            c.compound.compound_name
+            c.compound.canonical_name
             for c in state.analyzed_compounds
         }
         
@@ -358,6 +362,8 @@ class PipelineOrchestrator:
             self.graph_service.add_protein(
                 nmz_protein    
             )
+
+            # Add compound - protein interaction to knowledge graph
             
             self.graph_service.add_compound_protein_interaction(
                 compound,
@@ -377,8 +383,30 @@ class PipelineOrchestrator:
                 "protein": nmz_protein.model_dump()
             })    
         
-             
+        
+        unichem_nmz_compound = self.unichem_normalizer.normalize(
+            compound.chembl_id
+        )
+        
+        side_effects = self.sider_service.get_side_effects(
+            unichem_nmz_compound.get("pubchem_cids")
+        )
+           
+        for side_effect in side_effects:
+            # Add side effect to knowledge graph
+            
+            self.graph_service.add_side_effect(
+                side_effect
+            )
 
+            # Add compound --can-cause--> side effect to knowledge graph
+            
+            self.graph_service.add_compound_can_cause_side_effect(
+                compound,
+                side_effect    
+            )
+            
+            
         lipinski = properties.lipinski
         
         drug_likeness = {
@@ -458,7 +486,8 @@ class PipelineOrchestrator:
                 "compound": compound.model_dump(),
                 "properties": properties.model_dump(),
                 "drug_likeness": drug_likeness,
-                "proteins": proteins
+                "proteins": proteins,
+                "side_effects": side_effects
             }
         )
 

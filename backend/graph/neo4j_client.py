@@ -17,22 +17,22 @@ class Neo4jClient:
     def initialize_schema(self):
 
         with self.driver.session() as session:
-
             session.run(
                 graph_queries.CREATE_COMPOUND_CONSTRAINT
             )
-
             session.run(
                 graph_queries.CREATE_PROTEIN_CONSTRAINT
             )
-
             session.run(
-                graph_queries.CREATE_DISEASE_CONSTRAINT
+                graph_queries.CREATE_SIDE_EFFECT_CONSTRAINT
             )
 
-            session.run(
-                graph_queries.CREATE_PAPER_CONSTRAINT
-            )
+            # session.run(
+            #     graph_queries.CREATE_DISEASE_CONSTRAINT
+            # )
+            # session.run(
+            #     graph_queries.CREATE_PAPER_CONSTRAINT
+            # )
         
 
 
@@ -42,7 +42,6 @@ class Neo4jClient:
         parameters: dict | None = None
     ):
         with self.driver.session() as session:
-
             return session.run(
                 query,
                 parameters or {}

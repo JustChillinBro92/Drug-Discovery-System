@@ -20,9 +20,7 @@ class SIDERService:
             f"CID{int(pubchem_cid):09d}"
             for pubchem_cid in pubchem_cids
         }
-        
-        print(sider_ids)
-        
+                
         side_effects = []
         seen_meddra_ids = set()
         

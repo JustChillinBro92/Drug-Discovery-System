@@ -15,6 +15,12 @@ FOR (p:Protein)
 REQUIRE p.uniprot_id IS UNIQUE
 """
 
+CREATE_SIDE_EFFECT_CONSTRAINT = """
+CREATE CONSTRAINT meddra_id IF NOT EXISTS
+FOR (s:SideEffect)
+REQUIRE s.meddra_id IS UNIQUE
+"""
+
 
 CREATE_DISEASE_CONSTRAINT = """
 CREATE CONSTRAINT disease_id IF NOT EXISTS
@@ -101,18 +107,14 @@ SET
 """
 
 
-ADD_ADVERSE_EFFECT = """
+ADD_SIDE_EFFECT = """
 MERGE (s:SideEffect {
     meddra_id: $meddra_id
 })
 
 SET
-    s.original_text = $original_text,
-    s.canonical_name = $canonical_name,
-    s.confidence = $confidence,
-    s.synonyms = $synonyms,
-    s.frequency = $frequency,
-    s.severity = $severity
+    s.side_effect_name = $side_effect_name,
+    s.meddra_level = $meddra_level
 """
 
 
@@ -202,7 +204,7 @@ MERGE (c)-[:TREATS]->(d)
 """
 
 
-ADD_COMPOUND_HAS_ADVERSE_EFFECT = """
+ADD_COMPOUND_CAN_CAUSE_SIDE_EFFECT = """
 MATCH (c:Compound {
     chembl_id: $chembl_id
 })
@@ -211,7 +213,7 @@ MATCH (s:SideEffect {
     meddra_id: $meddra_id
 })
 
-MERGE (c)-[:HAS_ADVERSE_EFFECT]->(s)
+MERGE (c)-[:CAN_CAUSE]->(s)
 """
 
 

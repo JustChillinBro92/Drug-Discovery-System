@@ -16,6 +16,7 @@ from llm.generator import Generator
 
 from services.analyzers.chembl_target_analyzer import ChEMBLTargetAnalyzer
 from services.normalizers.compound_normalizer import compound_normalizer
+from services.normalizers.unichem_normalizer import unichem_normalizer
 
 from services.normalizers.protein_normalizer import protein_normalizer
 from services.normalizers.paper_normalizer import paper_normalizer
@@ -24,6 +25,7 @@ from services.analyzers.rdkit_service import rdkit_service
 from services.analyzers.fingerprint_service import fingerprint_service
 from services.analyzers.similarity_search_service import similarity_search_service
 from services.sources.uniprot_service import uniprot_service
+from services.sources.sider_service import sider_service
 
 from graph.graph_service import graph_service
 
@@ -57,6 +59,8 @@ orchestrator = PipelineOrchestrator(
     protein_normalizer=protein_normalizer,
     
     compound_normalizer=compound_normalizer,
+    unichem_normalizer=unichem_normalizer,
+    sider_service=sider_service,
     rdkit_service=rdkit_service,
     fingerprint_service=fingerprint_service,
     
@@ -350,6 +354,21 @@ if __name__ == "__main__":
                     print(f"Pathways              : {nmz_protein.get('pathways')}")
                     print(f"Sequence              : {nmz_protein.get('sequence')}")                    
                     print(f"Sequence Length       : {nmz_protein.get('sequence_length')}")
+
+
+            if "side_effects" in data:
+                side_effects = data["side_effects"]
+
+                print()
+                print("+------------------+")
+                print("| Side Effects     |")
+                print("+------------------+")
+
+                for index, side_effect in enumerate(side_effects, start=1):
+                    print(f"\nSide Effect [{index}]")
+                    print(f"MedDRA ID    : {side_effect.meddra_id}")
+                    print(f"Name         : {side_effect.side_effect_name}")
+                    print(f"MedDRA Level : {side_effect.meddra_level}")
 
 
             if "similarity_results" in data:
