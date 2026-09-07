@@ -47,6 +47,50 @@ class GraphService:
     # Compound
     # ========================================================
 
+    def get_compound_analysis(
+        self,
+        chembl_id: str
+    ):
+        records = self.client.execute_query(
+            graph_queries.GET_COMPOUND_ANALYSIS,
+            self._compound_analysis_parameters(
+                chembl_id=chembl_id
+            )
+        )
+
+        return records[0] if records else None
+
+
+    def get_compound_analysis_by_name(
+        self,
+        compound_name: str
+    ):
+        records = self.client.execute_query(
+            graph_queries.GET_COMPOUND_ANALYSIS_BY_NAME,
+            self._compound_analysis_parameters(
+                compound_name=compound_name
+            )
+        )
+
+        return records[0] if records else None
+
+
+    @staticmethod
+    def _compound_analysis_parameters(**values):
+        return {
+            **values,
+            "canonical_property": "canonical_name",
+            "original_property": "original_text",
+            "target_chembl_property": "target_chembl_id",
+            "target_name_property": "target_name",
+            "organism_property": "organism",
+            "description_property": "component_description",
+            "component_type_property": "component_type",
+            "activities_property": "activities_no",
+            "interaction_property": "interaction_type"
+        }
+
+
     def add_compound(
         self,
         compound: CompoundAnalysis
@@ -230,14 +274,24 @@ class GraphService:
         compound: CompoundEntity,
         protein: ProteinEntity,
         interaction,
+        target_metadata: dict | None = None
     ):
+        target_metadata = target_metadata or {}
 
         self.client.execute_query(
             graph_queries.ADD_COMPOUND_PROTEIN_INTERACTION,
             {
                 "chembl_id": compound.chembl_id,
                 "uniprot_id": protein.uniprot_id,
-                "interaction": interaction
+                "interaction": interaction,
+                "target_chembl_id": target_metadata.get("target_chembl_id"),
+                "target_name": target_metadata.get("target_name"),
+                "organism": target_metadata.get("organism"),
+                "component_description": target_metadata.get(
+                    "component_description"
+                ),
+                "component_type": target_metadata.get("component_type"),
+                "activities_no": target_metadata.get("activities_no")
             }
         )
 
@@ -293,6 +347,8 @@ class GraphService:
         target_compound: CompoundEntity,
         similarity_score: float
     ):
+        if query_compound.chembl_id == target_compound.chembl_id:
+            return
         
         self.client.execute_query(
             graph_queries.ADD_COMPOUND_SIMILAR_TO_COMPOUND,

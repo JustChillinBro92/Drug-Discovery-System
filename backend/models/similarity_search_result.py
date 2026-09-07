@@ -2,9 +2,19 @@ from pydantic import BaseModel, Field
 
 
 class SimilarCompound(BaseModel):
+    query_original_text: str = Field(
+        ...,
+        description="Original query compound text entered by the user."
+    )
+
     query_compound: str = Field(
         ...,
         description="Compound used as the similarity search query."
+    )
+
+    compound_original_text: str = Field(
+        ...,
+        description="Original compared compound text entered by the user."
     )
 
     compound_name: str = Field(

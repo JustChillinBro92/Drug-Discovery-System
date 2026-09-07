@@ -15,6 +15,7 @@ FOR (p:Protein)
 REQUIRE p.uniprot_id IS UNIQUE
 """
 
+
 CREATE_SIDE_EFFECT_CONSTRAINT = """
 CREATE CONSTRAINT meddra_id IF NOT EXISTS
 FOR (s:SideEffect)
@@ -185,6 +186,14 @@ MATCH (p:Protein {
 })
 
 MERGE (c)-[r:$($interaction)]->(p)
+SET
+    r.interaction_type = $interaction,
+    r.target_chembl_id = $target_chembl_id,
+    r.target_name = $target_name,
+    r.organism = $organism,
+    r.component_description = $component_description,
+    r.component_type = $component_type,
+    r.activities_no = $activities_no
 """
 
 
@@ -222,6 +231,8 @@ MATCH (c1:Compound {
 MATCH (c2:Compound {
     chembl_id: $target_chembl_id
 })
+
+WHERE c1 <> c2
 
 MERGE (c1)-[r:SIMILAR_TO]->(c2)
 
@@ -297,4 +308,69 @@ DETACH DELETE d
 CLEAR_GRAPH = """
 MATCH (n)
 DETACH DELETE n
+"""
+
+
+GET_COMPOUND_ANALYSIS = """
+MATCH (c:Compound {
+    chembl_id: $chembl_id
+})
+
+OPTIONAL MATCH (c)-[protein_relationship]->(p:Protein)
+OPTIONAL MATCH (c)-[disease_relationship]->(d:Disease)
+OPTIONAL MATCH (c)-[side_effect_relationship]->(s:SideEffect)
+
+RETURN c,
+    collect(DISTINCT {
+        protein: p,
+        target_chembl_id: protein_relationship[$target_chembl_property],
+        target_name: protein_relationship[$target_name_property],
+        organism: protein_relationship[$organism_property],
+        component_description: protein_relationship[$description_property],
+        component_type: protein_relationship[$component_type_property],
+        activities_no: protein_relationship[$activities_property],
+        interaction_type: coalesce(
+            protein_relationship[$interaction_property],
+            type(protein_relationship)
+        )
+    }) AS proteins,
+    collect(DISTINCT CASE
+        WHEN type(disease_relationship) = "MAY_TREAT" THEN d
+    END) AS diseases,
+    collect(DISTINCT CASE
+        WHEN type(side_effect_relationship) = "CAN_CAUSE" THEN s
+    END) AS side_effects
+"""
+
+
+GET_COMPOUND_ANALYSIS_BY_NAME = """
+MATCH (c:Compound)
+WHERE toLower(c[$canonical_property]) = toLower($compound_name)
+    OR toLower(c[$original_property]) = toLower($compound_name)
+
+OPTIONAL MATCH (c)-[protein_relationship]->(p:Protein)
+OPTIONAL MATCH (c)-[disease_relationship]->(d:Disease)
+OPTIONAL MATCH (c)-[side_effect_relationship]->(s:SideEffect)
+
+RETURN c,
+    collect(DISTINCT {
+        protein: p,
+        target_chembl_id: protein_relationship[$target_chembl_property],
+        target_name: protein_relationship[$target_name_property],
+        organism: protein_relationship[$organism_property],
+        component_description: protein_relationship[$description_property],
+        component_type: protein_relationship[$component_type_property],
+        activities_no: protein_relationship[$activities_property],
+        interaction_type: coalesce(
+            protein_relationship[$interaction_property],
+            type(protein_relationship)
+        )
+    }) AS proteins,
+    collect(DISTINCT CASE
+        WHEN type(disease_relationship) = "MAY_TREAT" THEN d
+    END) AS diseases,
+    collect(DISTINCT CASE
+        WHEN type(side_effect_relationship) = "CAN_CAUSE" THEN s
+    END) AS side_effects
+LIMIT 1
 """

@@ -9,6 +9,7 @@ class SimilaritySearchService:
         self,
         query_fingerprint: MolecularFingerprint,
         query_name: str,
+        query_original_text: str,
         compounds: list[dict],
         top_k: int = 5
     ) -> list[SimilarCompound]:
@@ -27,7 +28,9 @@ class SimilaritySearchService:
                 similarity_service.calculate_similarity(
                     query_fingerprint,
                     item["fingerprint"],
+                    query_original_text,
                     query_name,
+                    item["original_text"],
                     item["compound"].canonical_name,
                     item["compound"].chembl_id
                 )
