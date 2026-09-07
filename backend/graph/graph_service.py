@@ -244,20 +244,20 @@ class GraphService:
 
     # ========================================================
     # Compound -> Disease
-    # TREATS
+    # MAY_TREAT
     # ========================================================
 
-    def add_compound_treats_disease(
+    def add_compound_may_treat_disease(
         self,
         compound: CompoundEntity,
         disease: DiseaseEntity
     ):
 
         self.client.execute_query(
-            graph_queries.ADD_COMPOUND_TREATS_DISEASE,
+            graph_queries.ADD_COMPOUND_MAY_TREAT_DISEASE,
             {
                 "chembl_id": compound.chembl_id,
-                "disease_id": disease.disease_id
+                "mesh_id": disease.mesh_id
             }
         )
 
@@ -349,13 +349,13 @@ class GraphService:
 
     def delete_disease(
         self,
-        disease_id: str
+        mesh_id: str
     ):
 
         self.client.execute_query(
             graph_queries.DELETE_DISEASE,
             {
-                "disease_id": disease_id
+                "mesh_id": mesh_id
             }
         )
 

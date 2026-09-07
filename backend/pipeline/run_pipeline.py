@@ -17,6 +17,7 @@ from llm.generator import Generator
 from services.analyzers.chembl_target_analyzer import ChEMBLTargetAnalyzer
 from services.normalizers.compound_normalizer import compound_normalizer
 from services.normalizers.unichem_normalizer import unichem_normalizer
+from services.normalizers.disease_normalizer import disease_normalizer
 
 from services.normalizers.protein_normalizer import protein_normalizer
 from services.normalizers.paper_normalizer import paper_normalizer
@@ -60,6 +61,7 @@ orchestrator = PipelineOrchestrator(
     
     compound_normalizer=compound_normalizer,
     unichem_normalizer=unichem_normalizer,
+    disease_normalizer=disease_normalizer,
     sider_service=sider_service,
     rdkit_service=rdkit_service,
     fingerprint_service=fingerprint_service,
@@ -360,9 +362,9 @@ if __name__ == "__main__":
                 side_effects = data["side_effects"]
 
                 print()
-                print("+------------------+")
-                print("| Side Effects     |")
-                print("+------------------+")
+                print("+----------------------------+")
+                print("| Potential Side Effects     |")
+                print("+----------------------------+")
 
                 for index, side_effect in enumerate(side_effects, start=1):
                     print(f"\nSide Effect [{index}]")
@@ -371,6 +373,22 @@ if __name__ == "__main__":
                     print(f"MedDRA Level : {side_effect.meddra_level}")
 
 
+            if "diseases" in data:
+                diseases = data["diseases"]
+
+                print()
+                print("+-----------------------+")
+                print("| Potentially Treats    |")
+                print("+-----------------------+")
+
+                for index, disease in enumerate(diseases, start=1):
+                    print(f"\nDisease [{index}]")
+                    print(f"Mesh ID            : {disease.mesh_id}")
+                    print(f"Mesh Concept ID    : {disease.mesh_concept_id}")
+                    print(f"Name               : {disease.disease_name}")
+                    print(f"Description        : {disease.description}")
+
+                    
             if "similarity_results" in data:
                 compounds = data["similarity_results"]
                 

@@ -26,10 +26,9 @@ class Neo4jClient:
             session.run(
                 graph_queries.CREATE_SIDE_EFFECT_CONSTRAINT
             )
-
-            # session.run(
-            #     graph_queries.CREATE_DISEASE_CONSTRAINT
-            # )
+            session.run(
+                graph_queries.CREATE_DISEASE_CONSTRAINT
+            )
             # session.run(
             #     graph_queries.CREATE_PAPER_CONSTRAINT
             # )

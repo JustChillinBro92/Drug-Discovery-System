@@ -30,12 +30,7 @@ class BaseBioMedicalEntity(BaseModel):
     
     
     
-    
-# Different Normalized Entity Type classes
-# Inherits from parent class BaseBioMedicalEntity
-
-
-# Compound Entity class (ChemBL)
+# Compound Entity class (ChEMBL)
 
 class CompoundEntity(BaseBioMedicalEntity):
     chembl_id: str = Field(
@@ -130,23 +125,30 @@ class SideEffectEntity(BaseModel):
     
     
     
-# Disease Entity class (DisGeNET)
+# Disease Entity class (RxClass)
 
-class DiseaseEntity(BaseBioMedicalEntity):
-    disease_id: str = Field(
+class DiseaseEntity(BaseModel):
+    mesh_id: str = Field(
         ...,
-        description="DisGeNET identifier for the disease."
+        description="RxClass disease concept identifier."
+    )
+    
+    mesh_concept_id: Optional[str] = Field(
+        default=None,
+        description="Preferred MeSH concept identifier."
     )
 
-    ontology: Optional[str] = Field(
+    disease_name: str = Field(
+        ...,
+        description="Disease name returned by RxClass."
+    )
+    
+    description: Optional[str] = Field(
         default=None,
-        description="Disease ontology associated with the disease."
+        description="Disease definition from MeSH."
     )
 
-    mesh_id: Optional[str] = Field(
-        default=None,
-        description="MeSH identifier associated with the disease."
-    )
+
     
     
     

@@ -5,7 +5,7 @@ import json
 
 # from services.sources.chembl_service import chembl_service
 # from services.sources.unichem_service import unichem_service
-from services.sources.sider_service import sider_service
+# from services.sources.sider_service import sider_service
 # from services.sources.chembl_service import ChEMBLService
 # from services.analyzers.chembl_target_analyzer import ChEMBLTargetAnalyzer
 
@@ -13,9 +13,10 @@ from services.sources.sider_service import sider_service
 # from services.sources.europepmc_service import europepmc_service
 
 # from services.normalizers.compound_normalizer import compound_normalizer
-from services.normalizers.unichem_normalizer import unichem_normalizer
+# from services.normalizers.unichem_normalizer import unichem_normalizer
 # from services.normalizers.paper_normalizer import paper_normalizer
 # from services.normalizers.protein_normalizer import protein_normalizer
+from services.normalizers.disease_normalizer import disease_normalizer
 
 # from services.analyzers.rdkit_service import rdkit_service
 # from services.analyzers.fingerprint_service import fingerprint_service
@@ -50,15 +51,15 @@ from services.normalizers.unichem_normalizer import unichem_normalizer
 # print("\nMOLECULE DETAILS")
 # print(molecule.get("compounds")[0].get("sources")[0])
 
-nmz_compound = unichem_normalizer.normalize(
-    "CHEMBL424"
-)
+# nmz_compound = unichem_normalizer.normalize(
+#     "CHEMBL424"
+# )
 
-side_effects = sider_service.get_side_effects(
-    nmz_compound.get("pubchem_cids")
-)
+# side_effects = sider_service.get_side_effects(
+#     nmz_compound.get("pubchem_cids")
+# )
 
-print(len(side_effects))
+# print(len(side_effects))
 
 # compound1 = compound_normalizer.normalize("Aspirin")
 # compound2 = compound_normalizer.normalize("Ibuprofen")
@@ -351,3 +352,12 @@ print(len(side_effects))
 #             "|",
 #             protein["accession"]
 #         )
+
+
+# rxcui = disease_normalizer.normalize_compound(
+#     "aspirin"
+# )
+
+# diseases = disease_normalizer.normalize_disease(rxcui)
+
+# print(diseases)

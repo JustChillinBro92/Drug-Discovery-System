@@ -25,7 +25,7 @@ REQUIRE s.meddra_id IS UNIQUE
 CREATE_DISEASE_CONSTRAINT = """
 CREATE CONSTRAINT disease_id IF NOT EXISTS
 FOR (d:Disease)
-REQUIRE d.disease_id IS UNIQUE
+REQUIRE d.mesh_id IS UNIQUE
 """
 
 
@@ -94,16 +94,13 @@ SET
 
 ADD_DISEASE = """
 MERGE (d:Disease {
-    disease_id: $disease_id
+    mesh_id: $mesh_id
 })
 
 SET
-    d.original_text = $original_text,
-    d.canonical_name = $canonical_name,
-    d.confidence = $confidence,
-    d.synonyms = $synonyms,
-    d.ontology = $ontology,
-    d.mesh_id = $mesh_id
+    d.mesh_concept_id = $mesh_concept_id,
+    d.disease_name = $disease_name,
+    d.description = $description
 """
 
 
@@ -191,16 +188,16 @@ MERGE (c)-[r:$($interaction)]->(p)
 """
 
 
-ADD_COMPOUND_TREATS_DISEASE = """
+ADD_COMPOUND_MAY_TREAT_DISEASE = """
 MATCH (c:Compound {
     chembl_id: $chembl_id
 })
 
 MATCH (d:Disease {
-    disease_id: $disease_id
+    mesh_id: $mesh_id
 })
 
-MERGE (c)-[:TREATS]->(d)
+MERGE (c)-[:MAY_TREAT]->(d)
 """
 
 
@@ -255,7 +252,7 @@ DETACH DELETE p
 
 DELETE_DISEASE = """
 MATCH (d:Disease {
-    disease_id: $disease_id
+    mesh_id: $mesh_id
 })
 DETACH DELETE d
 """

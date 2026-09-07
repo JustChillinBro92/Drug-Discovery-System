@@ -14,6 +14,9 @@ class Settings:
     UNICHEM_API_URL = os.getenv("UNICHEM_API_URL")
     EUROPEPMC_API_URL = os.getenv("EUROPEPMC_API_URL")
     UNIPROT_API_URL = os.getenv("UNIPROT_API_URL")
+    RXNORM_API_URL = os.getenv("RXNORM_API_URL")
+    RXCLASS_API_URL = os.getenv("RXCLASS_API_URL")
+    MESH_RDF_API_URL = os.getenv("MESH_RDF_API_URL")
     
     GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
     GEMINI_MODEL = os.getenv("GEMINI_MODEL")

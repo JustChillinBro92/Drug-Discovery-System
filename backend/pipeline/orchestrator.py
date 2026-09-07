@@ -23,6 +23,7 @@ class PipelineOrchestrator:
         protein_normalizer,
         compound_normalizer,
         unichem_normalizer,
+        disease_normalizer,
         sider_service,
         rdkit_service,
         fingerprint_service,
@@ -43,6 +44,7 @@ class PipelineOrchestrator:
         self.protein_normalizer = protein_normalizer
         self.compound_normalizer = compound_normalizer
         self.unichem_normalizer = unichem_normalizer
+        self.disease_normalizer = disease_normalizer
         self.sider_service = sider_service
         self.rdkit_service = rdkit_service
         self.fingerprint_service = fingerprint_service
@@ -304,10 +306,27 @@ class PipelineOrchestrator:
         request,
         state
     ):
-        
         compound = self.compound_normalizer.normalize(
             request.query
         )
+
+        analysis = self._analyze_compound(
+            compound,
+            state
+        )
+
+        return PipelineResponse(
+            mode=request.mode,
+            message="Molecule analysis completed",
+            data=analysis
+        )
+
+
+    def _analyze_compound(
+        self,
+        compound,
+        state
+    ):
 
         properties = self.rdkit_service.analyze_properties(
             compound
@@ -407,6 +426,30 @@ class PipelineOrchestrator:
             )
             
             
+        
+        rxcui = self.disease_normalizer.normalize_compound(
+            compound.canonical_name
+        )
+        
+        diseases = self.disease_normalizer.normalize_disease(
+            rxcui
+        )
+        
+        for disease in diseases:
+            # Add disease to knowledge graph
+
+            self.graph_service.add_disease(
+                disease
+            )
+            
+            # Add compound --may_treat--> disease to knowledge graph
+            
+            self.graph_service.add_compound_may_treat_disease(
+                compound,
+                disease
+            )
+
+              
         lipinski = properties.lipinski
         
         drug_likeness = {
@@ -479,17 +522,14 @@ class PipelineOrchestrator:
         }
         
     
-        return PipelineResponse(
-            mode = request.mode,
-            message = "Molecule analysis completed",
-            data = {
-                "compound": compound.model_dump(),
-                "properties": properties.model_dump(),
-                "drug_likeness": drug_likeness,
-                "proteins": proteins,
-                "side_effects": side_effects
-            }
-        )
+        return {
+            "compound": compound.model_dump(),
+            "properties": properties.model_dump(),
+            "drug_likeness": drug_likeness,
+            "proteins": proteins,
+            "side_effects": side_effects,
+            "diseases": diseases
+        }
 
 
     def run_similarity_search(
@@ -498,17 +538,13 @@ class PipelineOrchestrator:
         state,
         **kwargs
     ):
-        
+
         query_compound = self.compound_normalizer.normalize(
             request.query
         )
-        
-        # Update conversation state
-        
-        state.entities.add_compound(
-            query_compound.canonical_name
-        )
-        
+
+        self._analyze_compound(query_compound, state)
+
         query_compound_fingerprint = (
             self.fingerprint_service.generate_morgan_fingerprint(
                 query_compound
@@ -517,31 +553,26 @@ class PipelineOrchestrator:
         
         target_compound_data = []
         
-        for compound in kwargs.get("target_compounds", []):
-            nmz_compound = self.compound_normalizer.normalize(
-                compound
+        for target in kwargs.get("target_compounds", []):
+            target_compound = self.compound_normalizer.normalize(
+                target
             )
-            
-            # Update conversation state
 
-            state.entities.add_compound(
-                nmz_compound.canonical_name
-            )
-            
+            self._analyze_compound(target_compound,state)
+
             fingerprint = (
                 self.fingerprint_service.generate_morgan_fingerprint(
-                    nmz_compound
+                    target_compound
                 )
             )
-            
+
             target_compound_data.append(
                 {
-                    "compound": nmz_compound,
-                    "fingerprint": fingerprint 
+                    "compound": target_compound,
+                    "fingerprint": fingerprint
                 }
             )
-        
-        
+
         similarity_results = (
             self.similarity_search_service
             .search_similar_compounds(
@@ -550,21 +581,11 @@ class PipelineOrchestrator:
                 compounds=target_compound_data
             )
         )
-        
-        
-        # Update conversation state
 
         state.similarity_results.extend(
             similarity_results
         )
-        
-        # Add query & target compounds to graph
-        
-        self.graph_service.add_compound(
-            query_compound
-        )
-        
-        
+
         for result in similarity_results:
             target_compound = next(
                 (
@@ -574,27 +595,22 @@ class PipelineOrchestrator:
                 ),
                 None
             )
-            
+
             if target_compound is None:
                 continue
-            
-            self.graph_service.add_compound(
-                target_compound
-            )
-            
+
             self.graph_service.add_compound_similarity(
                 query_compound=query_compound,
                 target_compound=target_compound,
                 similarity_score=result.similarity_score
             )
-        
 
         return PipelineResponse(
             mode = request.mode,
             message = "Similarity search completed",
             data = {
                 "compound": query_compound.model_dump(),
-                "similarity_results": similarity_results
+                "similarity_results": similarity_results,
             }
         )
 
@@ -633,8 +649,8 @@ class PipelineOrchestrator:
                 "retrieved_state": retrieval.model_dump()
             }
         )
-
-    
+        
+        
     def run_view_conversation_state(
         self,
         request,
