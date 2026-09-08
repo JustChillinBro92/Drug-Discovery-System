@@ -442,12 +442,9 @@ if __name__ == "__main__":
                 print(f"Conversation ID : {state_data.get('conversation_id')}")
                 print(f"Current Mode    : {state_data.get('current_mode')}")
 
-                print("\nEntities:")
-                print(state_data.get("entities"))
-
                 print("\nAnalyzed Compounds:")
                 for compound in state_data.get("analyzed_compounds", []):
-                    print(compound)
+                    print(json.dumps(compound, indent=2))
 
                 print("\nSimilarity Results:")
                 for similarity_result in state_data.get("similarity_results", []):

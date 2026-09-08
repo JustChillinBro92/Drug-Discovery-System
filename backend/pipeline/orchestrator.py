@@ -4,6 +4,7 @@ from models.conversation_state import ConversationState
 from pipeline.resolvers.dependencies import PipelineDependencies
 from pipeline.resolvers.literature_resolver import LiteratureResolver
 from pipeline.resolvers.molecular_resolver import MolecularResolver
+from pipeline.resolvers.graph_resolver import GraphResolver
 from pipeline.resolvers.state_resolver import StateResolver
 
 
@@ -51,8 +52,13 @@ class PipelineOrchestrator:
         )
 
         literature_resolver = LiteratureResolver(dependencies)
-        molecular_resolver = MolecularResolver(dependencies)
         state_resolver = StateResolver()
+        graph_resolver = GraphResolver(dependencies)
+        molecular_resolver = MolecularResolver(
+            dependencies,
+            state_resolver,
+            graph_resolver
+        )
 
         self._resolvers = {
             "literature_acquisition": literature_resolver.run_literature_acquisition,

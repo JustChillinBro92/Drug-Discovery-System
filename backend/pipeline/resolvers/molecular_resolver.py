@@ -1,17 +1,11 @@
-from models.biomedical_entities import (
-    CompoundEntity,
-    DiseaseEntity,
-    ProteinEntity,
-    SideEffectEntity
-)
-from models.compound_analysis import CompoundAnalysis
-from models.molecular_properties import LipinskiResult, MolecularProperties
 from models.pipeline_response import PipelineResponse
 
 
 class MolecularResolver:
-    def __init__(self, dependencies):
+    def __init__(self, dependencies, state_resolver, graph_resolver):
         self.dependencies = dependencies
+        self.state_resolver = state_resolver
+        self.graph_resolver = graph_resolver
 
     def run_molecule_analysis(self, request, state):
         compound, analysis = self._analyze_compound(
@@ -70,10 +64,10 @@ class MolecularResolver:
                 target_compound
                 and target_compound.chembl_id != query_compound.chembl_id
             ):
-                self.dependencies.graph_service.add_compound_similarity(
-                    query_compound=query_compound,
-                    target_compound=target_compound,
-                    similarity_score=result.similarity_score
+                self.graph_resolver.add_similarity(
+                    query_compound,
+                    target_compound,
+                    result.similarity_score
                 )
 
         return PipelineResponse(
@@ -87,24 +81,9 @@ class MolecularResolver:
 
 
     def _analyze_compound(self, compound_text, state):
-        graph_data = (
-            self.dependencies.graph_service
-            .get_compound_analysis_by_name(compound_text)
-        )
-
-        if (
-            graph_data
-            and self._has_complete_graph_analysis(graph_data)
-            and self._has_complete_graph_protein_metadata(graph_data)
-        ):
-            compound = CompoundEntity(
-                **self._graph_entity_properties(graph_data["c"])
-            )
-            return compound, self._analysis_from_graph(
-                compound,
-                graph_data,
-                state
-            )
+        graph_analysis = self.graph_resolver.get_analysis_by_name(compound_text)
+        if graph_analysis:
+            return self._store_graph_analysis(graph_analysis, state)
 
         compound = self.dependencies.compound_normalizer.normalize(
             compound_text
@@ -116,156 +95,49 @@ class MolecularResolver:
 
 
     def _analyze_normalized_compound(self, compound, state):
-        graph_data = self.dependencies.graph_service.get_compound_analysis(
-            compound.chembl_id
-        )
-        if (
-            graph_data
-            and self._has_complete_graph_analysis(graph_data)
-            and self._has_complete_graph_protein_metadata(graph_data)
-        ):
-            return self._analysis_from_graph(compound, graph_data, state)
+        graph_analysis = self.graph_resolver.get_analysis_by_compound(compound)
+        if graph_analysis:
+            return self._store_graph_analysis(graph_analysis, state)
         return self._analyze_from_sources(compound, state)
 
 
-    @staticmethod
-    def _has_complete_graph_analysis(graph_data):
-        required_fields = {
-            "molecular_weight", "logp", "tpsa", "h_bond_donors",
-            "h_bond_acceptors", "rotatable_bonds", "heavy_atom_count",
-            "ring_count", "aromatic_ring_count", "formal_charge",
-            "fraction_csp3", "qed", "lipinski_molecular_weight_pass",
-            "lipinski_logp_pass", "lipinski_hbd_pass", "lipinski_hba_pass",
-            "lipinski_overall_pass", "lipinski_violations"
-        }
-        return required_fields.issubset(graph_data.get("c", {}))
-
-
-    @staticmethod
-    def _has_complete_graph_protein_metadata(graph_data):
-        required_fields = {
-            "target_chembl_id",
-            "target_name",
-            "organism",
-            "component_description",
-            "component_type",
-            "activities_no",
-            "interaction_type"
-        }
-
-        for protein in graph_data.get("proteins", []):
-            if not protein or not protein.get("protein"):
-                continue
-            if any(
-                protein.get(field) is None
-                for field in required_fields
-            ):
-                return False
-
-        return True
-
-
-    def _analysis_from_graph(self, normalized_compound, graph_data, state):
-        graph_compound = self._graph_entity_properties(
-            graph_data["c"]
+    def _store_graph_analysis(self, graph_analysis, state):
+        compound, properties, proteins, side_effects, diseases = graph_analysis
+        analysis, _ = self.state_resolver.store_analysis(
+            compound,
+            properties,
+            state
         )
-        compound = CompoundEntity(**{
-            **normalized_compound.model_dump(),
-            **graph_compound
-        })
-        lipinski = LipinskiResult(
-            molecular_weight_pass=graph_compound["lipinski_molecular_weight_pass"],
-            logp_pass=graph_compound["lipinski_logp_pass"],
-            hbd_pass=graph_compound["lipinski_hbd_pass"],
-            hba_pass=graph_compound["lipinski_hba_pass"],
-            overall_pass=graph_compound["lipinski_overall_pass"],
-            violations=graph_compound["lipinski_violations"]
+        entity_state = self.state_resolver.get_entity_state(
+            state,
+            compound.canonical_name,
+            analysis
         )
-        properties = MolecularProperties(
-            molecular_weight=graph_compound["molecular_weight"],
-            logp=graph_compound["logp"],
-            tpsa=graph_compound["tpsa"],
-            h_bond_donors=graph_compound["h_bond_donors"],
-            h_bond_acceptors=graph_compound["h_bond_acceptors"],
-            rotatable_bonds=graph_compound["rotatable_bonds"],
-            heavy_atom_count=graph_compound["heavy_atom_count"],
-            ring_count=graph_compound["ring_count"],
-            aromatic_ring_count=graph_compound["aromatic_ring_count"],
-            formal_charge=graph_compound["formal_charge"],
-            fraction_csp3=graph_compound["fraction_csp3"],
-            qed=graph_compound["qed"],
-            lipinski=lipinski
+        self.state_resolver.update_entity_state(
+            entity_state,
+            analysis,
+            proteins,
+            side_effects,
+            diseases
         )
-        proteins = []
-        for graph_protein in graph_data.get("proteins", []):
-            if graph_protein and graph_protein.get("protein"):
-                protein = ProteinEntity(
-                    **self._graph_entity_properties(
-                        graph_protein["protein"]
-                    )
-                )
-                proteins.append({
-                    "target_chembl_id": graph_protein.get(
-                        "target_chembl_id"
-                    ),
-                    "target_name": graph_protein.get(
-                        "target_name",
-                        protein.protein_name
-                    ),
-                    "organism": graph_protein.get(
-                        "organism",
-                        protein.organism
-                    ),
-                    "accession": protein.uniprot_id,
-                    "component_description": graph_protein.get(
-                        "component_description"
-                    ),
-                    "component_type": graph_protein.get("component_type"),
-                    "interaction_type": graph_protein.get(
-                        "interaction_type"
-                    ),
-                    "activities_no": graph_protein.get("activities_no"),
-                    "protein": protein.model_dump()
-                })
-        diseases = [
-            DiseaseEntity(**self._graph_entity_properties(item))
-            for item in graph_data.get("diseases", []) if item
-        ]
-        side_effects = [
-            SideEffectEntity(**self._graph_entity_properties(item))
-            for item in graph_data.get("side_effects", []) if item
-        ]
-        self._store_analysis(compound, properties, state)
-        return self._build_response_data(
-            compound, properties, proteins, side_effects, diseases
+        return compound, self._build_response_data(
+            compound,
+            properties,
+            proteins,
+            side_effects,
+            diseases
         )
-
-
-    @staticmethod
-    def _graph_entity_properties(entity):
-        if entity is None:
-            return {}
-        if isinstance(entity, dict):
-            return entity
-        if hasattr(entity, "items"):
-            return dict(entity.items())
-        if isinstance(entity, tuple):
-            for value in reversed(entity):
-                if isinstance(value, dict):
-                    return value
-                if hasattr(value, "items"):
-                    return dict(value.items())
-            return {}
-        return dict(entity)
 
 
     def _analyze_from_sources(self, compound, state):
         properties = self.dependencies.rdkit_service.analyze_properties(compound)
-        is_new = self._store_analysis(compound, properties, state)
+        analysis, is_new = self.state_resolver.store_analysis(
+            compound,
+            properties,
+            state
+        )
         if is_new:
-            self.dependencies.graph_service.add_compound(
-                state.analyzed_compounds[-1]
-            )
+            self.graph_resolver.add_compound(analysis)
 
         proteins = []
         targets = self.dependencies.target_analyzer.get_protein_targets_for_molecule(
@@ -279,15 +151,10 @@ class MolecularResolver:
                 protein_details,
                 target["organism"]
             )
-            self.dependencies.graph_service.add_protein(protein)
-            self.dependencies.graph_service.add_compound_protein_interaction(
+            self.graph_resolver.add_protein_interaction(
                 compound,
                 protein,
-                target["interaction_type"],
-                target_metadata={
-                    **target,
-                    "activities_no": len(target["activities"])
-                }
+                target
             )
             proteins.append({
                 "target_chembl_id": target["target_chembl_id"],
@@ -308,8 +175,7 @@ class MolecularResolver:
             unichem_compound.get("pubchem_cids")
         )
         for side_effect in side_effects:
-            self.dependencies.graph_service.add_side_effect(side_effect)
-            self.dependencies.graph_service.add_compound_can_cause_side_effect(
+            self.graph_resolver.add_side_effect_relationship(
                 compound, side_effect
             )
 
@@ -318,28 +184,26 @@ class MolecularResolver:
         )
         diseases = self.dependencies.disease_normalizer.normalize_disease(rxcui)
         for disease in diseases:
-            self.dependencies.graph_service.add_disease(disease)
-            self.dependencies.graph_service.add_compound_may_treat_disease(
+            self.graph_resolver.add_disease_relationship(
                 compound, disease
             )
+
+        entity_state = self.state_resolver.get_entity_state(
+            state,
+            compound.canonical_name,
+            analysis
+        )
+        self.state_resolver.update_entity_state(
+            entity_state,
+            analysis,
+            proteins,
+            side_effects,
+            diseases
+        )
 
         return self._build_response_data(
             compound, properties, proteins, side_effects, diseases
         )
-
-
-    def _store_analysis(self, compound, properties, state):
-        state.entities.add_compound(compound.canonical_name)
-        existing = {
-            item.compound.canonical_name
-            for item in state.analyzed_compounds
-        }
-        if compound.canonical_name in existing:
-            return False
-        state.analyzed_compounds.append(
-            CompoundAnalysis(compound=compound, properties=properties)
-        )
-        return True
 
 
     def _build_response_data(

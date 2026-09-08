@@ -69,6 +69,7 @@ class LiteratureResolver:
             context=context,
             query=request.query
         )
+        
         return PipelineResponse(
             mode=request.mode,
             answer=answer,

@@ -1,4 +1,4 @@
-from typing import List, Dict, Optional
+from typing import Dict, List, Optional
 
 from pydantic import BaseModel, Field
 
@@ -7,22 +7,27 @@ from models.referenced_paper import ReferencedPaper
 from models.compound_analysis import CompoundAnalysis
 
 
-class EntityState(BaseModel):
-    compounds: List[str] = Field(default_factory=list)
-    diseases: List[str] = Field(default_factory=list) # <- pending
-    proteins: List[str] = Field(default_factory=list) # <- needs update
-    
-    def add_compound(self, compound: str):
-        if compound not in self.compounds:
-            self.compounds.append(compound)
-            
-    def add_disease(self, disease: str):
-        if disease not in self.diseases:
-            self.diseases.append(disease)
+class EntitySummary(BaseModel):
+    protein_count: int = 0
+    side_effect_count: int = 0
+    treatable_disease_count: int = 0
 
-    def add_protein(self, protein: str):
-        if protein not in self.proteins:
-            self.proteins.append(protein)
+
+class EntityState(BaseModel):
+    compound_details: CompoundAnalysis
+    summary: EntitySummary = Field(default_factory=EntitySummary)
+    
+    def update_compound(self, compound: CompoundAnalysis):
+        self.compound_details = compound
+
+    def update_proteins(self, proteins: List):
+        self.summary.protein_count = len(proteins)
+
+    def update_side_effects(self, side_effects: List):
+        self.summary.side_effect_count = len(side_effects)
+
+    def update_treatable_diseases(self, diseases: List):
+        self.summary.treatable_disease_count = len(diseases)
 
 
 class LiteratureRetrievalState(BaseModel):
@@ -48,13 +53,9 @@ class ConversationState(BaseModel):
 
     current_mode: Optional[str] = None
 
-    entities: EntityState = Field(
-        default_factory=EntityState
-    )
-    
-    analyzed_compounds: List[CompoundAnalysis] = Field(
+    analyzed_compounds: List[EntityState] = Field(
         default_factory=list,
-        description="Compounds analyzed during this conversation."
+        description="Compounds and summary data analyzed during this conversation."
     )
     
     similarity_results: List[SimilarCompound] = Field(
