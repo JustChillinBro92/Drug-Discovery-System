@@ -13,6 +13,7 @@ from rag.context_builder import context_builder
 
 from llm.gemini_client import GeminiClient
 from llm.generator import Generator
+from config.config import settings
 
 from services.analyzers.chembl_target_analyzer import ChEMBLTargetAnalyzer
 from services.normalizers.compound_normalizer import compound_normalizer
@@ -33,10 +34,8 @@ from graph.graph_service import graph_service
 
 # Initialize dependencies
 
-gemini_client = GeminiClient()
-generator = Generator(
-    client=gemini_client
-)
+gemini_client = GeminiClient(api_key=settings.GEMINI_API_KEY)
+generator = Generator(client=gemini_client)
 
 target_analyzer = ChEMBLTargetAnalyzer(
     generator=generator
@@ -74,7 +73,6 @@ orchestrator = PipelineOrchestrator(
 # Pipeline execution entry point
 
 def execute(
-    conversation_id: str,
     mode: str,
     query: str,
     state: ConversationState,
@@ -82,7 +80,6 @@ def execute(
 ):
 
     return orchestrator.run(
-        conversation_id=conversation_id,
         mode=mode,
         query=query,
         state=state,
@@ -97,11 +94,7 @@ if __name__ == "__main__":
     from models.conversation_state import ConversationState
 
 
-    conversation_id = "terminal_session_001"
-
-    state = ConversationState(
-        conversation_id=conversation_id
-    )
+    state = ConversationState()
 
 
     while True:
@@ -148,7 +141,6 @@ if __name__ == "__main__":
         
         if mode == "view_indexed_papers":
             result = execute(
-                conversation_id=conversation_id,
                 mode=mode,
                 query="",
                 state=state
@@ -158,7 +150,6 @@ if __name__ == "__main__":
             query_confirm = input("\nDelete all indexed papers? (y/n): ")
             
             result = execute(
-                conversation_id=conversation_id,
                 mode=mode,
                 query=query_confirm,
                 state=state
@@ -174,7 +165,6 @@ if __name__ == "__main__":
             ]
             
             result = execute(
-                conversation_id=conversation_id,
                 mode=mode,
                 query=query_compound,
                 state=state,
@@ -183,7 +173,6 @@ if __name__ == "__main__":
            
         elif mode == "view_conversation_state":
             result = execute(
-                conversation_id=conversation_id,
                 mode=mode,
                 query="",
                 state=state
@@ -194,7 +183,6 @@ if __name__ == "__main__":
             query = input("\nQuery: ")
 
             result = execute(
-                conversation_id=conversation_id,
                 mode=mode,
                 query=query,
                 state=state
@@ -439,7 +427,6 @@ if __name__ == "__main__":
                 print("| Conversation State |")
                 print("+--------------------+")
 
-                print(f"Conversation ID : {state_data.get('conversation_id')}")
                 print(f"Current Mode    : {state_data.get('current_mode')}")
 
                 print("\nAnalyzed Compounds:")
@@ -484,7 +471,17 @@ if __name__ == "__main__":
                     "important_context", []
                 ):
                     print(f"- {context}")
-                            
+                         
+                         
+            if  "tool_results" in data:
+                tool_results = data["tool_results"]
+                
+                print()
+                print("+--------------------+")
+                print("| Tool Results       |")
+                print("+--------------------+")
+                
+                print(json.dumps(tool_results, indent=2))
 
         if result.message:
             print("\nMessage:")

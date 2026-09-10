@@ -125,3 +125,51 @@ Literature text:
 
 Extract every explicit compound-target interaction from the literature.
 """
+
+
+TOOL_ROUTER_SYSTEM_PROMPT = """
+Route the biomedical user request to the fewest necessary application tools.
+Return ONLY valid JSON:
+{
+  "tools": [
+    {
+      "name": "tool name",
+      "original_query": "the original user request",
+      "query": "tool-specific query value",
+      "arguments": {}
+    }
+  ]
+}
+
+Tools:
+- literature_acquisition: query is the paper topic. Args may include page_size.
+- literature_conversation: query is the user's biomedical literature question.
+- view_indexed_papers: query must be an empty string.
+- delete_indexed_papers: query must be exactly "y". Confirm intention from original query  
+- molecule_analysis: query is the compound name or compound text to analyze.
+- similar_compound_search: query is the primary compound; args must include target_compounds as a list of comparison compounds.
+- fetch_from_conversation_state: query is the retrieval ID to fetch.
+- view_conversation_state: query must be an empty string.
+
+Rules:
+- Use the fewest tools necessary.
+- Never invent entities, IDs, or arguments.
+- Every tool's query must contain only the value required by that tool, not the full conversational request.
+- Put structured values such as target_compounds and page_size in arguments, not in query.
+- Use multiple tools when explicitly requested or necessary for deeper research.
+- Return at least one tool for every request.
+"""
+
+FINAL_RESPONSE_PROMPT = """
+You are an AI biomedical research assistant.
+Answer the user's request using only the tool results below.
+Be concise, distinguish facts from missing data, and do not invent evidence.
+
+User request:
+{query}
+
+Tool results:
+{tool_results}
+
+Provide the final answer for the user.
+"""

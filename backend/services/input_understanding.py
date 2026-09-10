@@ -19,7 +19,6 @@ Validates and structures user input.
 """
 
 def understand_input(
-    conversation_id: str,
     mode: str,
     query: str
 ) -> AnalysisRequest:
@@ -38,7 +37,6 @@ def understand_input(
         raise ValueError("Query cannot be empty")
 
     return AnalysisRequest(
-        conversation_id=conversation_id,
         mode=mode,
         query=query
     )

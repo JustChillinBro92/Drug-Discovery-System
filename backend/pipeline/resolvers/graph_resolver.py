@@ -23,6 +23,7 @@ class GraphResolver:
         )
         return self.get_analysis(compound, graph_data)
 
+
     def get_analysis_by_compound(self, compound):
         graph_data = self.dependencies.graph_service.get_compound_analysis(
             compound.chembl_id
@@ -30,6 +31,7 @@ class GraphResolver:
         if not self.has_complete_analysis(graph_data):
             return None
         return self.get_analysis(compound, graph_data)
+
 
     def get_analysis(self, normalized_compound, graph_data):
         graph_compound = self.graph_entity_properties(graph_data["c"])
@@ -99,8 +101,10 @@ class GraphResolver:
         ]
         return compound, properties, proteins, side_effects, diseases
 
+
     def add_compound(self, analysis):
         self.dependencies.graph_service.add_compound(analysis)
+
 
     def add_protein_interaction(self, compound, protein, target):
         self.dependencies.graph_service.add_protein(protein)
@@ -114,12 +118,14 @@ class GraphResolver:
             }
         )
 
+
     def add_side_effect_relationship(self, compound, side_effect):
         self.dependencies.graph_service.add_side_effect(side_effect)
         self.dependencies.graph_service.add_compound_can_cause_side_effect(
             compound,
             side_effect
         )
+
 
     def add_disease_relationship(self, compound, disease):
         self.dependencies.graph_service.add_disease(disease)
@@ -128,12 +134,14 @@ class GraphResolver:
             disease
         )
 
+
     def add_similarity(self, query_compound, target_compound, score):
         self.dependencies.graph_service.add_compound_similarity(
             query_compound=query_compound,
             target_compound=target_compound,
             similarity_score=score
         )
+
 
     @classmethod
     def has_complete_analysis(cls, graph_data):

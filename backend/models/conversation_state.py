@@ -49,8 +49,6 @@ class LiteratureRetrievalState(BaseModel):
 
 
 class ConversationState(BaseModel):
-    conversation_id: str
-
     current_mode: Optional[str] = None
 
     analyzed_compounds: List[EntityState] = Field(

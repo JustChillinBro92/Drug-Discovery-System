@@ -302,14 +302,8 @@ DETACH DELETE d
 
 
 # ========================================================
-# CLEAR GRAPH
+# FETCH DATA FROM GRAPH
 # ========================================================
-
-CLEAR_GRAPH = """
-MATCH (n)
-DETACH DELETE n
-"""
-
 
 GET_COMPOUND_ANALYSIS = """
 MATCH (c:Compound {
@@ -373,4 +367,14 @@ RETURN c,
         WHEN type(side_effect_relationship) = "CAN_CAUSE" THEN s
     END) AS side_effects
 LIMIT 1
+"""
+
+
+# ========================================================
+# CLEAR GRAPH
+# ========================================================
+
+CLEAR_GRAPH = """
+MATCH (n)
+DETACH DELETE n
 """

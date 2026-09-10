@@ -18,6 +18,7 @@ class Settings:
     RXCLASS_API_URL = os.getenv("RXCLASS_API_URL")
     MESH_RDF_API_URL = os.getenv("MESH_RDF_API_URL")
     
+    GEMINI_WRAPPER_API_KEY = os.getenv("GEMINI_WRAPPER_API_KEY")
     GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
     GEMINI_MODEL = os.getenv("GEMINI_MODEL")
     

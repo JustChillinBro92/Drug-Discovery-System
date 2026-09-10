@@ -72,20 +72,22 @@ class PipelineOrchestrator:
             "view_conversation_state": state_resolver.run_view_conversation_state
         }
 
+    @property
+    def resolvers(self):
+        return self._resolvers
+
     def run(
         self,
-        conversation_id: str,
         mode: str,
         query: str,
         state: ConversationState,
         **kwargs
     ):
         request = understand_input(
-            conversation_id=conversation_id,
             mode=mode,
             query=query
         )
-        
+
         resolver = self._resolvers.get(request.mode)
         if resolver is None:
             raise ValueError(f"Unsupported mode: {request.mode}")

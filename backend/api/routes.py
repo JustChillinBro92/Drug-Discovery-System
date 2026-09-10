@@ -1,12 +1,18 @@
 from fastapi import APIRouter
 
-from api.request_models import AnalysisRequest
+from api.request_models import (
+    AnalysisRequest,
+    ConversationRequest
+)
 from api.response_models import (
     HealthCheckResponse,
-    AnalysisResponse
+    AnalysisResponse,
+    ConversationResponse
 )
+from models.conversation_state import ConversationState
 
 from backend.pipeline.run_pipeline import execute
+from backend.pipeline.run_free_conversation import execute as execute_conversation
 
 router = APIRouter()
 
@@ -20,17 +26,34 @@ def health_check():
     
     
 @router.post("/analyze", response_model=AnalysisResponse)
-def analyze(
-    request: AnalysisRequest
-):
+def analyze(request: AnalysisRequest):
     result = execute(
-        conversation_id=request.conversation_id,
         mode=request.mode,
-        query=request.query
+        query=request.query,
+        state=ConversationState()
     )
 
     return AnalysisResponse(
-        conversation_id=request.conversation_id,
         mode=request.mode,
+        result=result
+    )
+
+
+@router.post(
+    "/chat/{conversation_id}",
+    response_model=ConversationResponse
+)
+def free_conversation(
+    conversation_id: str,
+    request: ConversationRequest
+):
+    result = execute_conversation(
+        conversation_id=conversation_id,
+        query=request.query
+    )
+
+    return ConversationResponse(
+        conversation_id=conversation_id,
+        mode="free_conversation",
         result=result
     )

@@ -69,5 +69,5 @@ class StateResolver:
         return PipelineResponse(
             mode=request.mode,
             message="Current conversation state",
-            data={"state": state.model_dump()}
+            data={"state": state.model_dump(mode="json")}
         )

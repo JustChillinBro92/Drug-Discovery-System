@@ -8,8 +8,10 @@ from llm.prompts import (
     SYSTEM_PROMPT_3,
     RAG_PROMPT,
     ASSAY_INTERACTION_PROMPT,
-    LITERATURE_INTERACTION_PROMPT
+    LITERATURE_INTERACTION_PROMPT,
+    FINAL_RESPONSE_PROMPT
 )
+from google.genai import types
 
 
 class Generator:
@@ -79,8 +81,14 @@ class Generator:
         )
 
 
+        config = types.GenerateContentConfig(
+            temperature=0.2,
+            response_mime_type="application/json",
+        )
+
         response = self.client.generate(
-            prompt
+            prompt,
+            config=config
         )
         
         # print(response)
@@ -109,3 +117,16 @@ class Generator:
         return json.loads(
             response
         )
+
+
+
+    def generate_final_response(
+        self,
+        query: str,
+        tool_results: list[dict]
+    ) -> str:
+        prompt = FINAL_RESPONSE_PROMPT.format(
+            query=query,
+            tool_results=json.dumps(tool_results, indent=2, default=str)
+        )
+        return self.client.generate(prompt)

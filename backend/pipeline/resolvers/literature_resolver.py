@@ -8,8 +8,15 @@ class LiteratureResolver:
     def __init__(self, dependencies):
         self.dependencies = dependencies
 
-    def run_literature_acquisition(self, request, state):
-        page_size = int(input("Enter the amount of papers to retrieve: "))
+    def run_literature_acquisition(self, request, state, **kwargs):
+        page_size = kwargs.get("page_size")
+        if page_size is None:
+            page_size = int(input("Enter the amount of papers to retrieve: "))
+            
+        page_size = int(page_size)
+        if page_size < 1:
+            raise ValueError("page_size must be at least 1")
+        
         papers = self.dependencies.paper_normalizer.normalize(
             request.query,
             page_size=page_size
@@ -21,6 +28,9 @@ class LiteratureResolver:
 
         for paper in papers:
             paper_id = paper.pmid or paper.pmcid or paper.doi
+            if not paper_id:
+                continue
+
             if self.dependencies.vector_store.paper_exists(paper_id):
                 duplicate_papers += 1
                 continue

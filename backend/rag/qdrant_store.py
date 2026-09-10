@@ -143,7 +143,6 @@ class QdrantStore:
     """
      
     def get_indexed_papers(self):
-        
         papers = {}
         
         points, _ = self.client.scroll(
@@ -190,9 +189,7 @@ class QdrantStore:
                     pmcid=paper["pmcid"],
                     doi=paper["doi"],
                     title=paper["title"],
-                    abstract="\n\n".join(
-                        paper["texts"]
-                    ),
+                    abstract="\n\n".join(paper["texts"]),
                     authors=paper["authors"],
                     journal=paper["journal"],
                     publication_year=paper["publication_year"],
@@ -210,8 +207,11 @@ class QdrantStore:
     
     def paper_exists(
         self,
-        paper_id: str
+        paper_id: str | None
     ) -> bool:
+
+        if not paper_id:
+            return False
 
         points, _ = self.client.scroll(
             collection_name=self.collection_name,
