@@ -109,8 +109,8 @@ class QdrantStore:
     def search_documents(
         self,
         query_embedding: np.ndarray,
-        top_k: int = 5,
-        offset: int = 0
+        top_k: int,
+        offset: int
     ) -> list[RetrievalResult]:
         
         results = self.client.query_points(

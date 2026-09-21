@@ -32,7 +32,7 @@ class FreeConversationResolver:
             
             tool_arguments = dict(kwargs)
             tool_arguments.update(tool_call.arguments)
-            
+                   
             if (
                 tool_call.name == "literature_acquisition"
                 and "page_size" not in tool_arguments

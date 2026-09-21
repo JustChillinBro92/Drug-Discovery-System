@@ -51,7 +51,6 @@ if __name__ == "__main__":
     print("\nConversation started. Type 'exit' to stop.")
     print(f"Conversation Id: {conversation_id}")
 
-
     try:
         while True:
             query = input("\nYou: ").strip()

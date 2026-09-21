@@ -1,4 +1,3 @@
-from models.paper_entity import PaperEntity
 from models.referenced_paper import ReferencedPaper
 from models.retrieval import RetrievalResult
 from models.pipeline_response import SourceReference
@@ -12,16 +11,16 @@ class ContextBuilder:
         context_parts = []
         sources = []
         referenced_papers = []
-        
+
         seen_sources = set()
         
-
         for index, result in enumerate(
             results,
             start = 1
         ):
             
             chunk = result.chunk
+            similarity_score = result.similarity_score
             
             paper_id = (
                 chunk.pmid
@@ -32,19 +31,11 @@ class ContextBuilder:
              
             context_parts.append(
                 f"""
-                    Source {index}
-                    
-                    PMID:
-                    {chunk.pmid or "Unknown"}
-
-                    PMCID:
-                    {chunk.pmcid or "Unknown"}
-
-                    DOI:
-                    {chunk.doi or "Unknown"}
-                    
-                    Text:
-                    {chunk.text or "Unknown"}
+                    Source {index}                   
+                    PMID: {chunk.pmid or "Unknown"}
+                    PMCID: {chunk.pmcid or "Unknown"}
+                    DOI: {chunk.doi or "Unknown"}              
+                    Text: {chunk.text or "Unknown"}
                 """
             )
             
@@ -61,7 +52,8 @@ class ContextBuilder:
                         doi=chunk.doi,
                         journal=chunk.journal,
                         publication_year=chunk.publication_year,
-                        url=chunk.url
+                        url=chunk.url,
+                        similarity_score=similarity_score
                     )
                 )
                 
@@ -80,7 +72,11 @@ class ContextBuilder:
                 
                 seen_sources.add(paper_id)
             
-        return ("\n\n".join(context_parts), sources, referenced_papers)
+        return (
+            "\n\n".join(context_parts), 
+            sources, 
+            referenced_papers
+        )
         
 
 context_builder = ContextBuilder()

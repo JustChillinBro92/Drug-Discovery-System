@@ -21,7 +21,7 @@ class EuropePMCService:
     def search_service(
         self,
         query: str,
-        page_size: int = 10
+        page_size: int = 100
     ):
         url = f"{self.base_url}/search"
         

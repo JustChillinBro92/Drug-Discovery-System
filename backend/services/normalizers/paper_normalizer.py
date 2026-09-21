@@ -7,7 +7,7 @@ class PaperNormalizer:
     def normalize(
         self, 
         query: str,
-        page_size: int = 10
+        page_size: int = 100
     ) -> list[PaperEntity]:
         
         # 1. Search up the papers using Europe PMC service
@@ -67,12 +67,16 @@ class PaperNormalizer:
             
             
             # Extract keywords and mesh terms
-            
-            keywords = (
-                result
-                .get("keywordList", {})
-                .get("keyword", [])
-            )
+                  
+            keywords = [
+                keyword
+                for keyword in (
+                    result
+                    .get("keywordList", {})
+                    .get("keyword", [])
+                )
+                if isinstance(keyword, str) and keyword.strip()
+            ]
 
             mesh_terms = [
                 mesh.get("descriptorName")

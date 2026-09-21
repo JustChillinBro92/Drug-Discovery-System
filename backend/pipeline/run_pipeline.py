@@ -483,6 +483,7 @@ if __name__ == "__main__":
                 
                 print(json.dumps(tool_results, indent=2))
 
+
         if result.message:
             print("\nMessage:")
             print(result.message)
@@ -504,7 +505,6 @@ if __name__ == "__main__":
             print("\nSources:")
 
             for index, source in enumerate(result.sources, start=1):
-
                 print(f"\n[{index}]")
 
                 print(f"Title   : {source.title}")
@@ -515,13 +515,13 @@ if __name__ == "__main__":
                 print(f"Journal : {source.journal}")
                 print(f"Year    : {source.publication_year}")
                 print(f"URL     : {source.url}")
+                print(f"Score   : {source.similarity_score}")
 
 
         if result.papers:
             print("\nIndexed Papers:")
 
             for index, paper in enumerate(result.papers, start=1):
-
                 print(f"\n[{index}]")
 
                 print(f"Title   : {paper.title}")

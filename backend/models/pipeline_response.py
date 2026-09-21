@@ -14,6 +14,7 @@ class SourceReference(BaseModel):
     journal: Optional[str] = None
     publication_year: Optional[int] = None
     url: Optional[str] = None
+    similarity_score: Optional[float]
     
 
 class PipelineResponse(BaseModel):

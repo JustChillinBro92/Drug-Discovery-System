@@ -47,6 +47,9 @@ class ToolRouter:
         except json.JSONDecodeError as error:
             raise ValueError("Tool router returned invalid JSON") from error
 
+        if isinstance(value, list):
+            value = {"tools": value}
+
         if not isinstance(value, dict):
             raise ValueError("Tool router response must be a JSON object")
         return value

@@ -10,7 +10,7 @@ class Retriever:
     def retrieve(
         self,
         query: str,
-        top_k: int = 5,
+        top_k: int = 8,
         offset: int = 0
     ):
         # Convert user query to embeddings

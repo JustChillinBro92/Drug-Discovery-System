@@ -83,7 +83,7 @@ class LiteratureResolver:
         return PipelineResponse(
             mode=request.mode,
             answer=answer,
-            sources=sources
+            sources=sources,
         )
 
 
