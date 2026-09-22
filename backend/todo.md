@@ -9,3 +9,5 @@
 5. LLM needs to go through the literature retrievals and decide the best retrieval to fetch / update with further literatures (by id)
 
 6. Add tool calls for individual protein, side effects, disease (By Name)
+
+7. Add methods for multiple compound(separated by ',') analysis

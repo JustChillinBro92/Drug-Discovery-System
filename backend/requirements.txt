@@ -15,7 +15,7 @@ neo4j
 faiss-cpu
 qdrant-client
 
-google-genai
+openai
 
 numpy
 pandas

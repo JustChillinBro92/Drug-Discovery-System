@@ -4,7 +4,6 @@ import re
 
 from models.tool_plan import ToolPlan
 from llm.prompts import TOOL_ROUTER_SYSTEM_PROMPT
-from google.genai import types
 
 
 class ToolRouter:
@@ -17,17 +16,13 @@ class ToolRouter:
         start = time.perf_counter()
         print("\nPlanning...")
         
-        config = types.GenerateContentConfig(
+        response = self.client.generate(
+            query,
             system_instruction=TOOL_ROUTER_SYSTEM_PROMPT,
             temperature=0.2,
-            max_output_tokens=256,
-            response_mime_type="application/json",
-            thinking_config=types.ThinkingConfig(
-                thinking_level="low"
-            )
+            max_output_tokens=2048,
+            json_mode=True
         )
-        
-        response = self.client.generate(query, config=config)
         
         elapsed = time.perf_counter() - start
         print(f"\nReceived Response in {elapsed:.2f}s")
@@ -35,6 +30,8 @@ class ToolRouter:
         print("\nParsing...")
         parsed_response = self._parse_json(response)
         print("\nFinished Parsing")
+        
+        print(parsed_response)
         
         return ToolPlan.model_validate(parsed_response)
 

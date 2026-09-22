@@ -30,4 +30,5 @@ class ToolCall(BaseModel):
 
 
 class ToolPlan(BaseModel):
-    tools: list[ToolCall] = Field(min_length=1)
+    tools: list[ToolCall] = Field(default_factory=list)
+    message: str = ""

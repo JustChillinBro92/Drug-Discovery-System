@@ -1,6 +1,5 @@
 import json
 
-# from llm.gemini_client import GeminiClient
 # from llm.generator import Generator
 
 # from services.sources.chembl_service import chembl_service
@@ -241,11 +240,6 @@ from services.normalizers.disease_normalizer import disease_normalizer
 #         )
 #     )
 
-# gemini_client = GeminiClient()
-
-# generator = Generator(
-#     client=gemini_client
-# )
 
 # chembl_service = ChEMBLService()
 # target_analyzer = ChEMBLTargetAnalyzer(

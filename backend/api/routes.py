@@ -11,8 +11,8 @@ from api.response_models import (
 )
 from models.conversation_state import ConversationState
 
-from backend.pipeline.run_pipeline import execute
-from backend.pipeline.run_free_conversation import execute as execute_conversation
+from pipeline.run_pipeline import execute
+from pipeline.run_free_conversation import run_user_input
 
 router = APIRouter()
 
@@ -39,21 +39,12 @@ def analyze(request: AnalysisRequest):
     )
 
 
-@router.post(
-    "/chat/{conversation_id}",
-    response_model=ConversationResponse
-)
+@router.post("/c/{conversation_id}", response_model=ConversationResponse)
 def free_conversation(
     conversation_id: str,
     request: ConversationRequest
 ):
-    result = execute_conversation(
+    return run_user_input(
         conversation_id=conversation_id,
         query=request.query
-    )
-
-    return ConversationResponse(
-        conversation_id=conversation_id,
-        mode="free_conversation",
-        result=result
     )

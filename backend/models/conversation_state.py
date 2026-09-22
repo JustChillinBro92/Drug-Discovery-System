@@ -60,26 +60,18 @@ class ConversationState(BaseModel):
         default_factory=list,
         description="Similarity comparisons performed during this conversation."
     )
-
-    # referenced_papers: List[ReferencedPaper] = Field(
-    #     default_factory=list,
-    #     description="Papers used in this conversation."
-    # )
-    
-    # retrieved_chunk_ids: List[str] = Field(
-    #     default_factory=list,
-    #     description="Chunk IDs retrieved during previous literature conversations."
-    # )
     
     referenced_paper_ids: set[str] = Field(
-        default_factory=set
+        default_factory=set,
+        description="ID's of papers used in this conversation."
     )
 
     literature_retrievals: Dict[
         str,
         LiteratureRetrievalState
     ] = Field(
-        default_factory=dict
+        default_factory=dict,
+        description="Literature retrieval details"
     )
 
     important_context: List[str] = Field(

@@ -2,12 +2,16 @@ import json
 from uuid import uuid4
 
 from models.conversation_state import ConversationState
+from api.response_models import ConversationResponse
 
 from config.config import settings
-from llm.gemini_client import GeminiClient
+
+from llm.openai_client import OpenAIClient
 from llm.tool_router import ToolRouter
+
 from pipeline.resolvers.free_conversation_resolver import FreeConversationResolver
 from pipeline.run_pipeline import orchestrator
+
 from rag.vector_store import vector_store
 
 
@@ -25,8 +29,8 @@ def _get_session(conversation_id: str):
             "state": ConversationState(),
             "resolver": FreeConversationResolver(
                 tool_router=ToolRouter(
-                    client=GeminiClient(
-                        api_key=settings.GEMINI_WRAPPER_API_KEY
+                    client=OpenAIClient(
+                        api_key=settings.OPENAI_WRAPPER_API_KEY
                     ),
                     generator=None
                 ),
@@ -46,6 +50,23 @@ def execute(conversation_id: str, query: str):
     )
 
 
+def run_user_input(conversation_id, query):
+    response = execute(conversation_id, query)
+    
+    print("\nAI:", response.answer)
+    
+    # Debug
+    print("\nTool results:")
+    print(json.dumps(response.data, indent=2))
+    
+    return ConversationResponse (
+        conversation_id = conversation_id,
+        mode = response.mode,
+        message = response.answer,
+        data = response.data
+    )
+    
+    
 if __name__ == "__main__":
     conversation_id = create_session_id()
     print("\nConversation started. Type 'exit' to stop.")
@@ -59,8 +80,6 @@ if __name__ == "__main__":
             if not query:
                 continue
 
-            result = execute(conversation_id, query)
-            print("\nTool results:")
-            print(json.dumps(result.data, indent=2))
+            run_user_input(conversation_id, query)
     finally:
         vector_store.close()

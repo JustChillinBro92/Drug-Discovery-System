@@ -1,6 +1,6 @@
 import json
 
-from llm.gemini_client import GeminiClient
+from llm.openai_client import OpenAIClient
 
 from llm.prompts import (
     SYSTEM_PROMPT_1,
@@ -11,13 +11,12 @@ from llm.prompts import (
     LITERATURE_INTERACTION_PROMPT,
     FINAL_RESPONSE_PROMPT
 )
-from google.genai import types
 
 
 class Generator:
     def __init__(
         self,
-        client: GeminiClient
+        client: OpenAIClient
     ):
 
         self.client = client
@@ -81,14 +80,12 @@ class Generator:
         )
 
 
-        config = types.GenerateContentConfig(
-            temperature=0.2,
-            response_mime_type="application/json",
-        )
-
         response = self.client.generate(
             prompt,
-            config=config
+            temperature=0.2,
+            max_output_tokens=2048,
+            json_mode=True,
+            reasoning_effort="low"
         )
         
         # print(response)

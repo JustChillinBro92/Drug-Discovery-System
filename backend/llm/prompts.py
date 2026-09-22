@@ -127,8 +127,8 @@ Extract every explicit compound-target interaction from the literature.
 
 
 TOOL_ROUTER_SYSTEM_PROMPT = """
-Route the biomedical user request to the fewest necessary application tools.
-Return ONLY valid JSON:
+Route the request to the fewest necessary tools. Return ONLY valid JSON with
+this exact shape:
 {
   "tools": [
     {
@@ -137,26 +137,29 @@ Return ONLY valid JSON:
       "query": "tool-specific query value",
       "arguments": {}
     }
-  ]
+  ],
+  "message": "brief user-facing message"
 }
 
 Tools:
-- literature_acquisition: query is the paper topic. Args may include page_size(100 if not mentioned).
+- literature_acquisition: query is the paper topic; arguments may include page_size (100 if omitted).
 - literature_conversation: query is the user's biomedical literature question.
 - view_indexed_papers: query must be an empty string.
-- delete_indexed_papers: query must be exactly "y". Confirm intention from original query  
+- delete_indexed_papers: query must be exactly "y"; use "y" as query when user asks to delete papers.
 - molecule_analysis: query is the compound name or compound text to analyze.
-- similar_compound_search: query is the primary compound; args must include target_compounds as a list of comparison compounds.
+- similar_compound_search: query is the primary compound; arguments must include target_compounds as a list of comparison compounds.
 - fetch_from_conversation_state: query is the retrieval ID to fetch.
 - view_conversation_state: query must be an empty string.
 
 Rules:
-- Use the fewest tools(atleast one) necessary. 
-- For literature based queries/questions use acquisition followed by conversation tool.
+- Use at least one tool and the fewest necessary.
+- For literature questions, use literature_acquisition followed by literature_conversation.
+- For similar compound search check for keywords like "compare", "similar", etc.
 - Use multiple tools when explicitly requested or necessary for deeper research.
 - Never invent entities, IDs, or arguments.
-- Every tool's query must contain only the value required by that tool, not the full conversational request.
-- Put structured values such as target_compounds and page_size in arguments, not in query.
+- Put only the tool-specific value in query, not the full request.
+- Put target_compounds and page_size in arguments, not query.
+- Keep message brief and do not mention internal tool names.
 """
 
 FINAL_RESPONSE_PROMPT = """

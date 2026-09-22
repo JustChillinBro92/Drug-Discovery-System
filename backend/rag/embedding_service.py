@@ -1,6 +1,7 @@
 import numpy as np
 from sentence_transformers import SentenceTransformer
 
+from config.config import settings
 from models.document_chunk import DocumentChunk
 
 
@@ -8,8 +9,13 @@ class EmbeddingService:
     """ Loads the embedding model once when the service starts """
     
     def __init__(self):
+        model_kwargs = {}
+        if settings.HF_TOKEN:
+            model_kwargs["token"] = settings.HF_TOKEN
+
         self.model = SentenceTransformer(
-            "sentence-transformers/all-MiniLM-L6-v2"
+            "sentence-transformers/all-MiniLM-L6-v2",
+            **model_kwargs,
         )
 
     """

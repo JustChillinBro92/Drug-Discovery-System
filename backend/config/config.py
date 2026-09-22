@@ -6,6 +6,8 @@ load_dotenv()
 
 class Settings:
     APP_NAME = os.getenv("APP_NAME")
+    HF_TOKEN = os.getenv("HF_TOKEN")
+
     NEO4J_URI = os.getenv("NEO4J_URI")
     NEO4J_USERNAME = os.getenv("NEO4J_USERNAME")
     NEO4J_PASSWORD = os.getenv("NEO4J_PASSWORD")
@@ -18,8 +20,8 @@ class Settings:
     RXCLASS_API_URL = os.getenv("RXCLASS_API_URL")
     MESH_RDF_API_URL = os.getenv("MESH_RDF_API_URL")
     
-    GEMINI_WRAPPER_API_KEY = os.getenv("GEMINI_WRAPPER_API_KEY")
-    GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
-    GEMINI_MODEL = os.getenv("GEMINI_MODEL")
+    OPENAI_WRAPPER_API_KEY = os.getenv("OPENAI_WRAPPER_API_KEY")
+    OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+    OPENAI_MODEL = os.getenv("OPENAI_MODEL")
     
 settings = Settings() 

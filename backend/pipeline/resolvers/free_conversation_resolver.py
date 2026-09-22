@@ -20,8 +20,16 @@ class FreeConversationResolver:
                 "Free conversation mode requires a tool router"
             )
 
+        # llm plans the tool calls needed
         plan = self.tool_router.plan(query)
         tool_results = []
+
+        if not plan.tools:
+            return PipelineResponse(
+                mode="free_conversation",
+                answer=plan.message or "I could not identify a suitable research tool for that request.",
+                data={"tool_results": []}
+            )
 
         for tool_call in plan.tools:
             tool_query = tool_call.query.strip() or query
@@ -59,6 +67,7 @@ class FreeConversationResolver:
         
         return PipelineResponse(
             mode="free_conversation",
+            answer=plan.message,
             data={
                 # "tool_plan": plan.model_dump(),
                 "tool_results": tool_results

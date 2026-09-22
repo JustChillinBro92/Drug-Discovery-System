@@ -11,7 +11,7 @@ from rag.vector_store import vector_store
 from rag.retriever import retriever
 from rag.context_builder import context_builder
 
-from llm.gemini_client import GeminiClient
+from llm.openai_client import OpenAIClient
 from llm.generator import Generator
 from config.config import settings
 
@@ -34,8 +34,8 @@ from graph.graph_service import graph_service
 
 # Initialize dependencies
 
-gemini_client = GeminiClient(api_key=settings.GEMINI_API_KEY)
-generator = Generator(client=gemini_client)
+openai_client = OpenAIClient(api_key=settings.OPENAI_API_KEY)
+generator = Generator(client=openai_client)
 
 target_analyzer = ChEMBLTargetAnalyzer(
     generator=generator
