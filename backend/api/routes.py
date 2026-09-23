@@ -27,10 +27,18 @@ def health_check():
     
 @router.post("/analyze", response_model=AnalysisResponse)
 def analyze(request: AnalysisRequest):
+    arguments = {}
+    
+    if request.mode == "literature_acquisition":
+        arguments["page_size"] = request.page_size
+    elif request.mode == "similar_compound_search":
+        arguments["target_compounds"] = request.target_compounds
+    
     result = execute(
         mode=request.mode,
         query=request.query,
-        state=ConversationState()
+        state=ConversationState(),
+        **arguments
     )
 
     return AnalysisResponse(

@@ -427,8 +427,6 @@ if __name__ == "__main__":
                 print("| Conversation State |")
                 print("+--------------------+")
 
-                print(f"Current Mode    : {state_data.get('current_mode')}")
-
                 print("\nAnalyzed Compounds:")
                 for compound in state_data.get("analyzed_compounds", []):
                     print(json.dumps(compound, indent=2))
