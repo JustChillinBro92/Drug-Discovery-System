@@ -80,8 +80,6 @@ class MolecularResolver:
         )
 
 
-
-
     def _analyze_compound(self, compound_text, state):
         graph_analysis = self.graph_resolver.get_analysis_by_name(compound_text)
         if graph_analysis:
