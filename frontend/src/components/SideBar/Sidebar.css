@@ -1,0 +1,138 @@
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+
+    border-right: 1px solid rgb(194, 194, 194);
+    border-bottom: 1px solid rgb(194, 194, 194);
+    gap: 1rem;
+    width: 300px;
+}
+
+.sidebar .title-container {
+    display: flex;
+    justify-content: space-between;
+
+    border-bottom: 1px solid rgb(194, 194, 194);
+    padding-top: 20px;
+    padding-bottom: 20px;
+    color: #2E5BFF;
+}
+
+.sidebar .title-container .title {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 220px;
+    margin-left: 25px;
+}
+
+.sidebar .title-container .title h2 {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.sidebar .title-container .title h3 {
+    font-size: 15px;
+    font-weight: 500;
+    padding-top: 0.3rem;
+    color: rgba(71, 71, 71, 0.603);
+}
+
+.sidebar .title-container .panel-open-close {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 10px;
+    height: fit-content;
+    color: rgba(71, 71, 71, 0.495);
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.sidebar .navigations-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+}
+
+.sidebar .navigations-container .navigations{
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    gap: 1rem;
+    width: 250px;
+}
+
+.sidebar .navigations-container .navigations ul {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.3rem;
+}
+
+.sidebar .navigations-container .navigations ul span {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    gap: 1rem;
+
+    color: rgb(86, 86, 86);
+    font-weight: 600;
+}
+
+.sidebar .navigations-container .navigations ul span h4 {
+    font-size: 16px;
+}
+
+.sidebar .navigations-container .navigations ul span .icon {
+    height: 1.7em;
+    width: 1.7em;
+    cursor: pointer;
+    border-radius: 4px;
+    padding: 3px;
+}
+
+.sidebar .navigations-container .navigations ul li {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+
+    padding: 10px;
+    gap: 0.5rem;
+    border-radius: 4px;
+
+    font-weight: 500;
+    color: rgb(64, 64, 64);
+    cursor: pointer;
+}
+
+.sidebar .navigations-container .navigations ul .recents {
+    transform: translateX(15px);
+    color: rgb(74, 74, 74);
+    font-weight: 400;
+}
+
+.sidebar .navigations-container .navigations ul li p{
+    width: 100%;
+}
+
+.sidebar .title-container .panel-open-close:hover {
+    color: #2E5BFF;
+}
+
+.sidebar .navigations-container .navigations ul li:hover{
+    background-color: rgb(223, 223, 223);
+    border-left: 2px solid #2E5BFF;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+    color: #2E5BFF;
+    font-weight: 600;
+}
+
+.sidebar .navigations-container .navigations ul span .icon:hover {
+    background-color: rgb(223, 223, 223);
+}

@@ -35,7 +35,7 @@ body{
 
 .app {
   display: flex;
-  flex-direction: column;
+  justify-content: start;
   
   width: 100%;
   margin: 0 auto;
@@ -43,12 +43,23 @@ body{
 }
 
 .app-content {
+  display: flex;
+  flex-direction: column;
+
+  width: 100%;
+  margin: 0 auto;
   flex: 1;
 }
 
 a {
   text-decoration: none;
   color: inherit;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
 @keyframes fadeIn {
@@ -60,7 +71,7 @@ a {
   }
 }
 
-@media(max-width: 640px) {
+/* @media(max-width: 640px) {
   .app {
     width: 90%;
   }
@@ -70,4 +81,4 @@ a {
   :root{
     width: 40vh;
   }
-}
+} */
