@@ -7,14 +7,11 @@ import {
   X,
   ListOrdered,
   ArrowDownCircle,
-  Microscope,
   Sparkles,
   Brain,
   ScrollText,
   BookOpenText,
   Cpu,
-  MessageSquareText,
-  Link2,
   SendHorizontal,
   BadgeCheck,
   RotateCw,
@@ -23,7 +20,7 @@ import {
   Lightbulb,
   MessageSquare 
 } from 'lucide-react';
-import { useState } from 'react';
+
 import './LiteratureRetrieval.css';
 
 const queryPresets = [
@@ -119,7 +116,7 @@ const LiteratureRetrieval = () => {
 
         <div className="vector-row literature-vector-row">
           <span className="vector-item">
-            <Cpu size={13} style={{ color: "0649db" }} /> Qdrant HNSW-Dense
+            <Cpu size={13} style={{ color: "#0649db" }} /> Qdrant HNSW-Dense
           </span>
           <span className="vector-separator">•</span>
           <span className="vector-item">Metric : Cosine</span>
@@ -135,7 +132,6 @@ const LiteratureRetrieval = () => {
         </div>
       </section>
 
-
       <section className="aggregation-card">
         <div className="aggregation-header">
           <h2>Aspirin platelet aggregation and COX-1 inhibition <br /> [Synthesis & Vector Retrieval]</h2>
@@ -146,57 +142,69 @@ const LiteratureRetrieval = () => {
         </div>
       </section>
 
-
       <section className="chatbox-card">
         <div className="chatbox-header">
           <div className="chatbox-header-left">
-            <Brain size={30} style={{ backgroundColor: "D9E1F3", padding: "5px", color: "blue" }} />
-            <h3>Literature AI Research Assistant</h3>
+            <Brain className="assistant-brain-icon" size={30} />
+            <div>
+              <div className="assistant-title-row">
+                <h3>Literature AI Research Assistant</h3>
+                <span className="synthesis-badge">RETRIEVAL AGENT</span>
+              </div>
+              <p className="assistant-subtitle">
+                Live cross-examination &amp; semantic inference over 24 grounded studies (412 chunks)
+              </p>
+            </div>
           </div>
           <div className="chatbox-header-right">
-
-            <span>24 Grounded Papers Active</span>
-            <RotateCw size={17} />
+            <span><Dot size={20} />24 Grounded Papers Active</span>
           </div>
         </div>
+
         <div className="chatbox-body">
-          <Sparkles size={30} style={{ backgroundColor: "#0040e0", color: "white", padding: "5px", borderRadius: "10px" }} />
-          <div className='chatbox-output'>
-
-            I have synthesized the 24 indexed publications regarding Aspirin platelet aggregation & COX-1 inhibition. Across 412 retrieved semantic vector chunks, consensus confirms irreversible acetylation of Ser529 in the platelet COX-1 catalytic pocket, resulting in ~100% suppression of platelet thromboxane A2 (TXA2) within 60 minutes.
-
-            Would you like to examine downstream prostacyclin (PGI2) sparing mechanisms, evaluate clinical low-dose protocols (75–100 mg), or compare binding kinetics against reversible nonselective NSAIDs?
-
-            <div className='chatbox-output-footer'>
-              <Paperclip size={20} />
-              <p>PRIMARY CITATIONS:    </p>
+          <div className="assistant-sparkle-icon"><Sparkles size={15} className="sparkle  "/></div>
+          <div className="chatbox-output">
+            <p>
+              I have synthesized the <strong>24 indexed publications</strong> regarding 
+              <strong> Aspirin platelet aggregation &amp; COX-1 inhibition. </strong> 
+              Across 412 retrieved semantic vector chunks, consensus confirms irreversible 
+              acetylation of <strong className="highlighted-term">Ser529</strong> in the 
+              platelet COX-1 catalytic pocket, resulting in ~100% suppression of platelet 
+              thromboxane A2 (TXA2) within 60 minutes.
+            </p>
+            <div className="chatbox-output-footer">
+              <Paperclip size={14} />
+              <strong>PRIMARY CITATIONS:</strong>
               <span>PMID: 25164478</span>
-              <Dot />
+              <Dot size={16} />
               <span>PMC4389211</span>
-              <Dot />
+              <Dot size={16} />
               <span>NEJM: 379(12)</span>
             </div>
-
           </div>
         </div>
 
-        <div className='chatbox-footer'>
-          <Lightbulb style={{ color: "0040e0" }} />
-          <p>SUGGESTED INQUIRIES:  </p>
-          <span>opt1</span>
-          <span>opt2</span>
+        <div className="chatbox-footer">
+          <Lightbulb size={15} />
+          <strong>SUGGESTED INQUIRIES:</strong>
+          <button type="button">Summarize off-target effects &amp; gastric toxicity</button>
+          <button type="button">Compare COX-1 vs COX-2 selectivity profile</button>
+          <button type="button">Extract clinical low-dose regimens</button>
         </div>
 
-        <div className='questionBox'>
-          <p>Ask your AI Assisstant</p>
-          <button>
-            Inquire
+        <div className="questionBox">
+          <MessageSquare size={19} />
+          <input
+            type="text"
+            placeholder="Ask a question about the retrieved literature, synthesize findings, or compare mechanisms..."
+            aria-label="Ask a question about the retrieved literature"
+          />
+          <button type="button">
+            INQUIRE
+            <SendHorizontal size={15} />
           </button>
         </div>
-
       </section>
-
-
     </main>
   );
 };
