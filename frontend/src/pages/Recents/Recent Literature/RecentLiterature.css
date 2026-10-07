@@ -361,8 +361,9 @@
   display: flex;
   flex: 0 0 auto;
   flex-direction: column;
+  justify-content: space-between;
   align-items: stretch;
-  gap: 9px;
+  height: 100%;
 }
 
 .paper-europe-pmc,

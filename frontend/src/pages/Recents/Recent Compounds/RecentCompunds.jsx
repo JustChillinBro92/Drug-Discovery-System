@@ -53,6 +53,8 @@ const RecentCompunds = () => {
               <option value="recent">Recently Added</option>
               <option value="name">Name</option>
               <option value="chembl">ChEMBL ID</option>
+              <option value="chembl">Molecular Weight</option>
+              <option value="chembl">LogP</option>  
             </select>
           </label>
         </div>

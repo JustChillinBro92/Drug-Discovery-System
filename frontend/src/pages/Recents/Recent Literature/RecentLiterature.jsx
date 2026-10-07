@@ -1,28 +1,91 @@
+import { useMemo, useState } from "react";
+import { Plus, ExternalLink, Search } from "lucide-react";
 
-import { Plus,ExternalLink,Search } from "lucide-react";
-
-const papers = [
-  {
-    journal: "J. Biol. Chem.",
-    year: "2016",
-    pmid: "25164478",
-    title: "Mechanism of Action of Aspirin and Other Non-Steroidal Anti-Inflammatory Drugs",
-    authors: ["Author list available in Europe PMC"],
-    keywords: ["PTGS1 (COX-1)", "PTGS2 (COX-2)", "Aspirin", "Salicylate"],
-  },
-  {
-    journal: "J. Med. Chem.",
-    year: "2023",
-    pmid: "37829104",
-    title: "Structure-Guided Design and Synthesis of Biphenyl-Based Selective COX-2 Inhibitors",
-    authors: ["Author list available in Europe PMC"],
-    keywords: ["PTGS2 (Selective)", "Celecoxib", "SC-558"],
-  },
-];
+import data from "../../../assets/data";
 
 import "./RecentLiterature.css";
 
+const getPaperId = (paper) => paper.pmid || paper.pmcid || paper.doi;
+
+const papers = Object.entries(data.state.literature_retrievals)
+  .flatMap(([retrievalId, retrieval]) => retrieval.referenced_papers)
+  .filter(
+    (paper, index, allPapers) =>
+      allPapers.findIndex(
+        (candidate) => getPaperId(candidate) === getPaperId(paper),
+      ) === index,
+  );
+
 const RecentLiterature = () => {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [sortBy, setSortBy] = useState("recent");
+
+  const visiblePapers = useMemo(() => {
+    const normalizedQuery = searchQuery.trim().toLowerCase();
+
+    const filteredPapers = papers
+      .map((paper) => {
+        if (!normalizedQuery) {
+          return {
+            paper,
+            searchScore: 0,
+          };
+        }
+
+        const title = paper.title?.toLowerCase() || "";
+
+        const text = [
+          paper.title,
+          paper.doi,
+          paper.pmid,
+          paper.pmcid,
+          paper.journal,
+          ...paper.authors,
+          ...paper.keywords,
+        ]
+          .filter(Boolean)
+          .join(" ")
+          .toLowerCase();
+
+        if (title.startsWith(normalizedQuery)) {
+          return {
+            paper,
+            searchScore: 2,
+          };
+        }
+
+        if (text.includes(normalizedQuery)) {
+          return {
+            paper,
+            searchScore: 1,
+          };
+        }
+
+        return null;
+      })
+      .filter(Boolean);
+
+    return filteredPapers
+      .sort((a, b) => {
+        // Search relevance first
+        if (normalizedQuery && a.searchScore !== b.searchScore) {
+          return b.searchScore - a.searchScore;
+        }
+
+        // Then user's selected sorting
+        if (sortBy === "title") {
+          return a.paper.title.localeCompare(b.paper.title);
+        }
+
+        if (sortBy === "author") {
+          return a.paper.authors[0].localeCompare(b.paper.authors[0]);
+        }
+
+        return b.paper.publication_year - a.paper.publication_year;
+      })
+      .map(({ paper }) => paper);
+  }, [papers, searchQuery, sortBy]);
+
   return (
     <main className="recent-literature">
       {/* 1st section tag */}
@@ -58,16 +121,23 @@ const RecentLiterature = () => {
                 type="search"
                 placeholder="Search papers by title, author, DOI, or target..."
                 aria-label="Search papers by title, author, DOI, or target"
+                value={searchQuery}
+                onChange={(event) => setSearchQuery(event.target.value)}
               />
             </label>
 
             <label className="literature-sort">
               <span>SORT :</span>
-              <select defaultValue="recent">
+              <select
+                value={sortBy}
+                onChange={(event) => setSortBy(event.target.value)}
+              >
                 <option value="recent">Recently Added</option>
                 <option value="title">Title</option>
+                <option value="journal">Journal</option>
+                <option value="year">Publication Year</option>
+                <option value="paperId">Paper ID</option>
                 <option value="author">Author</option>
-                <option value="citations">Citation Count</option>
               </select>
             </label>
           </div>
@@ -79,18 +149,22 @@ const RecentLiterature = () => {
         className="recent-literature-papers"
         aria-label="Literature papers"
       >
-        {papers.map((paper) => {
-          const paperUrl = `https://europepmc.org/article/MED/${paper.pmid}`;
+        {visiblePapers.map((paper) => {
+          const paperId = getPaperId(paper);
+          const paperUrl =
+            paper.url || `https://europepmc.org/article/MED/${paper.pmid}`;
 
           return (
-            <article className="literature-paper" key={paper.pmid}>
+            <article className="literature-paper" key={paperId}>
               <div className="literature-paper-content">
                 <div className="literature-paper-meta">
                   <strong>{paper.journal}</strong>
                   <span className="paper-meta-separator">•</span>
-                  <span>{paper.year}</span>
+                  <span>{paper.publication_year}</span>
                   <span className="paper-meta-separator">•</span>
-                  <span className="paper-pmid">PMID {paper.pmid}</span>
+                  <span className="paper-pmid">
+                    {paper.pmid ? `PMID ${paper.pmid}` : paperId}
+                  </span>
                   <span className="paper-grounded">
                     <i />
                     Grounded
@@ -122,7 +196,6 @@ const RecentLiterature = () => {
                     </div>
                   </div>
                 </div>
-
               </div>
 
               <div className="literature-paper-actions">
@@ -132,8 +205,8 @@ const RecentLiterature = () => {
                   target="_blank"
                   rel="noreferrer"
                 >
-                  <ExternalLink size={12} />
                   Europe PMC
+                  <ExternalLink size={12} />
                 </a>
                 <a
                   className="paper-view-button"
@@ -141,7 +214,7 @@ const RecentLiterature = () => {
                   target="_blank"
                   rel="noreferrer"
                 >
-                  View Papers
+                  View Paper
                   <ExternalLink size={12} />
                 </a>
               </div>
@@ -149,7 +222,6 @@ const RecentLiterature = () => {
           );
         })}
       </section>
-
     </main>
   );
 };
