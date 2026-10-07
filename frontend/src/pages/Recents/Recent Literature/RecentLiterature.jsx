@@ -6,15 +6,9 @@ import data from "../../../assets/data";
 import "./RecentLiterature.css";
 
 const getPaperId = (paper) => paper.pmid || paper.pmcid || paper.doi;
-
-const papers = Object.entries(data.state.literature_retrievals)
-  .flatMap(([retrievalId, retrieval]) => retrieval.referenced_papers)
-  .filter(
-    (paper, index, allPapers) =>
-      allPapers.findIndex(
-        (candidate) => getPaperId(candidate) === getPaperId(paper),
-      ) === index,
-  );
+const papers = Object.entries(data.state.literature_retrievals).flatMap(
+  ([retrievalId, retrieval]) => retrieval.referenced_papers,
+);
 
 const RecentLiterature = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -73,15 +67,18 @@ const RecentLiterature = () => {
         }
 
         // Then user's selected sorting
-        if (sortBy === "title") {
+        if (sortBy === "title")
           return a.paper.title.localeCompare(b.paper.title);
-        }
-
-        if (sortBy === "author") {
+        if (sortBy === "journal")
+          return a.paper.journal.localeCompare(b.paper.journal);
+        if (sortBy === "year")
+          return a.paper.publication_year - b.paper.publication_year;
+        if (sortBy === "paperId")
+          return getPaperId(a.paper).localeCompare(getPaperId(b.paper));
+        if (sortBy === "author")
           return a.paper.authors[0].localeCompare(b.paper.authors[0]);
-        }
-
-        return b.paper.publication_year - a.paper.publication_year;
+        if (sortBy === "keywords")
+          return a.paper.keywords[0].localeCompare(b.paper.keywords[0]);
       })
       .map(({ paper }) => paper);
   }, [papers, searchQuery, sortBy]);
@@ -120,7 +117,6 @@ const RecentLiterature = () => {
               <input
                 type="search"
                 placeholder="Search papers by title, author, DOI, or target..."
-                aria-label="Search papers by title, author, DOI, or target"
                 value={searchQuery}
                 onChange={(event) => setSearchQuery(event.target.value)}
               />
@@ -138,6 +134,7 @@ const RecentLiterature = () => {
                 <option value="year">Publication Year</option>
                 <option value="paperId">Paper ID</option>
                 <option value="author">Author</option>
+                <option value="keywords">Keywords</option>
               </select>
             </label>
           </div>
@@ -162,9 +159,21 @@ const RecentLiterature = () => {
                   <span className="paper-meta-separator">•</span>
                   <span>{paper.publication_year}</span>
                   <span className="paper-meta-separator">•</span>
-                  <span className="paper-pmid">
-                    {paper.pmid ? `PMID ${paper.pmid}` : paperId}
-                  </span>
+                  {paper.pmcid && (
+                    <span className="paper-pmid">
+                      {paper.pmid ? `PMCID : ${paper.pmcid}` : paperId}
+                    </span>
+                  )}
+                  {paper.pmid && (
+                    <span className="paper-pmid">
+                      {paper.pmid ? `PMID : ${paper.pmid}` : paperId}
+                    </span>
+                  )}
+                  {paper.doi && (
+                    <span className="paper-pmid">
+                      {paper.pmid ? `DOI : ${paper.doi}` : paperId}
+                    </span>
+                  )}
                   <span className="paper-grounded">
                     <i />
                     Grounded

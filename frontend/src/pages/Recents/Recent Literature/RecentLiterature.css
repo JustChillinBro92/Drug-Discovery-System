@@ -59,7 +59,6 @@
 
 .literature-session-id {
   color: #526b8d;
-  font-family: monospace;
   font-size: 11px;
   font-weight: 500;
 }
@@ -97,7 +96,6 @@
   border-radius: 4px;
   background: #f1f3f6;
   color: #64748b;
-  font-family: monospace;
   font-size: 10px;
   font-weight: 500;
 }
@@ -281,7 +279,8 @@
 
 .literature-paper-meta > strong {
   color: #2a4d83;
-  font-weight: 700;
+  font-weight: 500;
+  font-size: 13px;
 }
 
 .paper-meta-separator {
@@ -289,26 +288,32 @@
 }
 
 .paper-pmid {
+  font-size: 11px;
+  font-weight: 500;
+  padding: 3px 9px;
+  border: 1px solid #d8e0eb;
+  border-radius: 13px;
+  background: #f8fafc;
   color: #526b8d;
-  font-family: monospace;
+  line-height: 1.2;
+  cursor: pointer;
 }
 
 .paper-grounded {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  margin-left: 4px;
   padding: 4px 8px;
   border-radius: 12px;
   background: #e7f7f2;
   color: #008d6e;
   font-size: 10px;
-  font-weight: 600;
+  font-weight: 500;
 }
 
 .paper-grounded i {
-  width: 6px;
-  height: 6px;
+  width: 4px;
+  height: 4px;
   border-radius: 50%;
   background: #10a782;
 }
@@ -349,6 +354,7 @@
   background: #f8fafc;
   color: #526b8d;
   line-height: 1.35;
+  font-weight: 500;
 }
 
 .paper-author {

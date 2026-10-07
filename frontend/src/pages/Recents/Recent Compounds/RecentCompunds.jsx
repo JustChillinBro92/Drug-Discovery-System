@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useState, useContext, useMemo } from "react";
 
 import { Download, Plus, Search, SquareArrowOutUpRight } from "lucide-react";
 
@@ -8,7 +8,82 @@ import "./RecentCompunds.css";
 
 import data from "../../../assets/data";
 
+const compounds = data.state.analyzed_compounds.map((c) => 
+  c.compound_details
+);
+
 const RecentCompunds = () => {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [sortBy, setSortBy] = useState("recent");
+
+  const { url } = useContext(StoreContext);
+
+  const visibleCompounds = useMemo(() => {
+    const normalizedQuery = searchQuery.trim().toLowerCase();
+
+    const filteredCompounds = compounds
+      .map((c) => {
+        if (!normalizedQuery) {
+          return {
+            c,
+            searchScore: 0,
+          };
+        }
+
+        const name = c.compound.canonical_name?.toLowerCase() || "";
+
+        const text = [
+          c.compound.canonical_name,
+          c.compound.chembl_id,
+          c.compound.molecular_formula,
+          c.properties.molecular_weight,
+          c.properties.logp,
+          c.properties.lipinski.overall_pass ? "pass" : "fail"
+        ]
+          .filter(Boolean)
+          .join(" ")
+          .toLowerCase();
+
+        if (name.startsWith(normalizedQuery)) {
+          return {
+            c,
+            searchScore: 2,
+          };
+        }
+
+        if (text.includes(normalizedQuery)) {
+          return {
+            c,
+            searchScore: 1,
+          };
+        }
+
+        return null;
+      })
+      .filter(Boolean)
+
+    return filteredCompounds
+      .sort((a, b) => {
+        // Search relevance first
+        if (normalizedQuery && a.searchScore !== b.searchScore) {
+          return b.searchScore - a.searchScore;
+        }
+
+        // Then user's selected sorting
+        if (sortBy === "name")
+          return a.c.compound.canonical_name.localeCompare(b.c.compound.canonical_name);
+        if (sortBy === "compoundId")
+          return a.c.compound.chembl_id.localeCompare(b.c.compound.chembl_id);
+        if (sortBy === "weight")
+          return a.c.properties.molecular_weight - b.c.properties.molecular_weight;
+        if (sortBy === "logp")
+          return a.c.properties.logp - b.c.properties.logp;
+        
+      })
+      .map(({ c }) => c);
+  }, [compounds, searchQuery, sortBy]);
+
+  
   return (
     <main className="recent-compounds">
       <section className="recent-compounds-card">
@@ -44,17 +119,22 @@ const RecentCompunds = () => {
             <input
               type="search"
               placeholder="Filter compounds by name, ChEMBL ID, formula..."
+              value={searchQuery}
+              onChange={(event) => setSearchQuery(event.target.value)}
             />
           </label>
 
           <label className="recent-compounds-sort">
             <span>SORT :</span>
-            <select defaultValue="recent">
+            <select 
+              value={sortBy}
+              onChange={(event) => setSortBy(event.target.value)}
+            >
               <option value="recent">Recently Added</option>
-              <option value="name">Name</option>
-              <option value="chembl">ChEMBL ID</option>
-              <option value="chembl">Molecular Weight</option>
-              <option value="chembl">LogP</option>  
+              <option value="name">Compound Name</option>
+              <option value="compoundId">Compound ID</option>
+              <option value="weight">Molecular Weight</option>
+              <option value="logp">LogP Value</option>
             </select>
           </label>
         </div>
@@ -81,7 +161,7 @@ const RecentCompunds = () => {
         <div className="grid-headings">
           <p>STRUCTURE</p>
           <p>COMPOUND NAME</p>
-          <p>IDENTIFIERS</p>
+          <p>COMPOUND ID</p>
           <p>MOL FORMULA</p>
           <p>MOL WGT</p>
           <p>LOGP</p>
@@ -90,12 +170,10 @@ const RecentCompunds = () => {
         </div>
 
         <div className="list">
-          {data.state.analyzed_compounds.map((c) => {
-            const compound = c.compound_details.compound;
-            const properties = c.compound_details.properties;
+          {visibleCompounds.map((c) => {
+            const compound = c.compound;
+            const properties = c.properties;
             const synonyms = compound.synonyms ?? [];
-
-            const { url } = useContext(StoreContext);
             const imageUrl = `${url}image/${encodeURIComponent(compound.chembl_id)}.svg`;
 
             return (
@@ -131,7 +209,7 @@ const RecentCompunds = () => {
                 </div>
                 <div className="item">
                   {properties.lipinski.overall_pass ? (
-                    <span className="pass"> 
+                    <span className="pass">
                       <i className="legend-dot compliant-dot" />
                       <p>Pass</p>
                     </span>

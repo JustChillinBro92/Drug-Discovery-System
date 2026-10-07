@@ -38,14 +38,14 @@ const Sessionbar = () => {
   };
 
   const getId = (paper) => {
-    if (paper.pmid) return paper.pmid;
     if (paper.pmcid) return paper.pmcid;
+    if (paper.pmid) return paper.pmid;
     if (paper.doi) return paper.doi;
   };
 
   const getIdType = (id) => {
-    if (/^\d+$/.test(id)) return "PMID";
     if (/^PMC\d+$/.test(id)) return "PMCID";
+    if (/^\d+$/.test(id)) return "PMID";
     if (/^10\.\d{4,9}\/\S+$/.test(id)) return "DOI";
 
     return "Unknown";
