@@ -434,7 +434,7 @@
 .compound .compound-container .properties .details {
   display: grid;
   gap: 15px;
-  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
 }
 
 .compound .compound-container .properties .details .items {

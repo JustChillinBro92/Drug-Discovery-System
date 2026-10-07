@@ -365,11 +365,10 @@
 
 .literature-paper-actions {
   display: flex;
-  flex: 0 0 auto;
   flex-direction: column;
   justify-content: space-between;
-  align-items: stretch;
-  height: 100%;
+  align-self: stretch;
+  height: auto;
 }
 
 .paper-europe-pmc,
