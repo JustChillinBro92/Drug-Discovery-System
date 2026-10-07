@@ -25,17 +25,19 @@ const App = () => {
           <Sidebar/>
           <div className="app-content">
             <Navbar />
-            <Routes>
-              <Route path="/" element={<Home/>}/>
-              <Route path="/assistant" element={<Assistant/>}/>
-              <Route path="/compound-analysis" element={<CompoundAnalysis/>}/>
-              <Route path="/similrity-analysis" element={<SimilarityAnalysis/>}/>
-              <Route path="/similarity-analysis" element={<SimilarityAnalysis/>}/>
-              <Route path="/literature-retrieval" element={<LiteratureRetrieval/>}/>
-              <Route path="/recent-compounds" element={<RecentCompunds/>}/>
-              <Route path="/recent-similarity" element={<RecentSimilarity/>}/>
-              <Route path="/recent-literature" element={<RecentLiterature/>}/>
-            </Routes>
+            <div className="page-content">
+              <Routes>
+                <Route path="/" element={<Home/>}/>
+                <Route path="/assistant" element={<Assistant/>}/>
+                <Route path="/compound-analysis" element={<CompoundAnalysis/>}/>
+                <Route path="/similrity-analysis" element={<SimilarityAnalysis/>}/>
+                <Route path="/similarity-analysis" element={<SimilarityAnalysis/>}/>
+                <Route path="/literature-retrieval" element={<LiteratureRetrieval/>}/>
+                <Route path="/recent-compounds" element={<RecentCompunds/>}/>
+                <Route path="/recent-similarity" element={<RecentSimilarity/>}/>
+                <Route path="/recent-literature" element={<RecentLiterature/>}/>
+              </Routes>
+            </div>
           </div> 
           <Sessionbar/>
         </div>

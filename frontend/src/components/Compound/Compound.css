@@ -259,6 +259,7 @@
   .cluster
   .cluster-item {
   display: flex;
+  justify-content: space-between;
   flex-direction: column;
   gap: 10px;
   width: 100%;
