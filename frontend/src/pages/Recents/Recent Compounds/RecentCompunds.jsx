@@ -6,7 +6,7 @@ import { StoreContext } from "../../../context/StoredContext";
 
 import "./RecentCompunds.css";
 
-import data from "../../../assets/data";
+import { data } from "../../../assets/data";
 
 const compounds = data.state.analyzed_compounds.map((c) => 
   c.compound_details

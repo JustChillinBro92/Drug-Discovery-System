@@ -1,4 +1,4 @@
-const data = {
+export const data = {
   state: {
     analyzed_compounds: [
       {
@@ -854,4 +854,45 @@ const compound_data = {
   ],
 };
 
-export default data;
+export const similarity_data = {
+  compound: {
+    original_text: "aspirin",
+    canonical_name: "ASPIRIN",
+    confidence: 1.0,
+    chembl_id: "CHEMBL25",
+    smiles: "CC(=O)Oc1ccccc1C(=O)O",
+    inchikey: "BSYNRYMUTXBXSQ-UHFFFAOYSA-N",
+    molecular_formula: "C9H8O4",
+    synonyms: [
+      {
+        molecule_synonym: "Acetylsalicylic acid",
+        value: "ACETYLSALICYLIC ACID",
+        syn_type: "ATC",
+      },
+      {
+        molecule_synonym: "Aspirin",
+        value: "ASPIRIN",
+        syn_type: "FDA",
+      },
+    ],
+  },
+  similarity_results: [
+    {
+      query_original_text: "aspirin",
+      query_compound: "ASPIRIN",
+      compound_original_text: "ibuprofen",
+      compound_name: "IBUPROFEN",
+      chembl_id: "CHEMBL521",
+      similarity_score: 0.1951219512195122,
+    },
+    {
+      query_original_text: "aspirin",
+      query_compound: "ASPIRIN",
+      compound_original_text: "montelukast",
+      compound_name: "MONTELUKAST",
+      chembl_id: "CHEMBL787",
+      similarity_score: 0.11627906976744186,
+    },
+  ],
+};
+

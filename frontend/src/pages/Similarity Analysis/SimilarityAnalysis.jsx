@@ -7,7 +7,11 @@ import {
   Target
 } from "lucide-react";
 
+import Similarity from "../../components/Similarity/Similarity";
+
 import "./SimilarityAnalysis.css";
+
+import { similarity_data } from "../../assets/data"
 
 const SimilarityAnalysis = () => {
   return (
@@ -117,6 +121,13 @@ const SimilarityAnalysis = () => {
           </div>
         </div>
       </section>
+
+      {similarity_data.similarity_results.length > 0 && (
+        <Similarity 
+          reference_compound={similarity_data.compound}
+          similarity_results={similarity_data.similarity_results}
+        />
+      )}
     </main>
   );
 };

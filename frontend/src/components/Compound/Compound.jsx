@@ -1,5 +1,12 @@
 import { useContext } from "react";
-import { ChevronLeft, ChevronRight, CircleCheck, ShieldCheck, TriangleAlert } from "lucide-react";
+import {
+  ChevronLeft,
+  ChevronRight,
+  CircleCheck,
+  ShieldCheck,
+  TriangleAlert,
+  CirclePile
+} from "lucide-react";
 
 import { StoreContext } from "../../context/StoredContext";
 
@@ -16,15 +23,15 @@ const Compound = ({
 }) => {
   const compound = compound_details.compound;
   const properties = compound_details.properties;
-
   const synonyms = compound.synonyms ?? [];
-  
+
   const { url } = useContext(StoreContext);
   const imageUrl = `${url}image/${encodeURIComponent(compound.chembl_id)}.svg`;
 
   return (
-    <div className="compound" key={compound.chembl_id}>
-      <div className="title-container">
+    <main className="compound">
+      <header className="title-container">
+        <div className="icon"><CirclePile size={16}/></div>
         <div className="title">
           <h2>{compound.canonical_name}</h2>
           <h3>
@@ -56,11 +63,7 @@ const Compound = ({
               <span>
                 {currentIndex + 1} / {totalCompounds}
               </span>
-              <button
-                type="button"
-                onClick={onNext}
-                disabled={!hasNext}
-              >
+              <button type="button" onClick={onNext} disabled={!hasNext}>
                 <p>Next</p>
                 <ChevronRight size={16} />
               </button>
@@ -72,9 +75,9 @@ const Compound = ({
             </div>
           </h3>
         </div>
-      </div>
+      </header>
 
-      <div className="compound-container">
+      <section className="compound-container">
         <div className="compound-item">
           <div className="compound-details">
             <div className="item">
@@ -256,8 +259,8 @@ const Compound = ({
             </div>
           </div>
         </div>
-      </div>
-    </div>
+      </section>
+    </main>
   );
 };
 

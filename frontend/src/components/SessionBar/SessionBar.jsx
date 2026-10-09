@@ -20,7 +20,7 @@ import CollapsedSessionbar from "./CollapsedSessionbar";
 
 import "./Sessionbar.css";
 
-import data from "../../assets/data";
+import { data } from "../../assets/data";
 
 const Sessionbar = () => {
   const [closeSessionPanel, setCloseSessionPanel] = useState(false);

@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { Plus, ExternalLink, Search } from "lucide-react";
 
-import data from "../../../assets/data";
+import { data } from "../../../assets/data";
 
 import "./RecentLiterature.css";
 
@@ -142,10 +142,7 @@ const RecentLiterature = () => {
       </section>
 
       {/* 2nd section tag */}
-      <section
-        className="recent-literature-papers"
-        aria-label="Literature papers"
-      >
+      <section className="recent-literature-papers">
         {visiblePapers.map((paper) => {
           const paperId = getPaperId(paper);
           const paperUrl =

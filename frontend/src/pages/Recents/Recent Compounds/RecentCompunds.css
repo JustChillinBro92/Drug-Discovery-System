@@ -255,7 +255,7 @@
   min-height: 40px;
   padding: 0 20px;
   border-bottom: 2px solid #edf1f5;
-  background: #fcfcfd;
+  background-color: rgba(95, 95, 95, 0.058);
 }
 
 .grid-headings p {
@@ -275,7 +275,7 @@
 }
 
 .list-item {
-  min-height: 70px;
+  min-height: 90px;
   padding: 0;
   border-bottom: 2px solid #edf1f5;
 }

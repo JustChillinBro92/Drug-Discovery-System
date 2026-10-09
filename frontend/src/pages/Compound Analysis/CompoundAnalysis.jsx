@@ -12,7 +12,7 @@ import Compound from "../../components/Compound/Compound";
 
 import "./CompoundAnalysis.css";
 
-import data from "../../assets/data";
+import { data } from "../../assets/data";
 
 const CompoundAnalysis = () => {
   const compounds = data.state.analyzed_compounds;
@@ -106,7 +106,6 @@ const CompoundAnalysis = () => {
           hasNext={activeIndex < compounds.length - 1}
           currentIndex={activeIndex}
           totalCompounds={compounds.length}
-          key={compounds[activeIndex].compound_details.compound.chembl_id}
         />
       )}
     </main>
