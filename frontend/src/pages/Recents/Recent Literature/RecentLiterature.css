@@ -235,7 +235,7 @@
   border-color: #0649db;
   background: #0649db;
   color: #fff;
-  font-weight: 600; 
+  font-weight: 600;
   cursor: pointer;
   transition: 0.05s ease-in;
 }
@@ -247,7 +247,11 @@
 .recent-literature-papers {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 15px;
+}
+
+.literature-paper:hover {
+  border-color: #8da4f7;
 }
 
 .literature-paper {
@@ -261,6 +265,10 @@
   background: #fff;
   box-shadow: 0 4px 10px rgba(15, 23, 42, 0.06);
   color: #0f172a;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease,
+    border-color 0.15s ease;
 }
 
 .literature-paper-content {
@@ -385,7 +393,9 @@
   font-size: 12px;
   font-weight: 600;
   white-space: nowrap;
-  transition: background-color 0.15s ease, color 0.15s ease,
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease,
     border-color 0.15s ease;
 }
 

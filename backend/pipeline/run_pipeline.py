@@ -398,6 +398,7 @@ if __name__ == "__main__":
                 for compound in compounds:
                     print(f"Query Input          : {compound.query_original_text}")
                     print(f"Query Compound       : {compound.query_compound}")
+                    print(f"Query ChEMBL ID      : {compound.query_chembl_id}")
                     print(f"Compared Input       : {compound.compound_original_text}")
                     print(f"Compared Compound    : {compound.compound_name}")
                     print(f"ChEMBL ID            : {compound.chembl_id}")

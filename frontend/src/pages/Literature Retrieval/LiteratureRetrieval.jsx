@@ -33,7 +33,7 @@ const queryPresets = [
 const LiteratureRetrieval = () => {
   return (
     <main className="compound-analysis literature-analysis">
-      <section className="compound-card literature-card">
+      <header className="compound-card literature-card">
         <div className="compound-header">
           <div>
             <div className="route">
@@ -129,7 +129,7 @@ const LiteratureRetrieval = () => {
             />
           </label>
         </div>
-      </section>
+      </header>
 
       <section className="aggregation-card">
         <div className="aggregation-header">

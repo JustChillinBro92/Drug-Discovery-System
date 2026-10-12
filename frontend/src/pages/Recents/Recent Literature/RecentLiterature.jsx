@@ -85,7 +85,7 @@ const RecentLiterature = () => {
 
   return (
     <main className="recent-literature">
-      <section className="recent-literature-card">
+      <header className="recent-literature-card">
         <div className="literature-content">
           <div className="literature-heading">
             <div>
@@ -137,7 +137,7 @@ const RecentLiterature = () => {
             </label>
           </div>
         </div>
-      </section>
+      </header>
 
       <section className="recent-literature-papers">
         {visiblePapers.map((paper) => {

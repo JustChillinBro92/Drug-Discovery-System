@@ -12,6 +12,11 @@ class SimilarCompound(BaseModel):
         description="Compound used as the similarity search query."
     )
 
+    query_chembl_id: str = Field(
+        ...,
+        description="ChEMBL ID of the query compound."
+    )
+
     compound_original_text: str = Field(
         ...,
         description="Original compared compound text entered by the user."

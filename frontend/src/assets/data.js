@@ -158,6 +158,7 @@ export const data = {
       {
         query_original_text: "aspirin",
         query_compound: "ASPIRIN",
+        query_chembl_id: "CHEMBL25",
         compound_original_text: "ibuprofen",
         compound_name: "IBUPROFEN",
         chembl_id: "CHEMBL521",
@@ -166,6 +167,7 @@ export const data = {
       {
         query_original_text: "aspirin",
         query_compound: "ASPIRIN",
+        query_chembl_id: "CHEMBL25",
         compound_original_text: "montelukast",
         compound_name: "MONTELUKAST",
         chembl_id: "CHEMBL787",
@@ -346,6 +348,18 @@ const compound_data = {
     smiles: "CC(=O)Oc1ccccc1C(=O)O",
     inchikey: "BSYNRYMUTXBXSQ-UHFFFAOYSA-N",
     molecular_formula: "C9H8O4",
+    synonyms: [
+      {
+        molecule_synonym: "Acetylsalicylic acid",
+        value: "ACETYLSALICYLIC ACID",
+        syn_type: "ATC",
+      },
+      {
+        molecule_synonym: "Aspirin",
+        value: "ASPIRIN",
+        syn_type: "FDA",
+      },
+    ],
   },
   properties: {
     molecular_weight: 180.15899999999996,
@@ -876,6 +890,28 @@ export const similarity_data = {
       },
     ],
   },
+  properties: {
+    molecular_weight: 180.15899999999996,
+    logp: 1.3101,
+    tpsa: 63.60000000000001,
+    h_bond_donors: 1,
+    h_bond_acceptors: 3,
+    rotatable_bonds: 2,
+    heavy_atom_count: 13,
+    ring_count: 1,
+    aromatic_ring_count: 1,
+    formal_charge: 0,
+    fraction_csp3: 0.1111111111111111,
+    qed: 0.5501217966938848,
+    lipinski: {
+      molecular_weight_pass: true,
+      logp_pass: true,
+      hbd_pass: true,
+      hba_pass: true,
+      overall_pass: true,
+      violations: 0,
+    },
+  },
   similarity_results: [
     {
       query_original_text: "aspirin",
@@ -895,4 +931,3 @@ export const similarity_data = {
     },
   ],
 };
-

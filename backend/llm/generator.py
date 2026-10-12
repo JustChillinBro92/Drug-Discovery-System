@@ -88,7 +88,7 @@ class Generator:
             reasoning_effort="low"
         )
         
-        # print(response)
+        print(response)
 
         return json.loads(
             response

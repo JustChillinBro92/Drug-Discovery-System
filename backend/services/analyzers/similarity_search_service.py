@@ -9,15 +9,15 @@ class SimilaritySearchService:
         self,
         query_fingerprint: MolecularFingerprint,
         query_name: str,
+        query_chembl_id: str,
         query_original_text: str,
-        compounds: list[dict],
-        top_k: int = 5
+        compounds: list[dict]
     ) -> list[SimilarCompound]:
 
         """
         Loops through all target compounds, calculates
         Tanimoto similarity against the query compound,
-        and returns the top-k results.
+        and returns all results sorted by similarity.
         """
 
         results = []
@@ -30,6 +30,7 @@ class SimilaritySearchService:
                     item["fingerprint"],
                     query_original_text,
                     query_name,
+                    query_chembl_id,
                     item["original_text"],
                     item["compound"].canonical_name,
                     item["compound"].chembl_id
@@ -43,7 +44,7 @@ class SimilaritySearchService:
             reverse=True
         )
 
-        return results[:top_k]
+        return results
 
 
 similarity_search_service = SimilaritySearchService()

@@ -37,6 +37,7 @@ class SimilarityService:
         target_fingerprint: MolecularFingerprint,
         query_original_text: str,
         query_name: str,
+        query_chembl_id: str,
         target_original_text: str,
         target_name: str,
         target_chembl_id: str
@@ -63,6 +64,7 @@ class SimilarityService:
         return SimilarCompound(
             query_original_text=query_original_text,
             query_compound=query_name,
+            query_chembl_id=query_chembl_id,
             compound_original_text=target_original_text,
             compound_name=target_name,
             chembl_id=target_chembl_id,

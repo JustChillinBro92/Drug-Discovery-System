@@ -1,10 +1,16 @@
 import { CircleCheck, SquareArrowOutUpRight, TextSearch } from "lucide-react";
 
+import Compound from "../Compound/Compound";
+
 import "./Similarity.css";
 
-import { data, similarity_data } from "../../assets/data";
+import { data } from "../../assets/data";
 
-const Similarity = ({ reference_compound, similarity_results }) => {
+const Similarity = ({ 
+  reference_compound, 
+  reference_compound_properties,
+  similarity_results 
+}) => {
   const compounds = data.state.analyzed_compounds;
 
   const getCompoundDetails = (chembl_id) => {
@@ -16,6 +22,13 @@ const Similarity = ({ reference_compound, similarity_results }) => {
 
   return (
     <main className="similarity-results">
+      <Compound
+        compound_details={{
+          compound: reference_compound, 
+          properties: reference_compound_properties
+        }}
+      />
+
       <header className="title-container">
         <div className="icon">
           <TextSearch size={16} />
@@ -28,10 +41,10 @@ const Similarity = ({ reference_compound, similarity_results }) => {
               <span>
                 <p>Pairwise calculations relative to query:</p>
                 <p className="compound">
-                  {similarity_data.compound.canonical_name}
+                  {reference_compound.canonical_name}
                 </p>
                 <p className="compound">
-                  ({similarity_data.compound.chembl_id})
+                  ({reference_compound.chembl_id})
                 </p>
               </span>
             </div>
@@ -79,6 +92,8 @@ const Similarity = ({ reference_compound, similarity_results }) => {
             const synonyms = compound.synonyms ?? [];
             const properties = compound_details.properties;
 
+            const score = c.similarity_score.toFixed(2);
+
             return (
               <div className="list-item" key={compound.chembl_id}>
                 <div className="item">
@@ -98,25 +113,25 @@ const Similarity = ({ reference_compound, similarity_results }) => {
 
                 <div className="item">
                   <div className="score">
-                    <h3>{c.similarity_score.toFixed(2)}</h3>
+                    <h3>{score}</h3>
                     <div className="score-bar">
                       <div
                         className="bar-fill"
-                        style={{ width: `${c.similarity_score * 100}%` }}
+                        style={{ width: `${score * 100}%` }}
                       ></div>
                     </div>
                   </div>
 
                   <div className="compounds-legend">
-                    {c.similarity_score >= 0.7 ? (
+                    {score >= 0.7 ? (
                       <span className="moderate-legend-item compliant">
                         Very High Similarity
                       </span>
-                    ) : c.similarity_score >= 0.5 ? (
+                    ) : score >= 0.5 ? (
                       <span className="legend-item compliant">
                         High Similarity
                       </span>
-                    ) : c.similarity_score >= 0.3 ? (
+                    ) : score >= 0.3 ? (
                       <span className="moderate-legend-item moderate">
                         Moderate Similarity
                       </span>

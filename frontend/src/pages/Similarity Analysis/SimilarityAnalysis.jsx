@@ -13,7 +13,7 @@ import "./SimilarityAnalysis.css";
 
 import { similarity_data } from "../../assets/data"
 
-const SimilarityAnalysis = () => {
+const SimilarityAnalysis = () => {  
   return (
     <main className="compound-analysis">
       <section className="compound-card">
@@ -125,6 +125,7 @@ const SimilarityAnalysis = () => {
       {similarity_data.similarity_results.length > 0 && (
         <Similarity 
           reference_compound={similarity_data.compound}
+          reference_compound_properties={similarity_data.properties}
           similarity_results={similarity_data.similarity_results}
         />
       )}

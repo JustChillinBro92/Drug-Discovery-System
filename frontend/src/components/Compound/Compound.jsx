@@ -5,7 +5,7 @@ import {
   CircleCheck,
   ShieldCheck,
   TriangleAlert,
-  CirclePile
+  CirclePile,
 } from "lucide-react";
 
 import { StoreContext } from "../../context/StoredContext";
@@ -31,7 +31,9 @@ const Compound = ({
   return (
     <main className="compound">
       <header className="title-container">
-        <div className="icon"><CirclePile size={16}/></div>
+        <div className="icon">
+          <CirclePile size={16} />
+        </div>
         <div className="title">
           <h2>{compound.canonical_name}</h2>
           <h3>
@@ -49,25 +51,27 @@ const Compound = ({
               })}
             </div>
 
-            <div className="compound-navigation">
-              <button
-                type="button"
-                onClick={onPrevious}
-                disabled={!hasPrevious}
-                aria-label="Previous compound"
-                title="Previous compound"
-              >
-                <ChevronLeft size={16} />
-                <p>Previous</p>
-              </button>
-              <span>
-                {currentIndex + 1} / {totalCompounds}
-              </span>
-              <button type="button" onClick={onNext} disabled={!hasNext}>
-                <p>Next</p>
-                <ChevronRight size={16} />
-              </button>
-            </div>
+            {(hasPrevious || hasNext) && (
+              <div className="compound-navigation">
+                <button
+                  type="button"
+                  onClick={onPrevious}
+                  disabled={!hasPrevious}
+                  aria-label="Previous compound"
+                  title="Previous compound"
+                >
+                  <ChevronLeft size={16} />
+                  <p>Previous</p>
+                </button>
+                <span>
+                  {currentIndex + 1} / {totalCompounds}
+                </span>
+                <button type="button" onClick={onNext} disabled={!hasNext}>
+                  <p>Next</p>
+                  <ChevronRight size={16} />
+                </button>
+              </div>
+            )}
 
             <div className="indexed">
               <CircleCheck size={17} />

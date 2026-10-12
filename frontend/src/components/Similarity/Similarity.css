@@ -1,12 +1,18 @@
-.similarity-results .title-container {
+.similarity-results {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.similarity-results > .title-container {
   display: flex;
   align-items: start;
   justify-content: space-between;
-  margin-bottom: 20px;
+  margin-top: 20px;
   border-bottom: 1px solid #cbd5e1;
 }
 
-.similarity-results .title-container .icon {
+.similarity-results > .title-container .icon {
   display: flex;
   padding: 8px;
   border-radius: 4px;
@@ -14,7 +20,7 @@
   color: #2e5bff;
 }
 
-.similarity-results .title-container .title {
+.similarity-results > .title-container .title {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -22,29 +28,29 @@
   margin-left: 10px;
 }
 
-.similarity-results .title-container .title .synonyms {
+.similarity-results > .title-container .title .synonyms {
   display: flex;
   width: 85%;
 }
 
-.similarity-results .title-container .title .synonyms span {
+.similarity-results > .title-container .title .synonyms span {
   display: flex;
   width: 100%;
   gap: 5px;
   margin-right: 3px;
 }
 
-.similarity-results .title-container .title .synonyms span p {
+.similarity-results > .title-container .title .synonyms span p {
   display: flex;
   width: fit-content;
 }
 
-.similarity-results .title-container .title .synonyms span .compound {
+.similarity-results > .title-container .title .synonyms span .compound {
   font-weight: 600;
   color: rgba(71, 71, 71, 0.781);
 }
 
-.similarity-results .title-container .title h2 {
+.similarity-results > .title-container .title h2 {
   display: flex;
   justify-content: start;
   align-items: center;
@@ -54,7 +60,7 @@
   font-weight: 600;
 }
 
-.similarity-results .title-container .title h3 {
+.similarity-results > .title-container .title h3 {
   display: flex;
   justify-content: space-between;
 
@@ -67,13 +73,13 @@
   /* border-bottom: 1px solid #cbd5e1; */
 }
 
-.similarity-results .title-container .title h3 p {
+.similarity-results > .title-container .title h3 p {
   display: flex;
   align-items: center;
   width: 85%;
 }
 
-.similarity-results .title-container h3 .indexed {
+.similarity-results > .title-container h3 .indexed {
   display: flex;
   justify-content: center;
   align-items: center;

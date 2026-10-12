@@ -85,7 +85,7 @@ UNWIND $synonyms AS synonym
 
 MERGE (s:Synonym {
     syn_type: synonym.syn_type,
-    value: synonym.synonyms
+    synonyms: synonym.synonyms
 })
 
 SET s.molecule_synonym = synonym.molecule_synonym

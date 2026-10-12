@@ -21,7 +21,7 @@ class MolecularResolver:
 
 
     def run_similarity_search(self, request, state, **kwargs):
-        query_compound, _ = self._analyze_compound(
+        query_compound, query_analysis = self._analyze_compound(
             request.query,
             state
         )
@@ -46,6 +46,7 @@ class MolecularResolver:
         results = self.dependencies.similarity_search_service.search_similar_compounds(
             query_fingerprint=query_fingerprint,
             query_name=query_compound.canonical_name,
+            query_chembl_id=query_compound.chembl_id,
             query_original_text=request.query,
             compounds=target_compound_data
         )
@@ -75,6 +76,7 @@ class MolecularResolver:
             message="Similarity search completed",
             data={
                 "compound": query_compound.model_dump(),
+                "properties": query_analysis["properties"],
                 "similarity_results": results
             }
         )

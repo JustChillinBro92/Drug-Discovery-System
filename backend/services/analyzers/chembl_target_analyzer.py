@@ -94,6 +94,9 @@ class ChEMBLTargetAnalyzer:
 
         for target_id, relationship in relationships.items():
             target_data = chembl_service.get_target(target_id)
+            
+            if relationship.get("interaction_type") == "UNKNOWN":
+                continue
 
             for target in target_data.get("targets", []):
                 if target.get("target_type") != "SINGLE PROTEIN":
