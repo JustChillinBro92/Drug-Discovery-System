@@ -26,7 +26,7 @@ const SimilarityAnalysis = () => {
             </div>
             <h1>Compound Ingestion &amp; Similarity Analysis</h1>
             <p>Evaluate a reference query compound against custom target 
-              compounds using Tanimoto Morgan fingerprint radius-2 scoring.
+              compounds using Tanimoto Morgan fingerprint radius-2 scoring
             </p>
           </div>
           <div className="engine-ready">

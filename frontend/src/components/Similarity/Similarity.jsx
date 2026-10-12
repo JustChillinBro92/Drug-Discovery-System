@@ -100,18 +100,31 @@ const Similarity = ({ reference_compound, similarity_results }) => {
                   <div className="score">
                     <h3>{c.similarity_score.toFixed(2)}</h3>
                     <div className="score-bar">
-                        <div className="bar-fill"
-                            style={{width: `${c.similarity_score * 100}%`}}
-                        ></div>
+                      <div
+                        className="bar-fill"
+                        style={{ width: `${c.similarity_score * 100}%` }}
+                      ></div>
                     </div>
                   </div>
 
-                  
-
                   <div className="compounds-legend">
-                    <span className="legend-item compliant">
-                      High Similarity
-                    </span>
+                    {c.similarity_score >= 0.7 ? (
+                      <span className="moderate-legend-item compliant">
+                        Very High Similarity
+                      </span>
+                    ) : c.similarity_score >= 0.5 ? (
+                      <span className="legend-item compliant">
+                        High Similarity
+                      </span>
+                    ) : c.similarity_score >= 0.3 ? (
+                      <span className="moderate-legend-item moderate">
+                        Moderate Similarity
+                      </span>
+                    ) : (
+                      <span className="legend-item flagged">
+                        Low Similarity
+                      </span>
+                    )}
                   </div>
                 </div>
 

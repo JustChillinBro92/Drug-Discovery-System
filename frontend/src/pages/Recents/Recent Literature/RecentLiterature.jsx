@@ -85,8 +85,6 @@ const RecentLiterature = () => {
 
   return (
     <main className="recent-literature">
-      {/* 1st section tag */}
-
       <section className="recent-literature-card">
         <div className="literature-content">
           <div className="literature-heading">
@@ -99,7 +97,7 @@ const RecentLiterature = () => {
               <h1>Recent Literature Registry</h1>
               <p>
                 Peer-reviewed research and validated molecular evidence
-                supporting active drug discovery targets.
+                supporting active drug discovery targets
               </p>
             </div>
 
@@ -141,7 +139,6 @@ const RecentLiterature = () => {
         </div>
       </section>
 
-      {/* 2nd section tag */}
       <section className="recent-literature-papers">
         {visiblePapers.map((paper) => {
           const paperId = getPaperId(paper);

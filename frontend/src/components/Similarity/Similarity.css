@@ -103,7 +103,7 @@
     60px
     60px;
   align-items: center;
-  column-gap: 10px;
+  column-gap: 20px;
 }
 
 .similarity-results .list .item:nth-child(1) {
@@ -179,10 +179,20 @@
 }
 
 
-.similarity-results .list .item .legend-item {
+.similarity-results .list .item .legend-item,
+.similarity-results .list .item .moderate-legend-item {
   white-space: nowrap;
   font-size: 11px;
   font-weight: 500;
   padding: 5px 17px;
   border-radius: 4px;
+}
+
+.similarity-results .list .item .moderate-legend-item {
+  padding: 5px 10px;
+}
+
+.similarity-results .compounds-legend .moderate {
+  background-color: #DAE2FD;
+  color: #60647A;
 }

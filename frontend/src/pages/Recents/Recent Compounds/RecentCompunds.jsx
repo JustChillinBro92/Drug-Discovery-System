@@ -1,5 +1,4 @@
 import { useState, useContext, useMemo } from "react";
-
 import { Download, Plus, Search, SquareArrowOutUpRight } from "lucide-react";
 
 import { StoreContext } from "../../../context/StoredContext";
@@ -96,8 +95,8 @@ const RecentCompunds = () => {
             </div>
             <h1>Recent Compounds Registry</h1>
             <p>
-              Session catalog of analyzed small molecules, molecular properties,
-              and Lipinski Ro5 compliance.
+              Session catalog of analyzed compounds, their properties 
+              and Lipinski compliance
             </p>
           </div>
 
