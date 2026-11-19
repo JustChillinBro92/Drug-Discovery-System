@@ -1,3 +1,6 @@
+import ssl
+
+import certifi
 from neo4j import GraphDatabase
 
 from . import graph_queries
@@ -7,11 +10,29 @@ class Neo4jClient:
         self,
         uri: str,
         username: str,
-        password: str
+        password: str,
+        ca_bundle: str | None = None
     ):
+        config = {}
+        driver_uri = uri
+
+        if uri.lower().startswith("neo4j+s://"):
+            bundle = ca_bundle or certifi.where()
+            ssl_context = ssl.create_default_context(cafile=bundle)
+            driver_uri = "neo4j://" + uri[len("neo4j+s://"):]
+            config["encrypted"] = True
+            config["ssl_context"] = ssl_context
+        elif uri.lower().startswith("bolt+s://"):
+            bundle = ca_bundle or certifi.where()
+            ssl_context = ssl.create_default_context(cafile=bundle)
+            driver_uri = "bolt://" + uri[len("bolt+s://"):]
+            config["encrypted"] = True
+            config["ssl_context"] = ssl_context
+
         self.driver = GraphDatabase.driver(
-            uri,
-            auth=(username, password)
+            driver_uri,
+            auth=(username, password),
+            **config
         )
         
     def initialize_schema(self):

@@ -21,12 +21,24 @@ conversation_sessions = {}
 def create_session_id() -> str:
     return str(uuid4())
 
+    
+def get_or_create_session(
+    conversation_id: str | None = None,
+    create_new: bool = False
+):
+    if create_new or conversation_id is None:
+        conversation_id = create_session_id()
+        return conversation_id, _get_session(conversation_id)
+    return conversation_id, _get_session(conversation_id)
+
 
 def _get_session(conversation_id: str):
     session = conversation_sessions.get(conversation_id)
     if session is None:
         session = {
-            "state": ConversationState(),
+            "state": ConversationState(
+                conversation_id=conversation_id
+            ),
             "resolver": FreeConversationResolver(
                 tool_router=ToolRouter(
                     client=OpenAIClient(
@@ -41,8 +53,25 @@ def _get_session(conversation_id: str):
     return session
 
 
-def execute(conversation_id: str, query: str):
+def create_session():
+    conversation_id = create_session_id()
     session = _get_session(conversation_id)
+    return conversation_id, session
+
+
+def clear_session(conversation_id: str):
+    session = conversation_sessions.get(conversation_id)
+    if session is None:
+        raise ValueError("Conversation not found")
+
+    session["state"] = ConversationState(
+        conversation_id=conversation_id
+    )
+    return session
+
+
+def execute(conversation_id: str, query: str):
+    _, session = get_or_create_session(conversation_id)
     
     return session["resolver"].run(
         query=query,

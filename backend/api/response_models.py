@@ -8,6 +8,7 @@ class HealthCheckResponse(BaseModel):
 
 
 class AnalysisResponse(BaseModel):
+    conversation_id: str
     mode: str
     result: Any
 

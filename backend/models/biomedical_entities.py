@@ -155,8 +155,6 @@ class DiseaseEntity(BaseModel):
 
 
     
-    
-    
 # Pathway Entity class (KEGG)
 
 class PathwayEntity(BaseBioMedicalEntity):

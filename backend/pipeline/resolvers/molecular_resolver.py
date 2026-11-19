@@ -85,17 +85,7 @@ class MolecularResolver:
     def _analyze_compound(self, compound_text, state):
         graph_analysis = self.graph_resolver.get_analysis_by_name(compound_text)
         if graph_analysis:
-            compound = self.dependencies.compound_normalizer.normalize(
-                compound_text
-            )
-            self.graph_resolver.add_compound_synonyms(compound)
-            refreshed_analysis = self.graph_resolver.get_analysis_by_compound(
-                compound
-            )
-            return self._store_graph_analysis(
-                refreshed_analysis or graph_analysis,
-                state
-            )
+            return self._store_graph_analysis(graph_analysis, state)
 
         compound = self.dependencies.compound_normalizer.normalize(
             compound_text

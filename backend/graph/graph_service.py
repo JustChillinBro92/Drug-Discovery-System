@@ -22,13 +22,15 @@ class GraphService:
         self,
         uri: str,
         username: str,
-        password: str
+        password: str,
+        ca_bundle: str | None = None
     ):
 
         self.client = Neo4jClient(
             uri=uri,
             username=username,
-            password=password
+            password=password,
+            ca_bundle=ca_bundle
         )
         
         self.client.initialize_schema()
@@ -503,5 +505,6 @@ class GraphService:
 graph_service = GraphService(
     uri=settings.NEO4J_URI,
     username=settings.NEO4J_USERNAME,
-    password=settings.NEO4J_PASSWORD
+    password=settings.NEO4J_PASSWORD,
+    ca_bundle=settings.NEO4J_CA_BUNDLE
 )

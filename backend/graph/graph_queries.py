@@ -359,8 +359,21 @@ RETURN c,
 
 GET_COMPOUND_ANALYSIS_BY_NAME = """
 MATCH (c:Compound)
-WHERE toLower(c[$canonical_property]) = toLower($compound_name)
-    OR toLower(c[$original_property]) = toLower($compound_name)
+OPTIONAL MATCH (c)-[:HAS_SYNONYM]->(matched_synonym:Synonym)
+WITH c,
+    CASE
+        WHEN toLower(c[$canonical_property]) = toLower($compound_name)
+            OR toLower(c[$original_property]) = toLower($compound_name)
+            THEN 0
+        WHEN toLower(matched_synonym.molecule_synonym) = toLower($compound_name)
+            OR toLower(matched_synonym.synonyms) = toLower($compound_name)
+            THEN 1
+        ELSE 2
+    END AS match_priority
+WHERE match_priority < 2
+WITH c, match_priority
+ORDER BY match_priority
+LIMIT 1
 
 OPTIONAL MATCH (c)-[protein_relationship]->(p:Protein)
 OPTIONAL MATCH (c)-[disease_relationship]->(d:Disease)

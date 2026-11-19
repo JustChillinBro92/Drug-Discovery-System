@@ -19,7 +19,10 @@ class GraphResolver:
             return None
 
         compound = CompoundEntity(
-            **self.graph_entity_properties(graph_data["c"])
+            **{
+                **self.graph_entity_properties(graph_data["c"]),
+                "original_text": compound_text,
+            }
         )
         return self.get_analysis(compound, graph_data)
 

@@ -13,6 +13,7 @@ class ContextBuilder:
         referenced_papers = []
 
         seen_sources = set()
+        source_map = {}
         
         for index, result in enumerate(
             results,
@@ -43,19 +44,20 @@ class ContextBuilder:
             # Avoid duplicate paper citations
             
             if paper_id not in seen_sources:
-                sources.append(
-                    SourceReference(
-                        title=chunk.title or "Unknown",
-                        chunk_id=chunk.chunk_id,
-                        pmid=chunk.pmid,
-                        pmcid=chunk.pmcid,
-                        doi=chunk.doi,
-                        journal=chunk.journal,
-                        publication_year=chunk.publication_year,
-                        url=chunk.url,
-                        similarity_score=similarity_score
-                    )
+                source = SourceReference(
+                    title=chunk.title or "Unknown",
+                    chunk_ids=[chunk.chunk_id],
+                    pmid=chunk.pmid,
+                    pmcid=chunk.pmcid,
+                    doi=chunk.doi,
+                    journal=chunk.journal,
+                    publication_year=chunk.publication_year,
+                    url=chunk.url,
+                    similarity_score=similarity_score
                 )
+                
+                sources.append(source)
+                source_map[paper_id] = source
                 
                 referenced_papers.append(
                     ReferencedPaper(
@@ -72,6 +74,8 @@ class ContextBuilder:
                 )
                 
                 seen_sources.add(paper_id)
+            else:
+                source_map[paper_id].chunk_ids.append(chunk.chunk_id)
             
         return (
             "\n\n".join(context_parts), 

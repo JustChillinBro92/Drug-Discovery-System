@@ -15,6 +15,7 @@ A retrieval-augmented drug discovery backend built with FastAPI. The service com
 - NEO4J_URI=<your_neo4j_uri>
 - NEO4J_USERNAME=<your_neo4j_username>
 - NEO4J_PASSWORD=<your_neo4j_password>
+- NEO4J_CA_BUNDLE=<optional_path_to_ca_bundle_pem>
 - OPENAI_WRAPPER_KEY=<your_groq_openai_key>
 - OPENAI_API_KEY=<your_groq_openai_key>
 - OPENAI_MODEL=openai/gpt-oss-120b

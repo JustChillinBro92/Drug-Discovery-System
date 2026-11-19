@@ -1,3 +1,4 @@
+from uuid import uuid4
 from typing import Dict, List, Optional
 
 from pydantic import BaseModel, Field
@@ -49,6 +50,11 @@ class LiteratureRetrievalState(BaseModel):
 
 
 class ConversationState(BaseModel):
+    conversation_id: str = Field(
+        default_factory=lambda: str(uuid4()),
+        description="Unique identifier for this conversation."
+    )
+    
     analyzed_compounds: List[EntityState] = Field(
         default_factory=list,
         description="Compounds and summary data analyzed during this conversation."

@@ -11,6 +11,7 @@ class Settings:
     NEO4J_URI = os.getenv("NEO4J_URI")
     NEO4J_USERNAME = os.getenv("NEO4J_USERNAME")
     NEO4J_PASSWORD = os.getenv("NEO4J_PASSWORD")
+    NEO4J_CA_BUNDLE = os.getenv("NEO4J_CA_BUNDLE")
 
     CHEMBL_API_URL = os.getenv("CHEMBL_API_URL")
     UNICHEM_API_URL = os.getenv("UNICHEM_API_URL")

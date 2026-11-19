@@ -7,7 +7,7 @@ from models.paper_entity import PaperEntity
 
 class SourceReference(BaseModel):
     title: Optional[str] = None
-    chunk_id: Optional[str] = None
+    chunk_ids: list[str] = []
     pmid: Optional[str] = None
     pmcid: Optional[str] = None
     doi: Optional[str] = None

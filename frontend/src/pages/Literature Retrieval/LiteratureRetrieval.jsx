@@ -183,13 +183,13 @@ const LiteratureRetrieval = () => {
           </div>
         </div>
 
-        <div className="chatbox-footer">
+        {/* <div className="chatbox-footer">
           <Lightbulb size={15} />
           <strong>SUGGESTED INQUIRIES:</strong>
           <button type="button">Summarize off-target effects &amp; gastric toxicity</button>
           <button type="button">Compare COX-1 vs COX-2 selectivity profile</button>
           <button type="button">Extract clinical low-dose regimens</button>
-        </div>
+        </div> */}
 
         <div className="questionBox">
           <MessageSquare size={19} />
@@ -205,7 +205,7 @@ const LiteratureRetrieval = () => {
         </div>
       </section>
     </main>
-  );
+  );``
 };
-
+``
 export default LiteratureRetrieval;

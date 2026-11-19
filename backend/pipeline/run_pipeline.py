@@ -517,7 +517,7 @@ if __name__ == "__main__":
                 print(f"\n[{index}]")
 
                 print(f"Title   : {source.title}")
-                print(f"ChunkID : {source.chunk_id}")
+                print(f"ChunkID : {source.chunk_ids}")
                 print(f"PMID    : {source.pmid}")
                 print(f"PMCID   : {source.pmcid}")
                 print(f"DOI     : {source.doi}")

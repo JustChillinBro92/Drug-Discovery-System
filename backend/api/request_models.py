@@ -2,6 +2,7 @@ from pydantic import BaseModel
 
 
 class AnalysisRequest(BaseModel):
+    conversation_id: str | None = None
     mode: str
     query: str
     page_size: int | None = None
