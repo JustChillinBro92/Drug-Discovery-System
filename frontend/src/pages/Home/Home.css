@@ -1,3 +1,14 @@
+.aggregation-card.session-card {
+  background:
+    radial-gradient(
+      ellipse at top right,
+      rgba(6, 73, 219, 0.05) 0%,
+      rgba(6, 73, 219, 0.05) 50%,
+      transparent 70%
+    ),
+    #ffffff;
+}
+
 .literature-card .new-session button,
 .session-card .session .navs button {
   display: inline-flex;
@@ -65,13 +76,13 @@
 .session-card .session-header .session-id p {
   font-weight: 400;
   flex: 1;
-  
 }
 
 .session-card .session {
   display: flex;
   justify-content: space-between;
   gap: 40px;
+
   /* overflow-x: hidden;
   white-space: nowrap;
   mask-image: linear-gradient(to right, black 85%, transparent 100%);

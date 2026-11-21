@@ -1,152 +1,151 @@
 .footer {
-    border-top: 1px solid rgb(194, 194, 194);
+  border-top: 1px solid rgb(194, 194, 194);
 }
 
-.footer, 
+.footer,
 .footer .notice-copyright {
-    display: flex;
-    justify-content: start;
-    flex-direction: column;
-    gap: 0.5rem;
+  display: flex;
+  justify-content: start;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .footer .title-sources {
-    display: flex;
-    justify-content: space-between;
-    gap: 5rem;
-    width: 98%;
-    margin: 4px 15px;
+  display: flex;
+  justify-content: space-between;
+  gap: 5rem;
+  width: 98%;
+  margin: 4px 15px;
 }
 
 .footer .title-sources .title-container {
-    display: flex;
-    justify-content: start;
-    flex-direction: column;
-    width: 40%;
-    gap: 0.5rem;
-    padding: 10px;
+  display: flex;
+  justify-content: start;
+  flex-direction: column;
+  width: 40%;
+  gap: 0.5rem;
+  padding: 10px;
 }
 
 .footer .title-sources .title-container .title {
-    display: flex;
-    justify-content: start;
-    align-items: center;
-    gap: 0.5rem;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .footer .title-container .title h2 {
-    color: #2E5BFF;
+  color: #2e5bff;
 }
 
 .footer .title-container .title .flask {
-    background-color: #2E5BFF;
-    border-radius: 4px;
-    color: white;
-    padding: 3px;
-    height: 1.6em;
-    width: 1.6em;
+  background-color: #2e5bff;
+  border-radius: 4px;
+  color: white;
+  padding: 3px;
+  height: 1.6em;
+  width: 1.6em;
 }
 
 .footer .title-sources .title-container .title h3 {
-    background-color:rgb(233, 233, 233);
-    border-radius: 4px;
-    padding: 4px;
-    font-size: 16px;
-    color: rgb(74, 74, 74);
+  background-color: rgb(233, 233, 233);
+  border-radius: 4px;
+  padding: 4px;
+  font-size: 16px;
+  color: rgb(74, 74, 74);
 }
 
 .footer .title-sources .title-container .description {
-    color: rgb(74, 74, 74);
+  color: rgb(74, 74, 74);
 }
 
 .footer .title-sources .sources-container {
-    display: flex;
-    justify-content: start;
-    width: 60%;
-    gap: 0.5rem;
-    padding: 10px;
+  display: flex;
+  justify-content: start;
+  width: 60%;
+  gap: 0.5rem;
+  padding: 10px;
 }
 
 .footer .title-sources .sources-container .sources {
-    display: flex;
-    justify-content: start;
-    flex-direction: column;
-    width: 100%;
-    gap: 0.3rem;
+  display: flex;
+  justify-content: start;
+  flex-direction: column;
+  width: 100%;
+  gap: 0.3rem;
 }
 
 .footer .title-sources .sources-container .sources h4 {
-    margin-bottom: 3px;
-    color: rgb(74, 74, 74);
-    font-weight: 600;
+  margin-bottom: 3px;
+  color: rgb(74, 74, 74);
+  font-weight: 600;
 }
 
 .footer .title-sources .sources-container .sources a {
-    display: flex;
-    justify-content: start;
-    align-items: center;
-    gap: 0.3rem; 
-    transition: 0.05s ease-in;
-    width: fit-content;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  gap: 0.3rem;
+  transition: 0.05s ease-in;
+  width: fit-content;
 }
 
 .footer .title-sources .sources-container .sources a .source-label h5 {
-    font-size: 14px;
-    font-weight: 500;
+  font-size: 14px;
+  font-weight: 500;
 }
 
 .footer .title-sources .sources-container .sources a .source-label .icons {
-    height: 1.1em;
-    width: 1.1em;
-    color: #0138ff;
+  height: 1.1em;
+  width: 1.1em;
+  color: #0138ff;
 }
 
 .footer .title-sources .sources-container .sources a p,
 .footer .title-sources .sources-container .sources a .source-label {
-    display: flex;
-    justify-content: start;
-    align-items: center;
-    gap: 0.3rem;
-    font-size: 14px;
-    color: rgb(30, 30, 30);
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 14px;
+  color: rgb(30, 30, 30);
 }
 
 .footer .notice-copyright {
-    display: flex;
-    flex-direction: column;
-    padding-bottom: 8px;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 8px;
 }
 
 .footer .notice-copyright .notice .icon {
-    color:#0138ff;
-    height: 1.3em;
-    width: 1.3em;
+  color: #0138ff;
+  height: 1.3em;
+  width: 1.3em;
 }
 
 .footer .notice-copyright .notice {
-    display: flex;
-    justify-content: start;
-    gap: 0.5rem;
-    padding: 10px;
-    width: 97%;
-    margin: 0 23px;
-    border-radius: 4px;
-    background-color: rgba(71, 71, 71, 0.095);
-    border-left: 2px solid #2E5BFF;
-    border-right: 2px solid #2E5BFF;
-    color: rgb(74, 74, 74);
+  display: flex;
+  justify-content: start;
+  gap: 0.5rem;
+  padding: 10px;
+  width: 97%;
+  margin: 0 23px;
+  border-radius: 4px;
+  background-color: rgba(6, 73, 219, 0.04);
+  border-left: 2px solid #2e5bff;
+  border-right: 2px solid #2e5bff;
+  color: rgb(74, 74, 74);
 }
 
 .footer .notice-copyright .copyright {
-    display: flex;
-    justify-content: end;
-    width: 97%;
-    margin: 0 23px;
-    padding: 3px;
-    color: rgb(74, 74, 74);
+  display: flex;
+  justify-content: end;
+  width: 97%;
+  margin: 0 23px;
+  padding: 3px;
+  color: rgb(74, 74, 74);
 }
 
 .footer .title-sources .sources-container .sources a:hover {
-    transform: translateX(3px);
+  transform: translateX(3px);
 }
-

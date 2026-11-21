@@ -14,6 +14,14 @@
   background: #fff;
   box-shadow: 0 5px 12px rgba(15, 23, 42, 0.08);
   color: #0f172a;
+  background:
+    radial-gradient(
+      ellipse at top left,
+      rgba(6, 73, 219, 0.05) 0%,
+      rgba(6, 73, 219, 0.05) 50%,
+      transparent 70%
+    ),
+    #ffffff;
 }
 
 .compound-card .route {
@@ -163,7 +171,9 @@
   background-color: rgba(71, 71, 71, 0.052);
   font-size: 12px;
   cursor: pointer;
-  transition: color 0.1s ease, background-color 0.1s ease;
+  transition:
+    color 0.1s ease,
+    background-color 0.1s ease;
 }
 
 .analyzed-compounds {
@@ -215,12 +225,14 @@
   background-color: rgba(71, 71, 71, 0.052);
   font-size: 14px;
   cursor: pointer;
-  transition: color 0.1s ease, background-color 0.1s ease;
+  transition:
+    color 0.1s ease,
+    background-color 0.1s ease;
 }
 
 .analyzed-compounds-list .add {
-  background-color: rgba(137, 137, 137, 0.121); 
-  color:#0649db;
+  background-color: rgba(137, 137, 137, 0.121);
+  color: #0649db;
   font-size: 11px;
   font-weight: 600;
 }
@@ -241,7 +253,6 @@
   background: #3159f5;
   font-weight: 500;
 }
-
 
 @media (max-width: 700px) {
   .compound-header,

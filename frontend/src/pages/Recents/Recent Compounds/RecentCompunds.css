@@ -15,6 +15,15 @@
   color: #0f172a;
 }
 
+.recent-compounds-header {
+  background: radial-gradient(
+    ellipse at top left,
+    rgba(6, 73, 219, 0.05) 0%,
+    rgba(6, 73, 219, 0.05) 50%,
+    transparent 70%
+  );
+}
+
 .recent-compounds-heading,
 .recent-compounds-actions,
 .recent-compounds-toolbar,
@@ -411,7 +420,6 @@
 .list .item .fail p {
   color: #d25d23;
 }
-
 
 .list .item .view {
   background: none;

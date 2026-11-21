@@ -4,7 +4,7 @@
   justify-content: start;
 
   border-right: 1px solid rgb(194, 194, 194);
-    /* border-bottom: 1px solid rgb(194, 194, 194); */
+  /* border-bottom: 1px solid rgb(194, 194, 194); */
   gap: 1rem;
   width: 250px;
   height: auto;
@@ -20,6 +20,15 @@
   padding-top: 20px;
   padding-bottom: 20px;
   color: #2e5bff;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(6, 73, 219, 0.05) 5%,
+      rgba(6, 73, 219, 0.06) 70%,
+      transparent 90%
+    ),
+    #ffffff;
 }
 
 .sidebar .title-container .title {

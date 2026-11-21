@@ -14,6 +14,12 @@
   background: #fff;
   box-shadow: 0 5px 12px rgba(15, 23, 42, 0.08);
   color: #0f172a;
+  background: radial-gradient(
+    ellipse at top left,
+    rgba(6, 73, 219, 0.05) 0%,
+    rgba(6, 73, 219, 0.05) 50%,
+    transparent 70%
+  );
 }
 
 .literature-card .route {
@@ -181,6 +187,8 @@
   color: #172238;
   background: #f1f3f5;
   font-size: 12px;
+  border: 1px solid #c7d8e9;
+  box-shadow: 0 5px 12px rgba(15, 23, 42, 0.08);
 }
 
 .literature-card .pipeline-label,
@@ -346,6 +354,12 @@
   background: #fff;
   box-shadow: 0 5px 12px rgba(15, 23, 42, 0.08);
   color: #0f172a;
+  background: radial-gradient(
+    ellipse at top left,
+    rgba(6, 73, 219, 0.05) 0%,
+    rgba(6, 73, 219, 0.05) 35%,
+    transparent 90%
+  );
 }
 .aggregation-card .aggregation-header {
   display: flex;
@@ -463,6 +477,12 @@
   gap: 12px;
   padding: 18px 15px;
   background-color: #fbfcfd;
+  background: radial-gradient(
+    ellipse at top right,
+    rgba(6, 73, 219, 0.05) 0%,
+    rgba(6, 73, 219, 0.05) 50%,
+    transparent 90%
+  );
 }
 .chatbox-card .chatbox-output {
   background-color: #ffffff;

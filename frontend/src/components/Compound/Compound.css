@@ -41,7 +41,7 @@
   width: fit-content;
   gap: 5px;
   margin-right: 3px;
-} 
+}
 
 .compound .title-container .title .synonyms span .dot {
   display: flex;
@@ -154,15 +154,23 @@
   justify-content: start;
   gap: 30px;
   /* flex-direction: column; */
-  
+
   /* width: 60%; */
   width: 100%;
   padding: 22px 21px 24px;
-  border: 1px solid #cbd5e1;
+  border: 1px solid #c7d8e9;
   border-radius: 9px;
   background: #fff;
   box-shadow: 0 5px 12px rgba(15, 23, 42, 0.08);
   color: #0f172a;
+  background:
+    linear-gradient(
+      135deg,
+      rgba(6, 73, 219, 0.05) 0%,
+      rgba(6, 73, 219, 0.05) 30%,
+      transparent 50%
+    ),
+    #ffffff;
 }
 
 .compound .compound-container .compound-item .compound-details .item {
@@ -178,7 +186,7 @@
   border-radius: 4px;
   border: 1px solid #cbd5e1;
   box-shadow: 0 3px 12px rgba(15, 23, 42, 0.08);
-  background-color: rgba(71, 71, 71, 0.052);
+  background-color: rgba(188, 188, 188, 0.052);
 }
 
 .compound .compound-container .compound-item .compound-details .image img {
@@ -199,6 +207,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding-bottom: 5px;
 }
 
 .compound
@@ -212,7 +221,6 @@
   justify-content: center;
   width: 100%;
   margin: 0;
-  
 }
 
 .compound
@@ -303,6 +311,14 @@
   background: #fff;
   box-shadow: 0 5px 12px rgba(15, 23, 42, 0.08);
   color: #0f172a;
+  background:
+    linear-gradient(
+      135deg,
+      rgba(6, 73, 219, 0.05) 0%,
+      rgba(6, 73, 219, 0.05) 30%,
+      transparent 50%
+    ),
+    #ffffff;
 }
 
 .compound .compound-container .compound-item .lipinski .title {
@@ -406,7 +422,8 @@
   gap: 5px;
   padding: 12px 12px;
   border-radius: 4px;
-  background-color: rgba(71, 71, 71, 0.097);
+  border: 1px solid #cbd5e1;
+  background-color: rgba(203, 203, 203, 0.097);
 }
 
 .compound .compound-container .compound-item .lipinski .overall .title {
@@ -451,7 +468,7 @@
   justify-content: space-between;
   flex-direction: column;
   gap: 2px;
-  
+
   cursor: pointer;
   padding: 15px 10px;
   border: 1px solid #cbd5e1;
@@ -476,7 +493,14 @@
 }
 
 .compound .compound-container .properties .details .items:hover {
-  background-color: rgba(71, 71, 71, 0.045);
+  background:
+    linear-gradient(
+      135deg,
+      rgba(6, 73, 219, 0.05) 0%,
+      rgba(6, 73, 219, 0.05) 30%,
+      transparent 80%
+    ),
+    #ffffff;
   border-left: 2px solid #2e5bff;
   border-top-left-radius: 0px;
   border-bottom-left-radius: 0px;

@@ -214,7 +214,7 @@ const Compound = ({
 
           <div className="details">
             <div className="items">
-              <h3>MOLECUALR WEIGHT</h3>
+              <h3>MOLECUALR<br />WEIGHT</h3>
               <h4>{properties.molecular_weight.toFixed(2)}</h4>
             </div>
             <div className="items">
@@ -226,35 +226,35 @@ const Compound = ({
               <h4>{properties.tpsa.toFixed(2)}</h4>
             </div>
             <div className="items">
-              <h3>H-BOND DONORS</h3>
+              <h3>H-BOND<br />DONORS</h3>
               <h4>{properties.h_bond_donors}</h4>
             </div>
             <div className="items">
-              <h3>H-BOND ACCEPTORS</h3>
+              <h3>H-BOND<br />ACCEPTORS</h3>
               <h4>{properties.h_bond_acceptors}</h4>
             </div>
             <div className="items">
-              <h3>ROTATABLE BONDS</h3>
+              <h3>ROTATABLE<br />BONDS</h3>
               <h4>{properties.rotatable_bonds}</h4>
             </div>
             <div className="items">
-              <h3>HEAVY ATOM COUNT</h3>
+              <h3>HEAVY<br />ATOM COUNT</h3>
               <h4>{properties.heavy_atom_count}</h4>
             </div>
             <div className="items">
-              <h3>RING COUNT</h3>
+              <h3>RING<br />COUNT</h3>
               <h4>{properties.ring_count}</h4>
             </div>
             <div className="items">
-              <h3>AROMATIC RING COUNT</h3>
+              <h3>AROMATIC<br />RING COUNT</h3>
               <h4>{properties.aromatic_ring_count}</h4>
             </div>
             <div className="items">
-              <h3>FORMAL CHARGE</h3>
+              <h3>FORMAL<br />CHARGE</h3>
               <h4>{properties.formal_charge}</h4>
             </div>
             <div className="items">
-              <h3>FRACTION CSP3</h3>
+              <h3>FRACTION<br />CSP3</h3>
               <h4>{properties.fraction_csp3.toFixed(2)}</h4>
             </div>
             <div className="items">

@@ -85,7 +85,7 @@ const RecentCompunds = () => {
   
   return (
     <main className="recent-compounds">
-      <section className="recent-compounds-card">
+      <section className="recent-compounds-card recent-compounds-header">
         <div className="recent-compounds-heading">
           <div>
             <div className="recent-compounds-route">

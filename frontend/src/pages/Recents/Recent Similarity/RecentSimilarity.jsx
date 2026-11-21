@@ -89,7 +89,7 @@ const RecentSimilarity = () => {
 
   return (
     <main className="recent-compounds">
-      <header className="recent-similarity-card">
+      <header className="recent-similarity-card recent-similarity-header">
         <div className="recent-compounds-heading">
           <div>
             <div className="recent-compounds-route">

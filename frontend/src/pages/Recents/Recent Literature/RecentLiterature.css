@@ -13,6 +13,12 @@
   background: #fff;
   box-shadow: 0 5px 12px rgba(15, 23, 42, 0.08);
   color: #0f172a;
+  background: radial-gradient(
+    ellipse at top left,
+    rgba(6, 73, 219, 0.05) 0%,
+    rgba(6, 73, 219, 0.05) 50%,
+    transparent 70%
+  );
 }
 
 .literature-session-bar,

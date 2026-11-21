@@ -11,6 +11,15 @@
   color: #0f172a;
 }
 
+.recent-similarity-header {
+  background: radial-gradient(
+    ellipse at top left,
+    rgba(6, 73, 219, 0.05) 0%,
+    rgba(6, 73, 219, 0.05) 50%,
+    transparent 70%
+  );
+}
+
 .recent-similarity-compound {
   display: flex;
   flex-direction: column;
@@ -159,8 +168,10 @@
   gap: 10px;
   min-width: 0;
   padding: 14px 12px;
+  border: 1px solid #c7d8e9;
   border-radius: 5px;
   background: #f1f3f6;
+  box-shadow: 0 5px 12px rgba(15, 23, 42, 0.08);
 }
 
 .similar-compound-card-heading,
