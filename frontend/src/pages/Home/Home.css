@@ -1,0 +1,242 @@
+.literature-card .new-session button,
+.session-card .session .navs button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex: 0 0 auto;
+  min-width: 130px;
+  height: 38px;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  background-color: #0649db;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition:
+    color 0.1s ease,
+    background-color 0.1s ease;
+}
+
+.session-card .session-header {
+  display: flex;
+  justify-content: start;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.session-card .session-header .session-state {
+  display: flex;
+  margin: auto;
+  padding: 4px 8px;
+  background-color: #0649db;
+  color: white;
+  border-radius: 16px;
+  height: fit-content;
+  overflow-x: hidden;
+}
+
+.session-card .session-header .session-state h4 {
+  display: flex;
+  gap: 5px;
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.session-card .session-header .session-id {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #526b8d;
+  flex: 1;
+  overflow: hidden;
+  white-space: nowrap;
+  mask-image: linear-gradient(to right, black 85%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, black 85%, transparent 100%);
+}
+
+.session-card .session-header .session-id p {
+  font-weight: 400;
+  flex: 1;
+  
+}
+
+.session-card .session {
+  display: flex;
+  justify-content: space-between;
+  gap: 40px;
+  /* overflow-x: hidden;
+  white-space: nowrap;
+  mask-image: linear-gradient(to right, black 85%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, black 85%, transparent 100%); */
+}
+
+.session-card .session .research-topic {
+  width: 600px;
+}
+
+.session-card .session .research-topic h2 {
+  font-size: 23px;
+  font-weight: 500;
+}
+
+.session-card .session .details {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.session-card .session .details .state {
+  display: grid;
+  gap: 15px;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+}
+
+.session-card .session .details .state .items {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  gap: 2px;
+
+  cursor: pointer;
+  padding: 15px 10px;
+  border: 1px solid #e9eaeb;
+  background-color: #f7f9fb;
+  border-radius: 4px;
+  box-shadow: 0 5px 12px rgba(15, 23, 42, 0.08);
+  transition:
+    color 0.1s ease,
+    background-color 0.1s ease;
+}
+
+.session-card .session .details .state .items h4 {
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(71, 71, 71, 0.603);
+}
+
+.session-card .session .details .state .items h3 {
+  font-size: 26px;
+  font-weight: 600;
+  color: #0649db;
+}
+
+.session-card .session .details .state .items h5 {
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(71, 71, 71, 0.603);
+}
+
+.session-card .session .navs {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  width: 32%;
+  gap: 15px;
+}
+
+.session-card .session .navs button {
+  color: #526b8d;
+  cursor: pointer;
+  height: 55px;
+  width: 90%;
+  margin: 0 5%;
+  border: 1px solid #e9eaeb;
+  background-color: #f8fbff;
+  border-radius: 4px;
+  box-shadow: 0 5px 12px rgba(15, 23, 42, 0.08);
+  transition:
+    color 0.1s ease,
+    background-color 0.1s ease;
+}
+
+.past-sessions-card .past-sessions-header {
+  gap: 10px;
+  border: none;
+}
+
+.past-sessions-card .past-sessions-header .header h4 {
+  font-size: 16px;
+}
+
+.past-sessions-card .past-sessions-header .search {
+  height: 30px;
+  flex: none;
+  width: 350px;
+}
+
+.past-sessions-card .session-headings {
+  grid-template-columns: minmax(220px, 1.8fr) 90px 100px 100px 90px 60px;
+}
+
+.past-sessions-card .session-list .list-item {
+  grid-template-columns: minmax(220px, 1.8fr) 90px 100px 100px 90px 60px;
+}
+
+.session-list .list-item .item:nth-child(1) h5 {
+  flex: 0 0 100%;
+  color: #172238;
+  font-size: 14px;
+  font-weight: 500;
+  overflow: hidden;
+  white-space: nowrap;
+  mask-image: linear-gradient(to right, black 85%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, black 85%, transparent 100%);
+}
+
+.session-list .list-item .item:nth-child(1) h3 {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  color: #60718f;
+  font-size: 12px;
+  line-height: 1.2;
+  white-space: nowrap;
+  mask-image: linear-gradient(to right, black 85%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, black 85%, transparent 100%);
+}
+
+.session-list .list-item .item:nth-child(2) h5 {
+  color: #0759d8;
+  font-size: 12.5px;
+  font-weight: 600;
+}
+
+.session-list .list-item .item h5 {
+  font-size: 12.5px;
+  font-weight: 600;
+}
+
+.session-list .list-item .item:nth-child(2) h3,
+.session-list .list-item .item:nth-child(3) h3 {
+  font-size: 12px;
+  color: #60718f;
+}
+
+.session-list .list-item .item h3 {
+  font-size: 12px;
+  color: #60718f;
+}
+
+.session-card .session .navs button:hover {
+  background-color: #0649db;
+  color: white;
+}
+
+.literature-card .new-session button:hover {
+  background-color: #043bb2;
+}
+
+.session-card .session .details .state .items:hover {
+  border-left: 2px solid #2e5bff;
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
+}

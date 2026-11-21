@@ -17,17 +17,17 @@ import {
   Dot,
   Paperclip,
   Lightbulb,
-  MessageSquare 
-} from 'lucide-react';
+  MessageSquare,
+} from "lucide-react";
 
-import './LiteratureRetrieval.css';
+import "./LiteratureRetrieval.css";
 
 const queryPresets = [
-  'Aspirin COX-1',
-  'Cancer Immunotherapy PD-L1',
-  'EGFR T790M Resistance',
-  'KRAS G12D Scaffolds',
-  'Ibuprofen vs Acetaminophen',
+  "Aspirin COX-1",
+  "Cancer Immunotherapy PD-L1",
+  "EGFR T790M Resistance",
+  "KRAS G12D Scaffolds",
+  "Ibuprofen vs Acetaminophen",
 ];
 
 const LiteratureRetrieval = () => {
@@ -43,8 +43,8 @@ const LiteratureRetrieval = () => {
             </div>
             <h1>Literature Acquisition &amp; Semantic RAG Engine</h1>
             <p>
-              Retrieve literature, compute semantic chunk embeddings,
-              and inspect citation-grounded evidence. Connected to Europe PMC.
+              Retrieve literature, compute semantic chunk embeddings, and
+              inspect citation-grounded evidence. Connected to Europe PMC.
             </p>
           </div>
 
@@ -57,10 +57,7 @@ const LiteratureRetrieval = () => {
         <form className="analysis-form literature-form">
           <div className="compound-input literature-input">
             <Search size={18} />
-            <input
-              type="text"
-              placeholder="Aspirin platelet aggregation and COX-1 inhibition"
-            />
+            <input type="text" placeholder="Aspirin platelet aggregation and COX-1 inhibition" />
             <button type="button" className="clear-input">
               <X size={17} />
             </button>
@@ -70,7 +67,8 @@ const LiteratureRetrieval = () => {
             <ListOrdered size={16} />
             <div className="max-papers-meta">
               <span className="meta-label">MAX PAPERS</span>
-              <input className="meta-value"
+              <input
+                className="meta-value"
                 type="number"
                 min="1"
                 placeholder="100"
@@ -122,18 +120,19 @@ const LiteratureRetrieval = () => {
           <span className="vector-separator">•</span>
           <label className="vector-item k-value">
             Top k papers :
-            <input
-              type="number"
-              min="1"
-              placeholder="5"
-            />
+            <input type="number" min="1" placeholder="5" />
           </label>
         </div>
       </header>
 
       <section className="aggregation-card">
         <div className="aggregation-header">
-          <h2>Aspirin platelet aggregation and COX-1 inhibition <br /> [Synthesis & Vector Retrieval]</h2>
+          <div className="topic">
+            <ScrollText className="assistant-brain-icon" size={30} />
+            <h2>
+              Aspirin platelet aggregation and COX-1 inhibition
+            </h2>
+          </div>
           <div className="grounded">
             <BadgeCheck size={17} style={{ color: "#047857" }} />
             <span>GROUNDED & INDEXED</span>
@@ -147,29 +146,39 @@ const LiteratureRetrieval = () => {
             <Brain className="assistant-brain-icon" size={30} />
             <div>
               <div className="assistant-title-row">
-                <h3>Literature AI Research Assistant</h3>
-                <span className="synthesis-badge">RETRIEVAL AGENT</span>
+                <h3>Literature Assistant</h3>
               </div>
               <p className="assistant-subtitle">
-                Live cross-examination &amp; semantic inference over 24 grounded studies (412 chunks)
+                Live cross-examination &amp; semantic inference over 24 grounded
+                studies (412 chunks)
               </p>
             </div>
           </div>
           <div className="chatbox-header-right">
-            <span><Dot size={20} />24 Grounded Papers Active</span>
+            <span>
+              <Dot size={20} />
+              24 Grounded Papers Active
+            </span>
           </div>
         </div>
 
         <div className="chatbox-body">
-          <div className="assistant-sparkle-icon"><Sparkles size={15} className="sparkle  "/></div>
+          <div className="assistant-sparkle-icon">
+            <Sparkles size={15} className="sparkle  " />
+          </div>
           <div className="chatbox-output">
             <p>
-              I have synthesized the <strong>24 indexed publications</strong> regarding 
-              <strong> Aspirin platelet aggregation &amp; COX-1 inhibition. </strong> 
-              Across 412 retrieved semantic vector chunks, consensus confirms irreversible 
-              acetylation of <strong className="highlighted-term">Ser529</strong> in the 
-              platelet COX-1 catalytic pocket, resulting in ~100% suppression of platelet 
-              thromboxane A2 (TXA2) within 60 minutes.
+              I have synthesized the <strong>24 indexed publications</strong>{" "}
+              regarding
+              <strong>
+                {" "}
+                Aspirin platelet aggregation &amp; COX-1 inhibition.{" "}
+              </strong>
+              Across 412 retrieved semantic vector chunks, consensus confirms
+              irreversible acetylation of{" "}
+              <strong className="highlighted-term">Ser529</strong> in the
+              platelet COX-1 catalytic pocket, resulting in ~100% suppression of
+              platelet thromboxane A2 (TXA2) within 60 minutes.
             </p>
             <div className="chatbox-output-footer">
               <Paperclip size={14} />
@@ -205,7 +214,8 @@ const LiteratureRetrieval = () => {
         </div>
       </section>
     </main>
-  );``
+  );
+  ``;
 };
-``
+``;
 export default LiteratureRetrieval;
