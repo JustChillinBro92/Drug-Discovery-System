@@ -9,6 +9,13 @@
   background: #fff;
   box-shadow: 0 5px 12px rgba(15, 23, 42, 0.08);
   color: #0f172a;
+
+  background: linear-gradient(
+    135deg,
+    rgba(6, 73, 219, 0.05) 50%,
+    rgba(6, 73, 219, 0.01) 70%,
+    transparent 100%
+  );
 }
 
 .recent-similarity-header {
@@ -91,15 +98,11 @@
 
 .recent-similarity-compound .title-container .title h2 span {
   padding: 2px 8px;
-  border: 1px solid #d8e0eb;
+  border: 1px solid #b3caeb;
   border-radius: 4px;
-  background: #f8fafc;
-  color: #526b8d;
   line-height: 1.35;
-
   font-size: 11px;
   font-weight: 500;
-  border-color: #dbeafe;
   background: #eff6ff;
   color: #315b96;
 }
@@ -170,7 +173,7 @@
   padding: 14px 12px;
   border: 1px solid #c7d8e9;
   border-radius: 5px;
-  background: #f1f3f6;
+  background: #d4dfee38;
   box-shadow: 0 5px 12px rgba(15, 23, 42, 0.08);
 }
 
@@ -256,15 +259,11 @@
 
 .similar-compound-card-details .details span {
   padding: 2px 8px;
-  border: 1px solid #d8e0eb;
+  border: 1px solid #b3caeb;  
   border-radius: 4px;
-  background: #f8fafc;
-  color: #526b8d;
   line-height: 1.35;
-
   font-size: 11px;
   font-weight: 500;
-  border-color: #dbeafe;
   background: #d2e6ff;
   color: #2f5790;
 }

@@ -275,6 +275,12 @@
     background-color 0.15s ease,
     color 0.15s ease,
     border-color 0.15s ease;
+  background: linear-gradient(
+    135deg,
+    rgba(6, 73, 219, 0.05) 50%,
+    rgba(6, 73, 219, 0.01) 70%,
+    transparent 100%
+  );
 }
 
 .literature-paper-content {
@@ -305,7 +311,7 @@
   font-size: 11px;
   font-weight: 500;
   padding: 3px 9px;
-  border: 1px solid #d8e0eb;
+  border: 1px solid #b9cbe5;
   border-radius: 13px;
   background: #f8fafc;
   color: #526b8d;
@@ -318,6 +324,7 @@
   align-items: center;
   gap: 6px;
   padding: 4px 8px;
+  border: 1px solid #008d6e35;
   border-radius: 12px;
   background: #e7f7f2;
   color: #008d6e;
@@ -363,7 +370,7 @@
 
 .paper-tag {
   padding: 4px 9px;
-  border: 1px solid #d8e0eb;
+  border: 1px solid #c1d0e6;
   border-radius: 13px;
   background: #f8fafc;
   color: #526b8d;
@@ -372,7 +379,7 @@
 }
 
 .paper-author {
-  border-color: #dbeafe;
+  border-color: #c0dafd;
   background: #eff6ff;
   color: #315b96;
 }
