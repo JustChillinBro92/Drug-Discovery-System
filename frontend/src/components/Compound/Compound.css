@@ -289,7 +289,10 @@
   .details
   .items
   span {
-  padding: 12px 10px;
+  display: flex;
+  align-items: center;
+  min-height: 35px;
+  padding: 6px 10px;
   border-radius: 2px;
   font-size: 13px;
   font-weight: 500;
@@ -424,6 +427,7 @@
   border-radius: 4px;
   border: 1px solid #cbd5e1;
   background-color: rgba(203, 203, 203, 0.097);
+  /* height: 100%; */
 }
 
 .compound .compound-container .compound-item .lipinski .overall .title {

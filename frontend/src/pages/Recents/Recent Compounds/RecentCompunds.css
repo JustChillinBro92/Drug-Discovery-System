@@ -323,7 +323,7 @@
   width: 50px;
   height: 50px;
   border-radius: 4px;
-  background: #eef1f4;
+  background: #eef1f4e0;
   border: 1px solid #dde7f1;
   box-shadow: 0 5px 12px rgba(15, 23, 42, 0.08);
 }

@@ -9,7 +9,7 @@
     #ffffff;
 }
 
-.literature-card .new-session button,
+.new-session button,
 .session-card .session .navs button {
   display: inline-flex;
   align-items: center;
@@ -242,7 +242,7 @@
   color: white;
 }
 
-.literature-card .new-session button:hover {
+.new-session button:hover {
   background-color: #043bb2;
 }
 

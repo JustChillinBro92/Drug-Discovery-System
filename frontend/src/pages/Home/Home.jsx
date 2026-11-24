@@ -30,12 +30,12 @@ const Home = () => {
             </p>
           </div>
 
-          <div className="new-session">
+          {/* <div className="new-session">
             <button type="button">
               <CircleFadingPlus size={17} />
               New Session
             </button>
-          </div>
+          </div> */}
         </div>
       </header>
 
